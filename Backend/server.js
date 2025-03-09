@@ -39,7 +39,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use((req, res, next) => {
-    console.log(`${req.method} ${req.url}`); 
+    console.log(`${req.method} ${req.url}`);
     next();
 });
 
@@ -252,7 +252,7 @@ app.get('/api/whichShowTable', async (req, res) => {
 
 app.get('/api/whichBookTable', async (req, res) => {
     const sqlQuery = `select * from ${BQ_PROJECT}.${BOOK_TABLES_DATASET}.${WHICH_TABLE_BOOK} order by rand() limit 1`
-    
+
     console.log(sqlQuery)
 
     try {
@@ -1272,7 +1272,7 @@ app.get('/api/book_metadata_all', async (req, res) => {
 app.get('/api/film_recs_metadata/:id', async (req, res) => {
 
     const filmId = req.params.id;
-    
+
     const sqlQuery = `select * from ${BQ_PROJECT}.${METADATA_DATASET}.${FILM_RECS_METADATA_TABLE} WHERE original_film_id = @filmId`
 
     try {
@@ -1298,7 +1298,7 @@ app.get('/api/film_recs_metadata/:id', async (req, res) => {
 app.get('/api/show_recs_metadata/:id', async (req, res) => {
 
     const showId = req.params.id;
-    
+
     const sqlQuery = `select * from ${BQ_PROJECT}.${METADATA_DATASET}.${SHOW_RECS_METADATA_TABLE} WHERE original_show_id = @showId`
 
     try {
@@ -1325,7 +1325,7 @@ app.get('/api/show_recs_metadata/:id', async (req, res) => {
 
 app.get('/api/all_from_selected_music_table/:table', async (req, res) => {
     const table = req.params.table;
-    
+
     const sqlQuery = `select * from ${BQ_PROJECT}.${MUSIC_TABLES_DATASET}.${table}`
 
     try {
@@ -1340,7 +1340,7 @@ app.get('/api/all_from_selected_music_table/:table', async (req, res) => {
 
 app.get('/api/all_from_selected_film_table/:table', async (req, res) => {
     const table = req.params.table;
-    
+
     const sqlQuery = `select * from ${BQ_PROJECT}.${FILM_TABLES_DATASET}.${table}`
 
     try {
@@ -1355,7 +1355,7 @@ app.get('/api/all_from_selected_film_table/:table', async (req, res) => {
 
 app.get('/api/all_from_selected_shows_table/:table', async (req, res) => {
     const table = req.params.table;
-    
+
     const sqlQuery = `select * from ${BQ_PROJECT}.${SHOW_TABLES_DATASET}.${table}`
 
     try {
@@ -1370,7 +1370,7 @@ app.get('/api/all_from_selected_shows_table/:table', async (req, res) => {
 
 app.get('/api/all_from_selected_book_table/:table', async (req, res) => {
     const table = req.params.table;
-    
+
     const sqlQuery = `select * from ${BQ_PROJECT}.${BOOK_TABLES_DATASET}.${table}`
 
     try {
