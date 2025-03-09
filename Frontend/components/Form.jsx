@@ -40,6 +40,7 @@ const DropdownForm = ({name, submitFunction, attributes}) => {
             <View style={modalStyles.centeredView}>
               <View style={modalStyles.modalView}>
                 <Picker
+                  itemStyle={{ color: 'black' }}
                   style={{ height: 'auto', width: '100%' }}
                   selectedValue={selectedElement}
                   onValueChange={handleOptionChange}

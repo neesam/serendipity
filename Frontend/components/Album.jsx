@@ -86,6 +86,11 @@ export default function Album() {
         setSelectedElement(value)
     }
 
+    const handleSetCurrentAlbum = (value) => {
+        setAlbum(value)
+        handleCurrentTableItemsModalClose()
+    }
+
     const getAlbum = async () => {
 
         // Function to fetch actual album
@@ -367,21 +372,29 @@ export default function Album() {
                                 <View style={modalStyles.centeredView}>
                                 <View style={modalStyles.modalView}>
                                     <Picker
+                                    itemStyle={{ color: 'black' }}
                                     style={{ height: 'auto', width: '100%' }}
                                     selectedValue={selectedElement ? selectedElement : ''}
                                     onValueChange={handleOptionChange}
                                     >
-                                        {activeTableEntries.length > 0 ? (
+                                        {activeTableEntries.some(obj => obj.hasOwnProperty('title'))  ? (
                                             activeTableEntries.map((item) => (
                                                 <Picker.Item key={item.id} label={item.title} value={item.title} />
                                             ))
                                         ) : (
-                                            <Picker.Item label="Loading..." value="" />
+                                            activeTableEntries.map((item) => (
+                                                <Picker.Item key={item.id} label={item.link} value={item.link} />
+                                            ))
                                         )}
                                     </Picker>
+                                <Pressable onPress={() => handleSetCurrentAlbum(selectedElement)}>
+                                    <Text>
+                                        Set
+                                    </Text>
+                                </Pressable>
                                 <Pressable onPress={handleCurrentTableItemsModalClose}>
                                     <Text>
-                                    Close
+                                        Close
                                     </Text>
                                 </Pressable>
                                 </View>
