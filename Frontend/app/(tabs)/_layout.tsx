@@ -13,7 +13,7 @@ export default function TabLayout() {
                 headerTintColor: 'white',
                 tabBarStyle: {
                     backgroundColor: '#25292e'
-                }
+                },
             }}
         >
             <Tabs.Screen
@@ -21,7 +21,7 @@ export default function TabLayout() {
                 options={{
                     title: 'Album',
                     tabBarIcon: ({ color, focused }) => (
-                        <Ionicons name={focused ? 'home-sharp' : 'home-outline'} color={color} size={24}/>
+                        <Ionicons name={focused ? 'musical-notes-sharp' : 'musical-notes-outline'} color={color} size={24}/>
                     )
                 }}/>
             <Tabs.Screen
@@ -29,7 +29,7 @@ export default function TabLayout() {
                 options={{
                     title: 'Film',
                     tabBarIcon: ({ color, focused }) => (
-                        <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color={color} size={24}/>
+                        <Ionicons name={focused ? 'film-sharp' : 'film-outline'} color={color} size={24}/>
                     )
                 }}/>
 
@@ -38,7 +38,7 @@ export default function TabLayout() {
                 options={{
                     title: 'Show',
                     tabBarIcon: ({ color, focused }) => (
-                        <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color={color} size={24}/>
+                        <Ionicons name={focused ? 'tv-sharp' : 'tv-outline'} color={color} size={24}/>
                     )
                 }}/>
         </Tabs>
