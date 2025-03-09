@@ -16,18 +16,27 @@ export default function TabLayout() {
                 }
             }}
         >
-            <Tabs.Screen 
-                name="index" 
-                options={{ 
-                    title: 'Home',
+            <Tabs.Screen
+                name="index"
+                options={{
+                    title: 'Album',
                     tabBarIcon: ({ color, focused }) => (
                         <Ionicons name={focused ? 'home-sharp' : 'home-outline'} color={color} size={24}/>
                     )
                 }}/>
-            <Tabs.Screen 
-                name="about" 
-                options={{ 
-                    title: 'About',
+            <Tabs.Screen
+                name="film"
+                options={{
+                    title: 'Film',
+                    tabBarIcon: ({ color, focused }) => (
+                        <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color={color} size={24}/>
+                    )
+                }}/>
+
+            <Tabs.Screen
+                name="show"
+                options={{
+                    title: 'Show',
                     tabBarIcon: ({ color, focused }) => (
                         <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color={color} size={24}/>
                     )
