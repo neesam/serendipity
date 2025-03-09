@@ -4,6 +4,8 @@ import { Picker } from "@react-native-picker/picker";
 
 import DropdownForm from "./Form";
 
+import randomColor from '../Helper/randomColor'
+
 // import Button from "@/components/Button";
 // import EntCard from "@/components/Card";
 
@@ -182,7 +184,7 @@ export default function Album() {
             const albumIDVal = data[0]['id']
             const in_circulation = data[0]['in_circulation'] || 'false'
             const originalTableVal = data[0]['original_table'] || null
-            // const bgColor = randomColor()
+            const bgColor = randomColor()
 
             setAlbum(albumVal)
             setAlbumID(albumIDVal)
@@ -283,7 +285,7 @@ export default function Album() {
 
         console.log(await response.json());
         console.log('Album added successfully.');
-        
+
 
         // toast('Added to queue!', {
         //     autoClose: 2000,
@@ -330,8 +332,12 @@ export default function Album() {
         setActiveTableItemsModalVisible(true)
     }
 
+    const screenStyle = {
+        backgroundColor: backgroundColor
+    }
+
     return (
-        <View style={containerStyles.screenContainer}>
+        <View style={[containerStyles.screenContainer, screenStyle]}>
             <View style={containerStyles.topLeftCornerContainer}>
                 <DropdownForm attributes={{
                     tables: tables
@@ -441,7 +447,7 @@ const cardStyles = StyleSheet.create({
 
 const containerStyles = StyleSheet.create({
     screenContainer: {
-        backgroundColor: '#f8f8f8',
+        backgroundColor: 'tan',
         height: '100%',
         alignItems: 'center',
         justifyContent: 'center'

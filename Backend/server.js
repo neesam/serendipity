@@ -5,7 +5,7 @@ const {spawn} = require('child_process');
 const { BigQuery } = require('@google-cloud/bigquery');
 
 const app = express();
-const port = 5001;
+const port = 5002;
 
 const BQ_SERVICE_ACCOUNT = process.env.BQ_SERVICE_ACCOUNT;
 const BQ_PROJECT = process.env.BQ_PROJECT;
