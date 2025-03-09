@@ -1,5 +1,7 @@
-import { View, StyleSheet, Text, Pressable } from "react-native";
+import { View, StyleSheet, Text, Pressable, Modal } from "react-native";
 import { useState, useEffect } from "react";
+import { Picker } from "@react-native-picker/picker";
+
 import DropdownForm from "./Form";
 
 // import Button from "@/components/Button";
@@ -7,14 +9,17 @@ import DropdownForm from "./Form";
 
 export default function Album() {
 
-    const [whichTable, setWhichTable] = useState<string>('')
-    const [album, setAlbum] = useState<string>('')
-    const [albumID, setAlbumID] = useState<string>('')
-    const [inCirculation, setInCirculation] = useState<string>('')
-    const [originalTable, setOriginalTable] = useState<string>('')
-    const [tablesUsed, setTablesUsed] = useState<string[]>([])
-    const [backgroundColor, setBackgroundColor] = useState<string>('')
-    const [albumAndTableAvailable, setAlbumAndTableAvailable] = useState<boolean>(false)
+    const [whichTable, setWhichTable] = useState('')
+    const [album, setAlbum] = useState('')
+    const [albumID, setAlbumID] = useState('')
+    const [inCirculation, setInCirculation] = useState('')
+    const [originalTable, setOriginalTable] = useState('')
+    const [tablesUsed, setTablesUsed] = useState([])
+    const [backgroundColor, setBackgroundColor] = useState('')
+    const [albumAndTableAvailable, setAlbumAndTableAvailable] = useState(false)
+    const [currentTableItemsModalVisible, setActiveTableItemsModalVisible] = useState(false)
+    const [activeTableEntries, setActiveTableEntries] = useState([])
+    const [selectedElement, setSelectedElement] = useState('');
 
     const tables = [
         'album_2011vwave',
@@ -67,13 +72,25 @@ export default function Album() {
     //     localStorage.setItem('albumBackgroundColor', randColor);
     // }
 
-    }, [album]);
+    }, [album, activeTableEntries]);
+
+    const handleCurrentTableItemsModalOpen = () => {
+        setActiveTableItemsModalVisible(true)
+    }
+
+    const handleCurrentTableItemsModalClose = () => {
+        setActiveTableItemsModalVisible(false)
+    }
+
+    const handleOptionChange = (value) => {
+        setSelectedElement(value)
+    }
 
     const getAlbum = async () => {
 
         // Function to fetch actual album
 
-        const fetchAlbumFromWhichTable = async (whichTable: string) => {
+        const fetchAlbumFromWhichTable = async (whichTable) => {
             const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/${whichTable}`)
             if (!response.ok) {
                 throw new Error(`Failed to fetch details for ${whichTable}`);
@@ -102,7 +119,7 @@ export default function Album() {
 
         const fetchWhichTable = async () => {
 
-            let localTablesUsed: string[] = [...tablesUsed];
+            let localTablesUsed = [...tablesUsed];
 
             if (localTablesUsed.length === 20) {
                 localTablesUsed = []
@@ -124,7 +141,7 @@ export default function Album() {
                 }
 
                 const data = await response.json()
-                const fetchedTable: string = data[0]['title']
+                const fetchedTable = data[0]['title']
                 console.log(fetchedTable)
 
                 if (!localTablesUsed.includes(fetchedTable)) {
@@ -147,7 +164,7 @@ export default function Album() {
         fetchWhichTable();
     }
 
-    const getFromSpecificTable = async (specificTable: string) => {
+    const getFromSpecificTable = async (specificTable) => {
         const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/${specificTable}`)
             if (!response.ok) {
                 throw new Error(`Failed to fetch details for ${specificTable}`);
@@ -277,6 +294,45 @@ export default function Album() {
         //     });
     }
 
+    const handlePopulateTableItemsModal = async (table) => {
+
+        if(table.includes('album') || table.includes('artist')) {
+            try {
+                const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/all_from_selected_music_table/${table}`)
+                const data = await response.json()
+                setActiveTableEntries(data)
+                console.log(activeTableEntries)
+            } catch (error) {
+                console.log(error)
+            }
+        } else if(table.includes('film')) {
+            try {
+                const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/all_from_selected_film_table/${table}`)
+                const data = await response.json()
+                setActiveTableEntries(data)
+            } catch (error) {
+                console.log(error)
+            }
+        } else if(table.includes('anime') || table === 'shows') {
+            try {
+                const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/all_from_selected_shows_table/${table}`)
+                const data = await response.json()
+                setActiveTableEntries(data)
+            } catch (error) {
+                console.log(error)
+            }
+        } else {
+            try {
+                const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/all_from_selected_book_table/${table}`)
+                const data = await response.json()
+                setActiveTableEntries(data)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        setActiveTableItemsModalVisible(true)
+    }
+
     return (
         <View style={containerStyles.screenContainer}>
             <View style={containerStyles.topLeftCornerContainer}>
@@ -291,14 +347,47 @@ export default function Album() {
             </View>
                 <View style={containerStyles.cardContainer}>
                     {albumAndTableAvailable ? (
-                        <>
+                        <Pressable style={cardStyles.card}>
                             <Text style={cardStyles.albumName}>
                                 {album}
                             </Text>
-                            <Text style={cardStyles.tableName}>
-                                {whichTable}
-                            </Text>
-                        </>
+                            <Pressable onPress={() => handlePopulateTableItemsModal(whichTable)}>
+                                <Text style={cardStyles.tableName}>
+                                    {whichTable}
+                                </Text>
+                            </Pressable>
+                            <Modal
+                                animationType="slide"
+                                transparent={true}
+                                visible={currentTableItemsModalVisible}
+                                onRequestClose={() => {
+                                alert('Modal has been closed.');
+                                setActiveTableItemsModalVisible(!currentTableItemsModalVisible);
+                                }}>
+                                <View style={modalStyles.centeredView}>
+                                <View style={modalStyles.modalView}>
+                                    <Picker
+                                    style={{ height: 'auto', width: '100%' }}
+                                    selectedValue={selectedElement ? selectedElement : ''}
+                                    onValueChange={handleOptionChange}
+                                    >
+                                        {activeTableEntries.length > 0 ? (
+                                            activeTableEntries.map((item) => (
+                                                <Picker.Item key={item.id} label={item.title} value={item.title} />
+                                            ))
+                                        ) : (
+                                            <Picker.Item label="Loading..." value="" />
+                                        )}
+                                    </Picker>
+                                <Pressable onPress={handleCurrentTableItemsModalClose}>
+                                    <Text>
+                                    Close
+                                    </Text>
+                                </Pressable>
+                                </View>
+                                </View>
+                            </Modal>
+                        </Pressable>
                     ) :
                         <>
                             <Text style={cardStyles.loadingText}>
@@ -337,6 +426,9 @@ const cardStyles = StyleSheet.create({
         fontSize: 18,
         fontStyle: 'italic',
         color: '#888',
+    },
+    card: {
+        alignItems: 'center'
     }
 });
 
@@ -372,7 +464,7 @@ const containerStyles = StyleSheet.create({
         borderRadius: 10,
         padding: 30,
         alignItems: 'center',
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.1,
@@ -413,3 +505,49 @@ const buttonStyles = StyleSheet.create({
         color: 'white',
     },
 });
+
+const modalStyles = StyleSheet.create({
+    centeredView: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    modalView: {
+      margin: 20,
+      backgroundColor: 'white',
+      borderRadius: 20,
+      padding: 35,
+      alignItems: 'center',
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
+      width: '100%',
+      position: 'absolute',
+      bottom: 10
+    },
+    button: {
+      borderRadius: 20,
+      padding: 10,
+      elevation: 2,
+    },
+    buttonOpen: {
+      backgroundColor: '#F194FF',
+    },
+    buttonClose: {
+      backgroundColor: '#2196F3',
+    },
+    textStyle: {
+      color: 'white',
+      fontWeight: 'bold',
+      textAlign: 'center',
+    },
+    modalText: {
+      marginBottom: 15,
+      textAlign: 'center',
+    },
+  });

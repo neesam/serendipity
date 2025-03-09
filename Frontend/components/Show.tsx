@@ -3,8 +3,6 @@ import { useState, useEffect } from "react";
 
 // import { ToastContainer, toast } from 'react-toastify';
 
-const placeholderImage = require('/Users/anees/entertainmentRecSystemMobile/Frontend/assets/sticker-smash-assets/images/1.png')
-
 const Show = () => {
 
     const [whichTable, setWhichTable] = useState('')
@@ -163,7 +161,6 @@ const Show = () => {
       }
 
     return (
-        <ImageBackground source={placeholderImage}>
             <View style={containerStyles.screenContainer}>
                 <View style={containerStyles.cardContainer}>
                     {showAndTableAvailable ? (
@@ -195,7 +192,6 @@ const Show = () => {
                     </Pressable>
                 </View>
             </View>
-        </ImageBackground>
         );
 }
 
@@ -221,7 +217,6 @@ const cardStyles = StyleSheet.create({
 
 const containerStyles = StyleSheet.create({
     screenContainer: {
-        backgroundImage: placeholderImage,
         alignItems: 'center',
         justifyContent: 'center',
         height: '100%',
