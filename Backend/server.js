@@ -89,6 +89,8 @@ app.post('/api/addAlbumToQueue/:album', async (req, res) => {
         (title, id, type) VALUES (@album, GENERATE_UUID(), 'album')
     `;
 
+    console.log(query)
+
     try {
         // Run the query
         const options = {

@@ -4,7 +4,9 @@ import { Picker } from '@react-native-picker/picker'
 
 import { Ionicons } from '@expo/vector-icons'
 
-const DropdownForm = ({name, submitFunction, attributes}) => {
+const DropdownForm = ({name, setEntry, addToQueue, attributes}) => {
+
+  console.log(addToQueue)
 
   // State to store selected dropdown value
   const [tablesModalVisible, setTablesModalVisible] = useState(false);
@@ -18,6 +20,11 @@ const DropdownForm = ({name, submitFunction, attributes}) => {
 
   const handleOptionChange = (value) => {
     setSelectedElement(value)
+  }
+
+  const handleGetAndSetEntry = () => { 
+    setEntry(selectedElement)
+    handleTablesModalClose()
   }
 
   return (
@@ -49,17 +56,24 @@ const DropdownForm = ({name, submitFunction, attributes}) => {
                       <Picker.Item key={item} label={item} value={item} />
                     ))}
                 </Picker>
-              <Pressable onPress={handleTablesModalClose}>
-                <Text>
-                  Close
-                </Text>
-              </Pressable>
+              <View style={modalStyles.setCurrentAlbumModalButtonsContainerContainer}>
+                <Pressable style={modalStyles.setCurrentAlbumModalButtonContainer} onPress={handleGetAndSetEntry}>
+                  <Text style={modalStyles.setCurrentAlbumModalButton}>
+                    Set
+                  </Text>
+                </Pressable>
+                <Pressable style={modalStyles.setCurrentAlbumModalButtonContainer} onPress={handleTablesModalClose}>
+                  <Text style={modalStyles.setCurrentAlbumModalButton}>
+                    Close
+                  </Text>
+                </Pressable>
+              </View>
               </View>
             </View>
           </Modal>
         </View>
         ) :
-        <Pressable onPress={handleTablesModalOpen}>
+        <Pressable onPress={addToQueue}>
             <Ionicons name={name} size={20}/>
         </Pressable>
         }
@@ -115,6 +129,28 @@ const modalStyles = StyleSheet.create({
     marginBottom: 15,
     textAlign: 'center',
   },
+  setCurrentAlbumModalButtonsContainerContainer: {
+    flexDirection: 'row',
+    width: '100%',
+    height: 'auto',
+    justifyContent: 'space-around'
+},
+  setCurrentAlbumModalButtonContainer: {
+    borderWidth: .2,
+    borderColor: 'black',
+    borderRadius: 10,
+    elevation: 5,
+    padding: 10,
+    width: 100,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+},
+  setCurrentAlbumModalButton: {
+    fontSize: 20
+}
 });
 
 

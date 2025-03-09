@@ -184,18 +184,12 @@ export default function Album() {
             const originalTableVal = data[0]['original_table'] || null
             // const bgColor = randomColor()
 
-            localStorage.setItem('album', albumVal)
-            localStorage.setItem('albumID', albumIDVal)
-            localStorage.setItem('in_circulation', in_circulation)
-            localStorage.setItem('original_album_table', originalTableVal)
-            localStorage.setItem('whichMusicTable', specificTable)
-
             setAlbum(albumVal)
             setAlbumID(albumIDVal)
             setInCirculation(in_circulation)
             setOriginalTable(originalTableVal)
             setWhichTable(specificTable)
-            // setBackgroundColor(bgColor)
+            setBackgroundColor(bgColor)
     }
 
     const deleteAlbum = async () => {
@@ -276,22 +270,20 @@ export default function Album() {
     }
 
     const addToQueue = async () => {
-        try {
-            const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/addAlbumToQueue/${album}`, {
-                method: 'POST',
-                headers: { 'Content-type': 'application/json' },
-            })
+        console.log(album)
+        const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/addAlbumToQueue/${album}`, {
+            method: 'POST',
+            headers: { 'Content-type': 'application/json' },
+        })
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`Post failed: ${errorData.message || 'Unknown error'}`);
-            }
-
-            console.log(await response.json());
-            console.log('Album added successfully.');
-        } catch(error) {
-            console.error('Error in API call', error);
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`Post failed: ${errorData.message || 'Unknown error'}`);
         }
+
+        console.log(await response.json());
+        console.log('Album added successfully.');
+        
 
         // toast('Added to queue!', {
         //     autoClose: 2000,
@@ -344,18 +336,18 @@ export default function Album() {
                 <DropdownForm attributes={{
                     tables: tables
                     }}
-                    submitFunction={addToQueue}
+                    setEntry={getFromSpecificTable}
                     name={'list-sharp'}/>
             </View>
             <View style={containerStyles.topRightCornerContainer}>
-                <DropdownForm attributes={{}} submitFunction={addToQueue} name={'add-sharp'}/>
+                <DropdownForm attributes={{}} addToQueue={addToQueue} name={'add-sharp'}/>
             </View>
                 <View style={containerStyles.cardContainer}>
                     {albumAndTableAvailable ? (
-                        <Pressable style={cardStyles.card}>
-                            <Text style={cardStyles.albumName}>
-                                {album}
-                            </Text>
+                        <View style={cardStyles.card}>
+                                <Text style={cardStyles.albumName}>
+                                    {album}
+                                </Text>
                             <Pressable onPress={() => handlePopulateTableItemsModal(whichTable)}>
                                 <Text style={cardStyles.tableName}>
                                     {whichTable}
@@ -387,20 +379,22 @@ export default function Album() {
                                             ))
                                         )}
                                     </Picker>
-                                <Pressable onPress={() => handleSetCurrentAlbum(selectedElement)}>
-                                    <Text>
-                                        Set
-                                    </Text>
-                                </Pressable>
-                                <Pressable onPress={handleCurrentTableItemsModalClose}>
-                                    <Text>
-                                        Close
-                                    </Text>
-                                </Pressable>
+                                <View style={containerStyles.setCurrentAlbumModalButtonsContainerContainer}>
+                                    <Pressable style={containerStyles.setCurrentAlbumModalButtonContainer} onPress={() => handleSetCurrentAlbum(selectedElement)}>
+                                        <Text style={buttonStyles.setCurrentAlbumModalButton}>
+                                            Set
+                                        </Text>
+                                    </Pressable>
+                                    <Pressable style={containerStyles.setCurrentAlbumModalButtonContainer} onPress={handleCurrentTableItemsModalClose}>
+                                        <Text style={buttonStyles.setCurrentAlbumModalButton}>
+                                            Close
+                                        </Text>
+                                    </Pressable>
+                                </View>
                                 </View>
                                 </View>
                             </Modal>
-                        </Pressable>
+                            </View>
                     ) :
                         <>
                             <Text style={cardStyles.loadingText}>
@@ -408,7 +402,7 @@ export default function Album() {
                             </Text>
                         </>}
                 </View>
-            <View style={containerStyles.buttonsContainer}>
+            <View style={containerStyles.mainButtonsContainer}>
                 <Pressable onPress={getAlbum}>
                     <View style={containerStyles.getAlbumButtonContainer}>
                             <Text style={buttonStyles.buttonText}>Get album</Text>
@@ -505,10 +499,29 @@ const containerStyles = StyleSheet.create({
         borderColor: 'white',
         borderWidth: 3,
     },
-    buttonsContainer: {
+    mainButtonsContainer: {
         flexDirection: 'row',
         gap: 10
     },
+    setCurrentAlbumModalButtonsContainerContainer: {
+        flexDirection: 'row',
+        width: '100%',
+        height: 'auto',
+        justifyContent: 'space-around'
+    },
+    setCurrentAlbumModalButtonContainer: {
+        borderWidth: .2,
+        borderColor: 'black',
+        borderRadius: 10,
+        elevation: 5,
+        padding: 10,
+        width: 100,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 6,
+    }
 });
 
 const buttonStyles = StyleSheet.create({
@@ -517,12 +530,14 @@ const buttonStyles = StyleSheet.create({
         fontWeight: '600',
         color: 'white',
     },
+    setCurrentAlbumModalButton: {
+        fontSize: 20
+    }
 });
 
 const modalStyles = StyleSheet.create({
     centeredView: {
       flex: 1,
-      justifyContent: 'center',
       alignItems: 'center',
     },
     modalView: {
@@ -541,7 +556,8 @@ const modalStyles = StyleSheet.create({
       elevation: 5,
       width: '100%',
       position: 'absolute',
-      bottom: 10
+      bottom: 10,
+      flex: 'row'
     },
     button: {
       borderRadius: 20,
