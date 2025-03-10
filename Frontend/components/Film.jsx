@@ -1,6 +1,14 @@
 import { View, StyleSheet, Text, Pressable } from "react-native";
 import { useState, useEffect } from "react";
 
+import * as Haptics from 'expo-haptics';
+
+import { cardStyles, containerStyles, buttonStyles, modalStyles } from '../Styles/AlbumStyles.jsx'
+import TopScreenFunctionality from "./TopScreenFunctionality";
+import { filmTables } from "@/Helper/lists";
+import MainButtons from "./MainButtons.jsx";
+import ContentCard from "./ContentCard.jsx";
+
 // import { ToastContainer, toast } from 'react-toastify';
 
 const Film = () => {
@@ -10,26 +18,17 @@ const Film = () => {
     const [filmID, setFilmID] = useState('')
     const [tablesUsed, setTablesUsed] = useState([])
     const [backgroundColor, setBackgroundColor] = useState('')
-    const [filmAndTableAvailable, setFilmAndTableAvailable] = useState<boolean>(false)
-
-    const tables = [
-        'film_ebert',
-        'film_imdb250',
-        'filmrecs',
-        'film_towatch',
-        'film_visualhypnagogia',
-        'film_rymtop1500',
-        'film_criterion',
-        'film_noir1000',
-        'film_tspdt2500'
-    ]
+    const [filmAndTableAvailable, setFilmAndTableAvailable] = useState(false)
 
     useEffect(() => {
 
     }, [film]);
 
     const getFilm = async () => {
-        const fetchFilmFromWhichTable = async (whichTable: string) => {
+
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+
+        const fetchFilmFromWhichTable = async (whichTable) => {
             const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/${whichTable}`)
             if (!response.ok) {
                 throw new Error(`Failed to fetch details for ${whichTable}`);
@@ -69,7 +68,7 @@ const Film = () => {
                 }
 
                 const data = await response.json()
-                const fetchedTable: string = data[0]['title']
+                const fetchedTable = data[0]['title']
 
                 console.log(data)
 
@@ -94,6 +93,9 @@ const Film = () => {
     }
 
     const deleteFilm = async () => {
+
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+
         try {
         
             const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/film/${filmID}/${whichTable}`, {
@@ -108,7 +110,7 @@ const Film = () => {
 
             console.log(await response.json());
             console.log('Film deleted successfully.');
-        } catch (error: any) {
+        } catch (error) {
             console.error('Error during deletion:', error.message);
         }
 
@@ -120,7 +122,10 @@ const Film = () => {
         getFilm()
     };
 
-    const getFromSpecificTable = async (specificTable: string) => {
+    const getFromSpecificTable = async (specificTable) => {
+
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+
         const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/${specificTable}`)
             if (!response.ok) {
                 throw new Error(`Failed to fetch details for ${specificTable}`);
@@ -138,6 +143,9 @@ const Film = () => {
     }
 
     const addToQueue = async () => {
+
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+
         try {
             const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/addFilmToQueue/${film}`, {
                 method: 'POST',
@@ -159,118 +167,27 @@ const Film = () => {
         //     autoClose: 2000,
         //     theme: "light",
         //     });
-      }
+    }
 
     
-      return (
-        <View style={containerStyles.screenContainer}>
-            <View style={containerStyles.cardContainer}>
-                {filmAndTableAvailable ? (
-                    <>
-                        <Text style={cardStyles.albumName}>
-                            {film}
-                        </Text>
-                        <Text style={cardStyles.tableName}>
-                            {whichTable}
-                        </Text>
-                    </>
-                ) : 
-                    <>
-                        <Text style={cardStyles.loadingText}>
-                            Getting info...
-                        </Text>
-                    </>}
+        return (
+            <View style={containerStyles.screenContainer}>
+                <TopScreenFunctionality 
+                    containerStyles={containerStyles}
+                    tables={filmTables}
+                    getFromSpecificTable={getFromSpecificTable}
+                    addToQueue={addToQueue}
+                />
+                <ContentCard 
+                    whichTable={whichTable} 
+                    availability={filmAndTableAvailable} 
+                    type={'film'} 
+                    contentName={film}
+                    setEntry={setFilm}
+                />
+                <MainButtons getContent={getFilm} deleteContent={deleteFilm} type={'film'}/>
             </View>
-            <View style={containerStyles.buttonsContainer}>
-                <Pressable onPress={getFilm}>
-                    <View style={containerStyles.getFilmButtonContainer}>
-                            <Text style={buttonStyles.buttonText}>Get film</Text>
-                    </View>
-                </Pressable>
-                <Pressable>
-                    <View style={containerStyles.deleteFilmButtonContainer}>
-                            <Text style={buttonStyles.buttonText}>Delete film</Text>
-                    </View>
-                </Pressable>
-            </View>
-        </View>
     );
 }
 
 export default Film
-
-
-const cardStyles = StyleSheet.create({
-    albumName: {
-        fontSize: 22,
-        fontWeight: '600',
-        marginBottom: 5,
-        color: '#333',
-    },
-    tableName: {
-        fontSize: 18,
-        color: '#555',
-    },
-    loadingText: {
-        fontSize: 18,
-        fontStyle: 'italic',
-        color: '#888',
-    }
-});
-
-const containerStyles = StyleSheet.create({
-    screenContainer: {
-        backgroundColor: '#f8f8f8',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%',
-        padding: 20,
-    },
-    cardContainer: {
-        backgroundColor: 'white',
-        borderWidth: 2,
-        borderColor: 'gold',
-        borderRadius: 10,
-        padding: 30,
-        alignItems: 'center',
-        justifyContent: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.1,
-        shadowRadius: 6,
-        elevation: 5,  // This will give it a slight shadow on Android
-        marginBottom: 20,
-    },
-    getFilmButtonContainer: {
-        backgroundColor: 'blue',
-        paddingVertical: 12,
-        paddingHorizontal: 30,
-        borderRadius: 25,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderColor: 'white',
-        borderWidth: 3,
-    },
-    deleteFilmButtonContainer: {
-        backgroundColor: 'red',
-        paddingVertical: 12,
-        paddingHorizontal: 30,
-        borderRadius: 25,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderColor: 'white',
-        borderWidth: 3,
-    },
-    buttonsContainer: {
-        flexDirection: 'row',
-        gap: 10
-    }
-});
-
-const buttonStyles = StyleSheet.create({
-    buttonText: {
-        fontSize: 18,
-        fontWeight: '600',
-        color: 'white',
-    },
-});

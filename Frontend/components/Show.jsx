@@ -1,5 +1,13 @@
-import { View, StyleSheet, Text, Pressable, ImageBackground } from "react-native";
+import { View } from "react-native";
 import { useState, useEffect } from "react";
+
+import * as Haptics from 'expo-haptics';
+
+import { containerStyles } from '../Styles/AlbumStyles'
+import { showTables } from '../Helper/lists'
+import TopScreenFunctionality from './TopScreenFunctionality'
+import MainButtons from './MainButtons'
+import ContentCard from './ContentCard'
 
 // import { ToastContainer, toast } from 'react-toastify';
 
@@ -10,16 +18,7 @@ const Show = () => {
     const [tablesUsed, setTablesUsed] = useState([])
     const [showID, setShowID] = useState('')
     const [backgroundColor, setBackgroundColor] = useState('')
-    const [showAndTableAvailable, setShowAndTableAvailable] = useState<boolean>(false)
-
-
-    const tables = [
-        'shows',
-        'anime_classic',
-        'anime_other',
-        'shows_top50'
-    ]
-
+    const [showAndTableAvailable, setShowAndTableAvailable] = useState(false)
 
     useEffect(() => {
 
@@ -27,9 +26,11 @@ const Show = () => {
 
     const getShow = async () => {
 
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+
         // Function to fetch actual show
 
-        const fetchShowFromWhichTable = async (whichTable: string) => {
+        const fetchShowFromWhichTable = async (whichTable) => {
             const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/${whichTable}`)
             if (!response.ok) {
                 throw new Error(`Failed to fetch details for ${whichTable}`);
@@ -44,9 +45,8 @@ const Show = () => {
 
             // Logic to change background on each button press
 
-            // const bgColor = randomColor()
-            // setBackgroundColor(bgColor)
-            // localStorage.setItem('albumBackgroundColor', bgColor)
+            const bgColor = randomColor()
+            setBackgroundColor(bgColor)
         }
 
         // Function to retrieve specific table
@@ -73,7 +73,7 @@ const Show = () => {
                 }
 
                 const data = await response.json()
-                const fetchedTable: string = data[0]['title']
+                const fetchedTable = data[0]['title']
                 console.log(fetchedTable)
 
                 if (!localTablesUsed.includes(fetchedTable)) {
@@ -96,7 +96,10 @@ const Show = () => {
         fetchWhichTable();
     }
 
-    const getFromSpecificTable = async (specificTable: string) => {
+    const getFromSpecificTable = async (specificTable) => {
+
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+
         const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/${specificTable}`)
             if (!response.ok) {
                 throw new Error(`Failed to fetch details for ${specificTable}`);
@@ -115,6 +118,9 @@ const Show = () => {
     }
 
     const deleteShow = async () => {
+
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+
         console.log(showID)
         console.log(`Requesting DELETE for show ID: ${showID}`);
         try {
@@ -124,7 +130,7 @@ const Show = () => {
 
             const data = await response.json()
             console.log(data.message)
-        } catch (err: any) {
+        } catch (err) {
             console.log(err.message);
         }
 
@@ -137,6 +143,9 @@ const Show = () => {
     }
 
     const addToQueue = async () => {
+        
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+
         try {
             const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/addShowToQueue/${show}`, {
                 method: 'POST',
@@ -158,115 +167,31 @@ const Show = () => {
         //     autoClose: 2000,
         //     theme: "light",
         //     });
-      }
+    }
+
+    const screenStyle = {
+        backgroundColor: backgroundColor
+    }
 
     return (
-            <View style={containerStyles.screenContainer}>
-                <View style={containerStyles.cardContainer}>
-                    {showAndTableAvailable ? (
-                        <>
-                            <Text style={cardStyles.albumName}>
-                                {show}
-                            </Text>
-                            <Text style={cardStyles.tableName}>
-                                {whichTable}
-                            </Text>
-                        </>
-                    ) : 
-                        <>
-                            <Text style={cardStyles.loadingText}>
-                                Getting info...
-                            </Text>
-                        </>}
-                </View>
-                <View style={containerStyles.buttonsContainer}>
-                    <Pressable onPress={getShow}>
-                        <View style={containerStyles.getShowButtonContainer}>
-                                <Text style={buttonStyles.buttonText}>Get show</Text>
-                        </View>
-                    </Pressable>
-                    <Pressable onPress={deleteShow}>
-                        <View style={containerStyles.deleteShowButtonContainer}>
-                                <Text style={buttonStyles.buttonText}>Delete show</Text>
-                        </View>
-                    </Pressable>
-                </View>
-            </View>
+        <View style={[containerStyles.screenContainer, screenStyle]}>
+            <TopScreenFunctionality 
+                containerStyles={containerStyles}
+                tables={showTables}
+                getFromSpecificTable={getFromSpecificTable}
+                addToQueue={addToQueue}
+            />
+            <ContentCard 
+                    whichTable={whichTable} 
+                    availability={showAndTableAvailable} 
+                    type={'show'} 
+                    contentName={show}
+                    setEntry={setShow}
+            />
+            <MainButtons getContent={getShow} deleteContent={deleteShow} type={'show'}/>
+        </View>
         );
 }
 
 export default Show
 
-const cardStyles = StyleSheet.create({
-    albumName: {
-        fontSize: 22,
-        fontWeight: '600',
-        marginBottom: 5,
-        color: '#333',
-    },
-    tableName: {
-        fontSize: 18,
-        color: '#555',
-    },
-    loadingText: {
-        fontSize: 18,
-        fontStyle: 'italic',
-        color: '#888',
-    }
-});
-
-const containerStyles = StyleSheet.create({
-    screenContainer: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%',
-        padding: 20,
-    },
-    cardContainer: {
-        backgroundColor: 'white',
-        borderWidth: 2,
-        borderColor: 'gold',
-        borderRadius: 10,
-        padding: 30,
-        alignItems: 'center',
-        justifyContent: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.1,
-        shadowRadius: 6,
-        elevation: 5,  // This will give it a slight shadow on Android
-        marginBottom: 20,
-    },
-    getShowButtonContainer: {
-        backgroundColor: 'blue',
-        paddingVertical: 12,
-        paddingHorizontal: 30,
-        borderRadius: 25,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderColor: 'white',
-        borderWidth: 3,
-    },
-    deleteShowButtonContainer: {
-        backgroundColor: 'red',
-        paddingVertical: 12,
-        paddingHorizontal: 30,
-        borderRadius: 25,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderColor: 'white',
-        borderWidth: 3,
-    },
-    buttonsContainer: {
-        flexDirection: 'row',
-        gap: 10
-    }
-});
-
-const buttonStyles = StyleSheet.create({
-    buttonText: {
-        fontSize: 18,
-        fontWeight: '600',
-        color: 'white',
-    },
-});

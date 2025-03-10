@@ -41,6 +41,14 @@ export default function TabLayout() {
                         <Ionicons name={focused ? 'tv-sharp' : 'tv-outline'} color={color} size={24}/>
                     )
                 }}/>
+            <Tabs.Screen
+                name="book"
+                options={{
+                    title: 'Book',
+                    tabBarIcon: ({ color, focused }) => (
+                        <Ionicons name={focused ? 'book-sharp' : 'book-outline'} color={color} size={24}/>
+                    )
+                }}/>
         </Tabs>
     )
 }

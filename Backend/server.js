@@ -802,6 +802,21 @@ app.get('/api/album_2011vwave', async (req, res) => {
     }
 });
 
+app.get('/api/album_faketable', async (req, res) => {
+    const sqlQuery = `select * from ${BQ_PROJECT}.${MUSIC_TABLES_DATASET}.album_faketable order by rand() limit 1`
+
+    console.log(sqlQuery)
+
+    try {
+        const [rows] = await bigquery.query({ query: sqlQuery });
+        res.json(rows)
+        console.log(rows)
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
 app.post('/api/addToCirculation/:album/:table', async (req, res) => {
     const album = req.params.album;
     const table = req.params.table;
@@ -843,12 +858,12 @@ app.delete('/api/albums/:id/:whichTable', async (req, res) => {
 
     console.log(`Received DELETE request for id: ${id} from table: ${whichTable}`);
 
-
-    // Construct the query to delete the row
     const query = `
         DELETE FROM \`${BQ_PROJECT}.${MUSIC_TABLES_DATASET}.${whichTable}\`
         WHERE id  = @id
     `;
+
+    console.log(query)
 
     try {
         // Run the query

@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { View, StyleSheet, Pressable, Modal, Text } from 'react-native';
 import { Picker } from '@react-native-picker/picker'
 
 import { Ionicons } from '@expo/vector-icons'
 
-const DropdownForm = ({name, setEntry, addToQueue, attributes}) => {
+const TablesModalAndButton = ({ name, setEntry, addToQueue, tables, type }) => {
 
   console.log(addToQueue)
 
@@ -29,20 +29,18 @@ const DropdownForm = ({name, setEntry, addToQueue, attributes}) => {
 
   return (
       <View>
-        { name === 'list-sharp' ? (
-          <View>
 
             <Pressable onPress={handleTablesModalOpen}>
               <Ionicons name={name} size={20}/>
             </Pressable>
 
             <Modal
-            animationType="slide"
-            transparent={true}
-            visible={tablesModalVisible}
-            onRequestClose={() => {
-              Alert.alert('Modal has been closed.');
-              setTablesModalVisible(!tablesModalVisible);
+              animationType="slide"
+              transparent={true}
+              visible={tablesModalVisible}
+              onRequestClose={() => {
+                Alert.alert('Modal has been closed.');
+                setTablesModalVisible(!tablesModalVisible);
             }}>
             <View style={modalStyles.centeredView}>
               <View style={modalStyles.modalView}>
@@ -52,14 +50,14 @@ const DropdownForm = ({name, setEntry, addToQueue, attributes}) => {
                   selectedValue={selectedElement}
                   onValueChange={handleOptionChange}
                   >
-                    {attributes.tables.map((item) => (
+                    {tables.map((item) => (
                       <Picker.Item key={item} label={item} value={item} />
                     ))}
                 </Picker>
               <View style={modalStyles.setCurrentAlbumModalButtonsContainerContainer}>
                 <Pressable style={modalStyles.setCurrentAlbumModalButtonContainer} onPress={handleGetAndSetEntry}>
                   <Text style={modalStyles.setCurrentAlbumModalButton}>
-                    Set
+                    Get
                   </Text>
                 </Pressable>
                 <Pressable style={modalStyles.setCurrentAlbumModalButtonContainer} onPress={handleTablesModalClose}>
@@ -72,18 +70,9 @@ const DropdownForm = ({name, setEntry, addToQueue, attributes}) => {
             </View>
           </Modal>
         </View>
-        ) :
-        <Pressable onPress={addToQueue}>
-            <Ionicons name={name} size={20}/>
-        </Pressable>
-        }
-      </View>
   );
 };
 
-const styles = StyleSheet.create({
-
-})
 
 const modalStyles = StyleSheet.create({
   centeredView: {
@@ -154,4 +143,4 @@ const modalStyles = StyleSheet.create({
 });
 
 
-export default DropdownForm;
+export default TablesModalAndButton;
