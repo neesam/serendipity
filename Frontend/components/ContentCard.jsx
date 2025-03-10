@@ -6,7 +6,7 @@ import { Picker } from "@react-native-picker/picker";
 
 import { containerStyles, cardStyles, modalStyles, buttonStyles } from '../Styles/AlbumStyles.jsx'
 
-const ContentCard = ( { whichTable, availability, contentName, type, setEntry } ) => {
+const ContentCard = ({ whichTable, availability, contentName, type, setEntry }) => {
 
     const [currentTableItemsModalVisible, setActiveTableItemsModalVisible] = useState(false)
     const [selectedElement, setSelectedElement] = useState('');
@@ -28,7 +28,7 @@ const ContentCard = ( { whichTable, availability, contentName, type, setEntry } 
 
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-        if(table.includes('album') || table.includes('artist')) {
+        if (table.includes('album') || table.includes('artist')) {
             try {
                 const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/all_from_selected_music_table/${table}`)
                 const data = await response.json()
@@ -37,7 +37,7 @@ const ContentCard = ( { whichTable, availability, contentName, type, setEntry } 
             } catch (error) {
                 console.log(error)
             }
-        } else if(table.includes('film')) {
+        } else if (table.includes('film')) {
             try {
                 const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/all_from_selected_film_table/${table}`)
                 const data = await response.json()
@@ -45,7 +45,7 @@ const ContentCard = ( { whichTable, availability, contentName, type, setEntry } 
             } catch (error) {
                 console.log(error)
             }
-        } else if(table.includes('anime') || table === 'shows') {
+        } else if (table.includes('anime') || table === 'shows') {
             try {
                 const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/all_from_selected_shows_table/${table}`)
                 const data = await response.json()
@@ -75,7 +75,7 @@ const ContentCard = ( { whichTable, availability, contentName, type, setEntry } 
 
         const encodedQuery = encodeURIComponent(contentName);
         const spotifyWebUrl = `https://open.spotify.com/search/${encodedQuery}`;
-    
+
         // Open the Spotify app or redirect to Spotify on the web if app is not installed
         Linking.openURL(spotifyWebUrl).catch((err) => {
             console.error('Failed to open Spotify:', err);
@@ -88,7 +88,7 @@ const ContentCard = ( { whichTable, availability, contentName, type, setEntry } 
 
         const encodedQuery = encodeURIComponent(contentName + ' ' + type);
         const googleUrl = `https://www.google.com/search?q=${encodedQuery}`;
-    
+
         Linking.openURL(googleUrl).catch((err) => {
             console.error('Failed to open Google:', err);
             // If Spotify is not installed, open Spotify in the browser
@@ -122,43 +122,43 @@ const ContentCard = ( { whichTable, availability, contentName, type, setEntry } 
                         transparent={true}
                         visible={currentTableItemsModalVisible}
                         onRequestClose={() => {
-                        alert('Modal has been closed.');
-                        setActiveTableItemsModalVisible(!currentTableItemsModalVisible);
+                            alert('Modal has been closed.');
+                            setActiveTableItemsModalVisible(!currentTableItemsModalVisible);
                         }}>
                         <View style={modalStyles.centeredView}>
-                        <View style={modalStyles.modalView}>
-                            <Picker
-                            itemStyle={{ color: 'black' }}
-                            style={{ height: 'auto', width: '100%' }}
-                            selectedValue={selectedElement ? selectedElement : ''}
-                            onValueChange={handleOptionChange}
-                            >
-                                {activeTableEntries.some(obj => obj.hasOwnProperty('title'))  ? (
-                                    activeTableEntries.map((item) => (
-                                        <Picker.Item key={item.id} label={item.title} value={item.title} />
-                                    ))
-                                ) : (
-                                    activeTableEntries.map((item) => (
-                                        <Picker.Item key={item.id} label={item.link} value={item.link} />
-                                    ))
-                                )}
-                            </Picker>
-                        <View style={containerStyles.setCurrentContentModalButtonsContainerContainer}>
-                            <Pressable style={containerStyles.setCurrentContentModalButtonContainer} onPress={() => handleSetCurrentContent(selectedElement)}>
-                                <Text style={buttonStyles.setCurrentContentModalButton}>
-                                    Set
-                                </Text>
-                            </Pressable>
-                            <Pressable style={containerStyles.setCurrentContentModalButtonContainer} onPress={handleCurrentTableItemsModalClose}>
-                                <Text style={buttonStyles.setCurrentContentModalButton}>
-                                    Close
-                                </Text>
-                            </Pressable>
-                        </View>
-                        </View>
+                            <View style={modalStyles.modalView}>
+                                <Picker
+                                    itemStyle={{ color: 'black' }}
+                                    style={{ height: 'auto', width: '100%' }}
+                                    selectedValue={selectedElement ? selectedElement : ''}
+                                    onValueChange={handleOptionChange}
+                                >
+                                    {activeTableEntries.some(obj => obj.hasOwnProperty('title')) ? (
+                                        activeTableEntries.map((item) => (
+                                            <Picker.Item key={item.id} label={item.title} value={item.title} />
+                                        ))
+                                    ) : (
+                                        activeTableEntries.map((item) => (
+                                            <Picker.Item key={item.id} label={item.link} value={item.link} />
+                                        ))
+                                    )}
+                                </Picker>
+                                <View style={containerStyles.setCurrentContentModalButtonsContainerContainer}>
+                                    <Pressable style={containerStyles.setCurrentContentModalButtonContainer} onPress={() => handleSetCurrentContent(selectedElement)}>
+                                        <Text style={buttonStyles.setCurrentContentModalButton}>
+                                            Set
+                                        </Text>
+                                    </Pressable>
+                                    <Pressable style={containerStyles.setCurrentContentModalButtonContainer} onPress={handleCurrentTableItemsModalClose}>
+                                        <Text style={buttonStyles.setCurrentContentModalButton}>
+                                            Close
+                                        </Text>
+                                    </Pressable>
+                                </View>
+                            </View>
                         </View>
                     </Modal>
-                    </View>
+                </View>
             ) :
                 <>
                     <Text style={cardStyles.loadingText}>
