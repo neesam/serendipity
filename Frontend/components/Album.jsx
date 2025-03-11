@@ -16,7 +16,7 @@ export default function Album() {
     const [whichTable, setWhichTable] = useState('')
     const [album, setAlbum] = useState('')
     const [albumID, setAlbumID] = useState('')
-    const [inCirculation, setInCirculation] = useState('')
+    const [currentlyListening, setCurrentlyListening] = useState('')
     const [originalTable, setOriginalTable] = useState('')
     const [tablesUsed, setTablesUsed] = useState([])
     const [backgroundColor, setBackgroundColor] = useState('')
@@ -24,7 +24,9 @@ export default function Album() {
 
     useEffect(() => {
 
-    }, [album]);
+        console.log(currentlyListening)
+
+    }, [album, whichTable]);
 
     const getAlbum = async () => {
 
@@ -37,14 +39,16 @@ export default function Album() {
             }
             const data = await response.json()
 
-            console.log(data[0]['id'])
-
-            if(data[0]['link']) {
+            if (data[0]['link']) {
                 setAlbum(data[0]['link'])
             } else {
                 setAlbum(data[0]['title'])
                 setAlbumID(data[0]['id'])
             }
+
+            console.log(data)
+
+            setCurrentlyListening(data[0]['currently_listening'] || 'false')
 
             setAlbumAndTableAvailable(true)
 
@@ -52,6 +56,8 @@ export default function Album() {
 
             const bgColor = randomColor()
             setBackgroundColor(bgColor)
+
+            idk()
         }
 
         // Function to retrieve specific table
@@ -73,7 +79,6 @@ export default function Album() {
 
             while (!tableUsed) {
 
-
                 const response = await fetch('https://first-choice-porpoise.ngrok-free.app/api/whichMusicTable');
 
                 if (!response.ok) {
@@ -83,7 +88,6 @@ export default function Album() {
 
                 const data = await response.json()
                 const fetchedTable = data[0]['title']
-                console.log(fetchedTable)
 
                 if (!localTablesUsed.includes(fetchedTable)) {
 
@@ -93,7 +97,6 @@ export default function Album() {
 
                     localTablesUsed.push(fetchedTable);
                     setTablesUsed(localTablesUsed);
-                    console.log('After update:', [...tablesUsed, fetchedTable]);
 
                     if (data.length > 0) {
                         fetchAlbumFromWhichTable(fetchedTable); // Assuming data is an array and we're using the first item
@@ -108,43 +111,38 @@ export default function Album() {
     const getFromSpecificTable = async (specificTable) => {
 
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-
         const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/${specificTable}`)
-            if (!response.ok) {
-                throw new Error(`Failed to fetch details for ${specificTable}`);
-            }
-            const data = await response.json()
+        if (!response.ok) {
+            throw new Error(`Failed to fetch details for ${specificTable}`);
+        }
+        const data = await response.json()
 
-            console.log(data)
+        const albumVal = data[0]['link'] || data[0]['title']
+        const albumIDVal = data[0]['id']
+        const currently_listening = data[0]['currently_listening'] || 'false'
+        const originalTableVal = data[0]['original_table'] || null
+        const bgColor = randomColor()
 
-            const albumVal = data[0]['link'] || data[0]['title']
-            const albumIDVal = data[0]['id']
-            const in_circulation = data[0]['in_circulation'] || 'false'
-            const originalTableVal = data[0]['original_table'] || null
-            const bgColor = randomColor()
+        setAlbum(albumVal)
+        setAlbumID(albumIDVal)
+        setInCirculation(currently_listening)
+        setOriginalTable(originalTableVal)
+        setWhichTable(specificTable)
+        setBackgroundColor(bgColor)
 
-            console.log(albumIDVal)
-
-            setAlbum(albumVal)
-            setAlbumID(albumIDVal)
-            setInCirculation(in_circulation)
-            setOriginalTable(originalTableVal)
-            setWhichTable(specificTable)
-            setBackgroundColor(bgColor)
+        console.log(specificTable)
     }
 
     const deleteAlbum = async () => {
 
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-        if(inCirculation === 'false') {
+        if (inCirculation === 'false') {
             try {
                 const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/albums/${albumID}/${whichTable}`, {
                     method: 'DELETE',
                     headers: { 'Content-type': 'application/json' },
                 });
-
-                console.log(response)
 
                 if (!response.ok) {
                     const errorData = await response.json();
@@ -152,9 +150,7 @@ export default function Album() {
                     throw new Error(`Delete failed: ${errorData.message || 'Unknown error'}`);
                 }
 
-                console.log('fucking bitch')
                 console.log(await response.json());
-                console.log('shit man')
                 console.log('Album deleted successfully.');
 
                 getAlbum()
@@ -191,9 +187,9 @@ export default function Album() {
         //     });
     };
 
-    const addToCirculation = async () => {
+    const addToCurrentlyListening = async () => {
         try {
-            const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/addToCirculation/${album}/${whichTable}`, {
+            const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/addToCurrentlyListening/${album}/${whichTable}`, {
                 method: 'POST',
                 headers: { 'Content-type': 'application/json' },
             })
@@ -210,7 +206,6 @@ export default function Album() {
         }
 
         setInCirculation('true')
-        localStorage.setItem('in_circulation', 'true')
 
         // toast('Added to inCirculation!', {
         //     autoClose: 2000,
@@ -222,7 +217,6 @@ export default function Album() {
 
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-        console.log(album)
         const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/addAlbumToQueue/${album}`, {
             method: 'POST',
             headers: { 'Content-type': 'application/json' },
@@ -249,20 +243,26 @@ export default function Album() {
 
     return (
         <View style={[containerStyles.screenContainer, screenStyle]}>
-            <TopScreenFunctionality 
+            <TopScreenFunctionality
                 containerStyles={containerStyles}
                 tables={musicTables}
                 getFromSpecificTable={getFromSpecificTable}
                 addToQueue={addToQueue}
             />
-                <ContentCard 
-                    whichTable={whichTable} 
-                    availability={albumAndTableAvailable} 
-                    type={'album'}
-                    contentName={album} 
-                    setEntry={setAlbum}
-                />
-                <MainButtons getContent={getAlbum} deleteContent={deleteAlbum} type={'album'}/>
+            <ContentCard
+                whichTable={whichTable}
+                availability={albumAndTableAvailable}
+                type={'album'}
+                contentName={album}
+                getFromSpecificTable={getFromSpecificTable}
+            />
+            <MainButtons
+                getContent={getAlbum}
+                deleteContent={deleteAlbum}
+                type={'album'}
+                currentlyListening={currentlyListening}
+                addToCurrentlyListening={addToCurrentlyListening}
+            />
         </View>
     );
 }

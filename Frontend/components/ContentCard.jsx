@@ -14,7 +14,7 @@ const ContentCard = ({ whichTable, availability, contentName, type, setEntry }) 
 
     useEffect(() => {
 
-    }, [availability, activeTableEntries])
+    }, [availability, activeTableEntries, contentName])
 
     const handleCurrentTableItemsModalClose = () => {
         setActiveTableItemsModalVisible(false)
@@ -33,7 +33,6 @@ const ContentCard = ({ whichTable, availability, contentName, type, setEntry }) 
                 const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/all_from_selected_music_table/${table}`)
                 const data = await response.json()
                 setActiveTableEntries(data)
-                console.log(activeTableEntries)
             } catch (error) {
                 console.log(error)
             }

@@ -105,7 +105,18 @@ export const containerStyles = StyleSheet.create({
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.1,
         shadowRadius: 6,
-    }
+    },
+    addToCurrentlyListeningButtonContainer: {
+        backgroundColor: 'gray',
+        paddingVertical: 12,
+        paddingHorizontal: 30,
+        borderRadius: 25,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderColor: 'white',
+        borderWidth: 3,
+        marginTop: 10
+    },
 });
 
 export const buttonStyles = StyleSheet.create({
@@ -134,7 +145,7 @@ export const modalStyles = StyleSheet.create({
         shadowOffset: {
             width: 0,
             height: 2,
-    },
+        },
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
@@ -163,4 +174,4 @@ export const modalStyles = StyleSheet.create({
         marginBottom: 15,
         textAlign: 'center',
     },
-  });
+});

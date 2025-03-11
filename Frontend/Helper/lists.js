@@ -1,4 +1,5 @@
 export const musicTables = [
+    'album_currentlyListening',
     'album_2011vwave',
     'album_faketable',
     'album_allgenres',
@@ -19,7 +20,6 @@ export const musicTables = [
     'album_greatscene',
     'album_guysfavemoalbums',
     'album_hopelessrecords',
-    'album_inCirculation',
     'album_indiepop',
     'album_latenightlofi',
     'album_luxelitesources',

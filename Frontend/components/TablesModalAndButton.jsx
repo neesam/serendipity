@@ -6,8 +6,6 @@ import { Ionicons } from '@expo/vector-icons'
 
 const TablesModalAndButton = ({ name, setEntry, addToQueue, tables, type }) => {
 
-  console.log(addToQueue)
-
   // State to store selected dropdown value
   const [tablesModalVisible, setTablesModalVisible] = useState(false);
   const [selectedElement, setSelectedElement] = useState('');
@@ -22,54 +20,54 @@ const TablesModalAndButton = ({ name, setEntry, addToQueue, tables, type }) => {
     setSelectedElement(value)
   }
 
-  const handleGetAndSetEntry = () => { 
+  const handleGetAndSetEntry = () => {
     setEntry(selectedElement)
     handleTablesModalClose()
   }
 
   return (
-      <View>
+    <View>
 
-            <Pressable onPress={handleTablesModalOpen}>
-              <Ionicons name={name} size={20}/>
-            </Pressable>
+      <Pressable onPress={handleTablesModalOpen}>
+        <Ionicons name={name} size={20} />
+      </Pressable>
 
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={tablesModalVisible}
-              onRequestClose={() => {
-                Alert.alert('Modal has been closed.');
-                setTablesModalVisible(!tablesModalVisible);
-            }}>
-            <View style={modalStyles.centeredView}>
-              <View style={modalStyles.modalView}>
-                <Picker
-                  itemStyle={{ color: 'black' }}
-                  style={{ height: 'auto', width: '100%' }}
-                  selectedValue={selectedElement}
-                  onValueChange={handleOptionChange}
-                  >
-                    {tables.map((item) => (
-                      <Picker.Item key={item} label={item} value={item} />
-                    ))}
-                </Picker>
-              <View style={modalStyles.setCurrentAlbumModalButtonsContainerContainer}>
-                <Pressable style={modalStyles.setCurrentAlbumModalButtonContainer} onPress={handleGetAndSetEntry}>
-                  <Text style={modalStyles.setCurrentAlbumModalButton}>
-                    Get
-                  </Text>
-                </Pressable>
-                <Pressable style={modalStyles.setCurrentAlbumModalButtonContainer} onPress={handleTablesModalClose}>
-                  <Text style={modalStyles.setCurrentAlbumModalButton}>
-                    Close
-                  </Text>
-                </Pressable>
-              </View>
-              </View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={tablesModalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setTablesModalVisible(!tablesModalVisible);
+        }}>
+        <View style={modalStyles.centeredView}>
+          <View style={modalStyles.modalView}>
+            <Picker
+              itemStyle={{ color: 'black' }}
+              style={{ height: 'auto', width: '100%' }}
+              selectedValue={selectedElement}
+              onValueChange={handleOptionChange}
+            >
+              {tables.map((item) => (
+                <Picker.Item key={item} label={item} value={item} />
+              ))}
+            </Picker>
+            <View style={modalStyles.setCurrentAlbumModalButtonsContainerContainer}>
+              <Pressable style={modalStyles.setCurrentAlbumModalButtonContainer} onPress={handleGetAndSetEntry}>
+                <Text style={modalStyles.setCurrentAlbumModalButton}>
+                  Get
+                </Text>
+              </Pressable>
+              <Pressable style={modalStyles.setCurrentAlbumModalButtonContainer} onPress={handleTablesModalClose}>
+                <Text style={modalStyles.setCurrentAlbumModalButton}>
+                  Close
+                </Text>
+              </Pressable>
             </View>
-          </Modal>
+          </View>
         </View>
+      </Modal>
+    </View>
   );
 };
 
@@ -123,7 +121,7 @@ const modalStyles = StyleSheet.create({
     width: '100%',
     height: 'auto',
     justifyContent: 'space-around'
-},
+  },
   setCurrentAlbumModalButtonContainer: {
     borderWidth: .2,
     borderColor: 'black',
@@ -136,10 +134,10 @@ const modalStyles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 6,
-},
+  },
   setCurrentAlbumModalButton: {
     fontSize: 20
-}
+  }
 });
 
 

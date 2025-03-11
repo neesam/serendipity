@@ -503,8 +503,8 @@ app.get('/api/album_hopelessrecords', async (req, res) => {
     }
 });
 
-app.get('/api/album_incirculation', async (req, res) => {
-    const sqlQuery = `select * from ${BQ_PROJECT}.${MUSIC_TABLES_DATASET}.album_inCirculation order by rand() limit 1`
+app.get('/api/album_currentlyListening', async (req, res) => {
+    const sqlQuery = `select * from ${BQ_PROJECT}.${MUSIC_TABLES_DATASET}.album_currentlyListening order by rand() limit 1`
 
     try {
         const [rows] = await bigquery.query({ query: sqlQuery });
@@ -516,8 +516,8 @@ app.get('/api/album_incirculation', async (req, res) => {
     }
 });
 
-app.get('/api/album_incirculation_all', async (req, res) => {
-    const sqlQuery = `select * from ${BQ_PROJECT}.${MUSIC_TABLES_DATASET}.album_inCirculation`
+app.get('/api/album_currentlyListening_all', async (req, res) => {
+    const sqlQuery = `select * from ${BQ_PROJECT}.${MUSIC_TABLES_DATASET}.album_currentlyListening`
 
     try {
         const [rows] = await bigquery.query({ query: sqlQuery });
@@ -817,13 +817,13 @@ app.get('/api/album_faketable', async (req, res) => {
     }
 });
 
-app.post('/api/addToCirculation/:album/:table', async (req, res) => {
+app.post('/api/addToCurrentlyListening/:album/:table', async (req, res) => {
     const album = req.params.album;
     const table = req.params.table;
 
     const query = `
-        INSERT INTO \`${BQ_PROJECT}.${MUSIC_TABLES_DATASET}.album_inCirculation\`
-        (title, id, original_table, in_circulation) VALUES (@album, GENERATE_UUID(), @table, 'true')
+        INSERT INTO \`${BQ_PROJECT}.${MUSIC_TABLES_DATASET}.album_currentlyListening\`
+        (title, id, original_table, currently_listening) VALUES (@album, GENERATE_UUID(), @table, 'true')
     `;
 
     try {
@@ -894,12 +894,12 @@ app.delete('/api/albums/:id/:album/:original_table', async (req, res) => {
     const originalTable = req.params.original_table;
     const album = req.params.album;
 
-    console.log(`Received DELETE request for album: ${album} from table: ${originalTable} and album_inCirculation`);
+    console.log(`Received DELETE request for album: ${album} from table: ${originalTable} and album_currentlyListening`);
 
 
-    // Query to delete from album_inCirculation
+    // Query to delete from album_currentlyListening
     const query1 = `
-    DELETE FROM \`${BQ_PROJECT}.${MUSIC_TABLES_DATASET}.album_inCirculation\`
+    DELETE FROM \`${BQ_PROJECT}.${MUSIC_TABLES_DATASET}.album_currentlyListening\`
     WHERE id = @id
     `;
 
