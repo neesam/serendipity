@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { View, StyleSheet, Pressable, Modal, Text } from 'react-native';
+
 import { Picker } from '@react-native-picker/picker'
+import * as Haptics from 'expo-haptics';
 
 import { Ionicons } from '@expo/vector-icons'
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 const TablesModalAndButton = ({ name, setEntry, addToQueue, tables, type }) => {
 
@@ -11,6 +14,7 @@ const TablesModalAndButton = ({ name, setEntry, addToQueue, tables, type }) => {
   const [selectedElement, setSelectedElement] = useState('');
 
   const handleTablesModalOpen = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     setTablesModalVisible(true);
   }
 
@@ -29,7 +33,7 @@ const TablesModalAndButton = ({ name, setEntry, addToQueue, tables, type }) => {
     <View>
 
       <Pressable onPress={handleTablesModalOpen}>
-        <Ionicons name={name} size={20} />
+        <AntDesign name={name} size={20} />
       </Pressable>
 
       <Modal

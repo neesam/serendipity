@@ -10,10 +10,10 @@ const TopScreenFunctionality = ({ containerStyles, tables, getFromSpecificTable,
         { type !== 'book' ? (
             <>
             <View style={containerStyles.topLeftCornerContainer}>
-                <TablesModalAndButton 
+                <TablesModalAndButton
                     tables={tables}
                     setEntry={getFromSpecificTable}
-                    name={'list-sharp'}
+                    name={'table'}
                     type={type}
                 />
             </View>

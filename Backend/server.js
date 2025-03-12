@@ -835,12 +835,14 @@ app.post('/api/addToCurrentlyListening/:album/:table', async (req, res) => {
         const [job] = await bigquery.createQueryJob(options);
         console.log(`Job ${job.id} started.`);
 
+        console.log(query, options.params)
+
         // Wait for the query to finish
         const [rows] = await job.getQueryResults();
         console.log('Rows affected:', rows);
 
         if (rows.length === 0) {
-            return res.status(404).send('Table not found');
+            return res.json('No rows')
         }
 
         res.status(200).send({ message: 'Album added successfully' });

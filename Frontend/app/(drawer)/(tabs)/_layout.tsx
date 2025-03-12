@@ -1,23 +1,21 @@
 import { Tabs } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
+import { DrawerToggleButton } from '@react-navigation/drawer'
 
 export default function TabLayout() {
     return (
         <Tabs
             screenOptions={{
                 tabBarActiveTintColor: '#ffd33d',
-                headerStyle: {
-                    backgroundColor: '#25292e'
-                },
-                headerShadowVisible: false,
-                headerTintColor: 'white',
+                headerShown: true,
                 tabBarStyle: {
                     backgroundColor: '#25292e'
                 },
+                headerLeft: () => <DrawerToggleButton/>
             }}
         >
             <Tabs.Screen
-                name="index"
+                name="album"
                 options={{
                     title: 'Album',
                     tabBarIcon: ({ color, focused }) => (

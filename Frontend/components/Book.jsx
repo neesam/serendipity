@@ -17,7 +17,7 @@ const Book = () => {
     const [book, setBook] = useState('')
     const [bookID, setBookID] = useState('')
     const [backgroundColor, setBackgroundColor] = useState('')
-    const [bookAndTableAvailable, setBookAndTableAvailable] = useState(false)
+    const [bookAndTableAvailable, setBookAndTableAvailable] = useState(true)
 
     useEffect(() => {
 
@@ -25,9 +25,12 @@ const Book = () => {
 
     const getBook = async () => {
 
+        setBookAndTableAvailable(false)
+
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-        const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/book_toread`)
+        try {
+            const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/book_toread`)
 
             if (!response.ok) {
                 throw new Error(`Failed to fetch details`);
@@ -40,7 +43,7 @@ const Book = () => {
                     const minCeiled = Math.ceil(min);
                     const maxFloored = Math.floor(max);
                     return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
-                }       
+                }
                 setBookID(data[0]['id'])
                 setBook(data[0]['title'] + ' ' + getRandomInt(2, 5))
             } else {
@@ -52,8 +55,11 @@ const Book = () => {
 
             const bgColor = randomColor()
             setBackgroundColor(bgColor)
-
+        } catch (err) {
+            console.log(err)
+        } finally {
             setBookAndTableAvailable(true)
+        }
 
     }
 
@@ -62,12 +68,12 @@ const Book = () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
         try {
-        
+
             const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/book_toread/${bookID}`, {
                 method: 'DELETE',
                 headers: { 'Content-type': 'application/json' },
             });
-    
+
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(`Delete failed: ${errorData.message || 'Unknown error'}`);
@@ -88,7 +94,7 @@ const Book = () => {
     };
 
     const addToQueue = async () => {
-        
+
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
         try {
@@ -120,18 +126,24 @@ const Book = () => {
 
     return (
         <View style={[containerStyles.screenContainer, screenStyle]}>
-            <TopScreenFunctionality 
+            <TopScreenFunctionality
                 containerStyles={containerStyles}
                 addToQueue={addToQueue}
                 type={'book'}
             />
-            <ContentCard 
-                    type={'book'} 
-                    contentName={book}
-                    setEntry={setBook}
-                    availability={bookAndTableAvailable}
+            <ContentCard
+                type={'book'}
+                contentName={book}
+                setEntry={setBook}
+                availability={bookAndTableAvailable}
             />
-            <MainButtons getContent={getBook} deleteContent={deleteBook} type={'book'}/>
+            <MainButtons
+                getContent={getBook}
+                deleteContent={deleteBook}
+                type={'book'}
+                availability={bookAndTableAvailable}
+                contentName={book}
+            />
         </View>
     )
 }

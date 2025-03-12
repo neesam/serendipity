@@ -8,17 +8,18 @@ import { showTables } from '../Helper/lists'
 import TopScreenFunctionality from './TopScreenFunctionality'
 import MainButtons from './MainButtons'
 import ContentCard from './ContentCard'
+import randomColor from '../Helper/randomColor'
 
 // import { ToastContainer, toast } from 'react-toastify';
 
 const Show = () => {
 
     const [whichTable, setWhichTable] = useState('')
-    const [show, setShow] = useState()
+    const [show, setShow] = useState('')
     const [tablesUsed, setTablesUsed] = useState([])
     const [showID, setShowID] = useState('')
     const [backgroundColor, setBackgroundColor] = useState('')
-    const [showAndTableAvailable, setShowAndTableAvailable] = useState(false)
+    const [showAndTableAvailable, setShowAndTableAvailable] = useState(true)
 
     useEffect(() => {
 
@@ -143,7 +144,7 @@ const Show = () => {
     }
 
     const addToQueue = async () => {
-        
+
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
         try {
@@ -175,20 +176,26 @@ const Show = () => {
 
     return (
         <View style={[containerStyles.screenContainer, screenStyle]}>
-            <TopScreenFunctionality 
+            <TopScreenFunctionality
                 containerStyles={containerStyles}
                 tables={showTables}
                 getFromSpecificTable={getFromSpecificTable}
                 addToQueue={addToQueue}
             />
-            <ContentCard 
-                    whichTable={whichTable} 
-                    availability={showAndTableAvailable} 
-                    type={'show'} 
-                    contentName={show}
-                    setEntry={setShow}
+            <ContentCard
+                whichTable={whichTable}
+                availability={showAndTableAvailable}
+                type={'show'}
+                contentName={show}
+                setEntry={setShow}
             />
-            <MainButtons getContent={getShow} deleteContent={deleteShow} type={'show'}/>
+            <MainButtons
+                getContent={getShow}
+                deleteContent={deleteShow}
+                type={'show'}
+                availability={showAndTableAvailable}
+                contentName={show}
+            />
         </View>
         );
 }

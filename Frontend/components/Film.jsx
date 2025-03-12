@@ -8,6 +8,7 @@ import TopScreenFunctionality from "./TopScreenFunctionality";
 import { filmTables } from "@/Helper/lists";
 import MainButtons from "./MainButtons.jsx";
 import ContentCard from "./ContentCard.jsx";
+import randomColor from '../Helper/randomColor'
 
 // import { ToastContainer, toast } from 'react-toastify';
 
@@ -18,15 +19,13 @@ const Film = () => {
     const [filmID, setFilmID] = useState('')
     const [tablesUsed, setTablesUsed] = useState([])
     const [backgroundColor, setBackgroundColor] = useState('')
-    const [filmAndTableAvailable, setFilmAndTableAvailable] = useState(false)
+    const [filmAndTableAvailable, setFilmAndTableAvailable] = useState(true)
 
     useEffect(() => {
 
-    }, [film]);
+    }, [film, whichTable]);
 
     const getFilm = async () => {
-
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
         const fetchFilmFromWhichTable = async (whichTable) => {
             const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/${whichTable}`)
@@ -40,13 +39,15 @@ const Film = () => {
 
             setFilmAndTableAvailable(true)
 
-            // const bgColor = randomColor()
-    
-            // setBackgroundColor(bgColor)
-            // localStorage.setItem('filmBackgroundColor', bgColor)
+            const bgColor = randomColor()
+            setBackgroundColor(bgColor)
         }
 
         const fetchWhichTable = async () => {
+
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+
+            setFilmAndTableAvailable(false)
 
             let localTablesUsed = [...tablesUsed];
 
@@ -56,8 +57,6 @@ const Film = () => {
             }
 
             let tableUsed = false
-
-            setFilmAndTableAvailable(false)
 
             while (!tableUsed) {
 
@@ -97,12 +96,12 @@ const Film = () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
         try {
-        
+
             const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/film/${filmID}/${whichTable}`, {
                 method: 'DELETE',
                 headers: { 'Content-type': 'application/json' },
             });
-    
+
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(`Delete failed: ${errorData.message || 'Unknown error'}`);
@@ -127,10 +126,14 @@ const Film = () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
         const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/${specificTable}`)
+
             if (!response.ok) {
                 throw new Error(`Failed to fetch details for ${specificTable}`);
             }
+
             const data = await response.json()
+
+            console.log(data)
 
             setFilm(data[0]['title'])
             setFilmID(data[0]['id'])
@@ -138,8 +141,8 @@ const Film = () => {
 
             // Logic to change background on each button press
 
-            // setBackgroundColor(bgColor)
-            // localStorage.setItem('filmBackgroundColor', bgColor)
+            const bgColor = randomColor()
+            setBackgroundColor(bgColor)
     }
 
     const addToQueue = async () => {
@@ -169,23 +172,33 @@ const Film = () => {
         //     });
     }
 
-    
+    const screenStyle = {
+        backgroundColor: backgroundColor
+    }
+
+
         return (
-            <View style={containerStyles.screenContainer}>
-                <TopScreenFunctionality 
+            <View style={[containerStyles.screenContainer, screenStyle]}>
+                <TopScreenFunctionality
                     containerStyles={containerStyles}
                     tables={filmTables}
                     getFromSpecificTable={getFromSpecificTable}
                     addToQueue={addToQueue}
                 />
-                <ContentCard 
-                    whichTable={whichTable} 
-                    availability={filmAndTableAvailable} 
-                    type={'film'} 
+                <ContentCard
+                    whichTable={whichTable}
+                    availability={filmAndTableAvailable}
+                    type={'film'}
                     contentName={film}
                     setEntry={setFilm}
                 />
-                <MainButtons getContent={getFilm} deleteContent={deleteFilm} type={'film'}/>
+                <MainButtons
+                    getContent={getFilm}
+                    deleteContent={deleteFilm}
+                    type={'film'}
+                    availability={filmAndTableAvailable}
+                    contentName={film}
+                />
             </View>
     );
 }

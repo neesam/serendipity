@@ -6,7 +6,7 @@ import { Picker } from "@react-native-picker/picker";
 
 import { containerStyles, cardStyles, modalStyles, buttonStyles } from '../Styles/AlbumStyles.jsx'
 
-const ContentCard = ({ whichTable, availability, contentName, type, setEntry }) => {
+const ContentCard = ({ whichTable, availability, contentName, type, setEntry, contentID }) => {
 
     const [currentTableItemsModalVisible, setActiveTableItemsModalVisible] = useState(false)
     const [selectedElement, setSelectedElement] = useState('');
@@ -25,6 +25,8 @@ const ContentCard = ({ whichTable, availability, contentName, type, setEntry }) 
     }
 
     const handlePopulateTableItemsModal = async (table) => {
+
+        console.log(contentID)
 
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
@@ -70,50 +72,52 @@ const ContentCard = ({ whichTable, availability, contentName, type, setEntry }) 
         handleCurrentTableItemsModalClose()
     }
 
-    const openSpotify = () => {
+    const openLink = () => {
 
-        const encodedQuery = encodeURIComponent(contentName);
-        const spotifyWebUrl = `https://open.spotify.com/search/${encodedQuery}`;
+        if(type === 'album') {
+            const encodedQuery = encodeURIComponent(contentName);
+            const spotifyWebUrl = `https://open.spotify.com/search/${encodedQuery}`;
 
-        // Open the Spotify app or redirect to Spotify on the web if app is not installed
-        Linking.openURL(spotifyWebUrl).catch((err) => {
-            console.error('Failed to open Spotify:', err);
-            // If Spotify is not installed, open Spotify in the browser
-            Linking.openURL(`https://open.spotify.com/search/${encodeURIComponent(searchQuery)}`);
-        });
-    };
+            // Open the Spotify app or redirect to Spotify on the web if app is not installed
+            Linking.openURL(spotifyWebUrl).catch((err) => {
+                console.error('Failed to open Spotify:', err);
+                // If Spotify is not installed, open Spotify in the browser
+                Linking.openURL(`https://open.spotify.com/search/${encodeURIComponent(searchQuery)}`);
+            });
+        } else {
+            const encodedQuery = encodeURIComponent(contentName + ' ' + type);
+            const googleUrl = `https://www.google.com/search?q=${encodedQuery}`;
 
-    const openGoogle = () => {
-
-        const encodedQuery = encodeURIComponent(contentName + ' ' + type);
-        const googleUrl = `https://www.google.com/search?q=${encodedQuery}`;
-
-        Linking.openURL(googleUrl).catch((err) => {
-            console.error('Failed to open Google:', err);
-            // If Spotify is not installed, open Spotify in the browser
-        });
+            Linking.openURL(googleUrl).catch((err) => {
+                console.error('Failed to open Google:', err);
+                // If Spotify is not installed, open Spotify in the browser
+            });
+        }
     };
 
     return (
         <View style={containerStyles.cardContainer}>
             {availability ? (
                 <View style={cardStyles.card}>
-                    {type === 'album' ? (
-                        <Text onPress={openSpotify} style={cardStyles.contentName}>
-                            {contentName}
+                    {contentName === '' ? (
+                        <Text onPress={openLink} style={cardStyles.contentName}>
+                            Choose some content!
                         </Text>
                     ) : (
-                        <Text onPress={openGoogle} style={cardStyles.contentName}>
+                        <Text onPress={openLink} style={cardStyles.contentName}>
                             {contentName}
                         </Text>
                     )}
-                    {type !== 'book' ? (
-                        <TouchableOpacity onPress={() => handlePopulateTableItemsModal(whichTable)}>
+                    {contentName === '' ? (
+                        <></>
+                    ) : (
+                        type !== 'book' ? (
+                            <TouchableOpacity onPress={() => handlePopulateTableItemsModal(whichTable)}>
                             <Text style={cardStyles.tableName}>
                                 {whichTable}
                             </Text>
                         </TouchableOpacity>
-                    ) : (
+                    ) :
                         <></>
                     )}
                     <Modal
