@@ -6,7 +6,7 @@ import * as Haptics from 'expo-haptics';
 // import { ToastContainer, toast } from 'react-toastify';
 
 import { bookAnthologies } from '../Helper/lists';
-import { containerStyles } from '../Styles/AlbumStyles'
+import { containerStyles } from '../Styles/Styles'
 import randomColor from '../Helper/randomColor';
 import TopScreenFunctionality from './TopScreenFunctionality'
 import MainButtons from './MainButtons'
@@ -38,8 +38,8 @@ const Book = () => {
 
             const data = await response.json()
 
-            if(bookAnthologies.includes(data[0]['title'])) {
-                const getRandomInt =(min, max) => {
+            if (bookAnthologies.includes(data[0]['title'])) {
+                const getRandomInt = (min, max) => {
                     const minCeiled = Math.ceil(min);
                     const maxFloored = Math.floor(max);
                     return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
@@ -110,7 +110,7 @@ const Book = () => {
 
             console.log(await response.json());
             console.log('Book added successfully.');
-        } catch(error) {
+        } catch (error) {
             console.error('Error in API call', error);
         }
 

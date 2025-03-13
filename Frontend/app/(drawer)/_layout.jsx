@@ -16,62 +16,45 @@ const CustomDrawerContent = (props) => {
   return (
     <DrawerContentScrollView {...props} >
       <DrawerItem
-        icon={({ color, size }) => (
+        icon={() => (
           <Ionicons
-            name={'musical-notes-sharp'}
+            name={'star-sharp'}
             color={pathName === '/album' ? 'white' : 'black'}
-            size={20}/>
+            size={20} />
         )}
-        label={'Album'}
-        labelStyle={{color: pathName === '/album' ? 'white' : 'black'}}
-        style={{ backgroundColor: pathName === '/album' ? '#333' : 'white'}}
+        label={'Content fetcher'}
+        labelStyle={{ color: pathName === '/album' ? 'white' : 'black' }}
+        style={{ backgroundColor: pathName === '/album' ? '#333' : 'white' }}
         onPress={() => {
-          router.push('/(drawer)/(tabs)/album')
+          router.push('/(drawer)/(content_fetcher_tabs)')
         }}
       />
       <DrawerItem
-        icon={({ color, size }) => (
+        icon={() => (
           <Ionicons
-            name={'film-sharp'}
-            color={pathName === '/film' ? 'white' : 'black'}
-            size={20}
-          />
+            name={'add-sharp'}
+            color={pathName === '/addToTable' ? 'white' : 'black'}
+            size={20} />
         )}
-        label={'Film'}
-        labelStyle={{color: pathName === '/film' ? 'white' : 'black'}}
-        style={{ backgroundColor: pathName === '/film' ? '#333' : 'white'}}
+        label={'Add to table'}
+        labelStyle={{ color: pathName === '/addToTable' ? 'white' : 'black' }}
+        style={{ backgroundColor: pathName === '/addToTable' ? '#333' : 'white' }}
         onPress={() => {
-          router.push('/(drawer)/(tabs)/film')
+          router.push('/(drawer)/addToTable')
         }}
       />
       <DrawerItem
-        icon={({ color, size }) => (
+        icon={() => (
           <Ionicons
-            name={'tv-sharp'}
-            color={pathName === '/show' ? 'white' : 'black'}
-            size={20}
-          />
+            name={'checkmark-sharp'}
+            color={pathName === '/finishedContentAlbum' ? 'white' : 'black'}
+            size={20} />
         )}
-        label={'Show'}
-        labelStyle={{color: pathName === '/show' ? 'white' : 'black'}}
-        style={{ backgroundColor: pathName === '/show' ? '#333' : 'white'}}
+        label={'Finished content'}
+        labelStyle={{ color: pathName === '/finishedContentAlbum' ? 'white' : 'black' }}
+        style={{ backgroundColor: pathName === '/finishedContentAlbum' ? '#333' : 'white' }}
         onPress={() => {
-          router.push('/(drawer)/(tabs)/show')
-        }}
-      />
-      <DrawerItem
-        icon={({ color, size }) => (
-          <Ionicons
-            name={'book-sharp'}
-            color={pathName === '/book' ? 'white' : 'black'}
-            size={20}
-          />
-        )}
-        label={'Book'}
-        labelStyle={{color: pathName === '/book' ? 'white' : 'black'}}
-        style={{ backgroundColor: pathName === '/book' ? '#333' : 'white'}}
-        onPress={() => {
-          router.push('/(drawer)/(tabs)/book')
+          router.push('/(drawer)/(finished_content_tabs)/finishedContentAlbum')
         }}
       />
     </DrawerContentScrollView>
@@ -80,9 +63,9 @@ const CustomDrawerContent = (props) => {
 
 export default function _layout() {
   return (
-    <Drawer drawerContent={(props) => <CustomDrawerContent {...props}/>} screenOptions={{ headerShown: false }}>
-      <Drawer.Screen name="album" options={{headerShown: true}}/>
-      <Drawer.Screen name="index" options={{headerShown: true}}/>
+    <Drawer drawerContent={(props) => <CustomDrawerContent {...props} />} screenOptions={{ headerShown: false }}>
+      <Drawer.Screen name="addToTable" options={{ headerShown: true, headerTitle: "Add to table" }} />
+      <Drawer.Screen name="(finishd_content_tabs)/finishedContentAlbum" options={{ headerShown: true, headerTitle: "Finished content" }} />
     </Drawer>
   )
 }

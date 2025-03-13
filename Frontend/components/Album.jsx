@@ -5,7 +5,7 @@ import * as Haptics from 'expo-haptics';
 
 import randomColor from '../Helper/randomColor'
 import { musicTables } from '../Helper/lists'
-import { containerStyles } from '../Styles/AlbumStyles'
+import { containerStyles } from '../Styles/Styles'
 
 import TopScreenFunctionality from './TopScreenFunctionality'
 import MainButtons from './MainButtons'
@@ -154,7 +154,7 @@ export default function Album() {
                 console.log(await response.json());
                 console.log('Album deleted successfully.');
 
-                getAlbum()
+                getFromSpecificTable(whichTable)
 
             } catch (error) {
                 // console.error('Error during deletion:', error.message);
@@ -176,7 +176,7 @@ export default function Album() {
 
                 // setInCirculation('false')
 
-                getAlbum()
+                getFromSpecificTable(whichTable)
             } catch (error) {
                 // console.error('Error during deletion:', error.message);
             }
@@ -189,6 +189,7 @@ export default function Album() {
     };
 
     const addToCurrentlyListening = async () => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
         try {
             const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/addToCurrentlyListening/${album}/${whichTable}`, {
                 method: 'POST',
@@ -236,6 +237,24 @@ export default function Album() {
         //     });
     }
 
+    const getDataForSpecificEntry = async (title) => {
+        try {
+            const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/specificEntry/${title}/${whichTable}`)
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.log(errorData.message)
+            }
+
+            const data = await response.json()
+
+            setAlbum(data[0]['title'])
+            setAlbumID(data[0]['id'])
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+
     const screenStyle = {
         backgroundColor: backgroundColor
     }
@@ -254,7 +273,7 @@ export default function Album() {
                 type={'album'}
                 contentName={album}
                 getFromSpecificTable={getFromSpecificTable}
-                setEntry={setAlbum}
+                getDataForSpecificEntry={getDataForSpecificEntry}
                 contentID={albumID}
             />
             <MainButtons

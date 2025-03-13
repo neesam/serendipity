@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 
 import * as Haptics from 'expo-haptics';
 
-import { cardStyles, containerStyles, buttonStyles, modalStyles } from '../Styles/AlbumStyles.jsx'
+import { cardStyles, containerStyles, buttonStyles, modalStyles } from '../Styles/Styles'
 import TopScreenFunctionality from "./TopScreenFunctionality";
 import { filmTables } from "@/Helper/lists";
 import MainButtons from "./MainButtons.jsx";
@@ -127,22 +127,22 @@ const Film = () => {
 
         const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/${specificTable}`)
 
-            if (!response.ok) {
-                throw new Error(`Failed to fetch details for ${specificTable}`);
-            }
+        if (!response.ok) {
+            throw new Error(`Failed to fetch details for ${specificTable}`);
+        }
 
-            const data = await response.json()
+        const data = await response.json()
 
-            console.log(data)
+        console.log(data)
 
-            setFilm(data[0]['title'])
-            setFilmID(data[0]['id'])
-            setWhichTable(specificTable)
+        setFilm(data[0]['title'])
+        setFilmID(data[0]['id'])
+        setWhichTable(specificTable)
 
-            // Logic to change background on each button press
+        // Logic to change background on each button press
 
-            const bgColor = randomColor()
-            setBackgroundColor(bgColor)
+        const bgColor = randomColor()
+        setBackgroundColor(bgColor)
     }
 
     const addToQueue = async () => {
@@ -162,7 +162,7 @@ const Film = () => {
 
             console.log(await response.json());
             console.log('Film added successfully.');
-        } catch(error) {
+        } catch (error) {
             console.error('Error in API call', error);
         }
 
@@ -177,29 +177,29 @@ const Film = () => {
     }
 
 
-        return (
-            <View style={[containerStyles.screenContainer, screenStyle]}>
-                <TopScreenFunctionality
-                    containerStyles={containerStyles}
-                    tables={filmTables}
-                    getFromSpecificTable={getFromSpecificTable}
-                    addToQueue={addToQueue}
-                />
-                <ContentCard
-                    whichTable={whichTable}
-                    availability={filmAndTableAvailable}
-                    type={'film'}
-                    contentName={film}
-                    setEntry={setFilm}
-                />
-                <MainButtons
-                    getContent={getFilm}
-                    deleteContent={deleteFilm}
-                    type={'film'}
-                    availability={filmAndTableAvailable}
-                    contentName={film}
-                />
-            </View>
+    return (
+        <View style={[containerStyles.screenContainer, screenStyle]}>
+            <TopScreenFunctionality
+                containerStyles={containerStyles}
+                tables={filmTables}
+                getFromSpecificTable={getFromSpecificTable}
+                addToQueue={addToQueue}
+            />
+            <ContentCard
+                whichTable={whichTable}
+                availability={filmAndTableAvailable}
+                type={'film'}
+                contentName={film}
+                setEntry={setFilm}
+            />
+            <MainButtons
+                getContent={getFilm}
+                deleteContent={deleteFilm}
+                type={'film'}
+                availability={filmAndTableAvailable}
+                contentName={film}
+            />
+        </View>
     );
 }
 

@@ -7,6 +7,12 @@ export const cardStyles = StyleSheet.create({
         marginBottom: 5,
         color: '#333',
     },
+    noContentName: {
+        fontSize: 22,
+        fontWeight: '600',
+        marginBottom: 0,
+        color: '#333',
+    },
     tableName: {
         fontSize: 18,
         color: '#555',
@@ -23,7 +29,6 @@ export const cardStyles = StyleSheet.create({
 
 export const containerStyles = StyleSheet.create({
     screenContainer: {
-        backgroundColor: 'tan',
         height: '100%',
         alignItems: 'center',
         justifyContent: 'center'
@@ -175,3 +180,45 @@ export const modalStyles = StyleSheet.create({
         textAlign: 'center',
     },
 });
+
+export const formStyles = StyleSheet.create({
+    label: {
+        fontSize: 24,
+        marginBottom: 15,
+        color: 'white',
+        shadowColor: 'black',
+        elevation: 10,
+        fontWeight: 'bold'
+    },
+    input: {
+        height: 45,
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 5,
+        marginBottom: 15,
+        padding: 25,
+        width: '100%'
+    },
+    formContainer: {
+        padding: 50,
+        width: '90%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderWidth: 6,
+        borderColor: 'white',
+        borderStyle: 'dashed',
+        borderRadius: 6,
+        height: '90%'
+    },
+    button: {
+        backgroundColor: '#f5f3f2',
+        color: 'black',
+        borderWidth: 3,
+        borderColor: 'white',
+        borderRadius: 18,
+        padding: 15,
+        width: '100%',
+        alignItems: 'center',
+        marginBottom: 40
+    }
+})

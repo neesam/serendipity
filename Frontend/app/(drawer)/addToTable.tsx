@@ -1,5 +1,5 @@
-import Film from '@/components/Film';
+import AddToTable from '@/components/AddToTable';
 
-export default function FilmScreen() {
-    return <Film/>
+export default function AddToTableScreen() {
+    return <AddToTable/>
 }

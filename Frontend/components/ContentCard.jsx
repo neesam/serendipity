@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react'
 import * as Haptics from 'expo-haptics';
 import { Picker } from "@react-native-picker/picker";
 
-import { containerStyles, cardStyles, modalStyles, buttonStyles } from '../Styles/AlbumStyles.jsx'
+import { containerStyles, cardStyles, modalStyles, buttonStyles } from '../Styles/Styles'
 
-const ContentCard = ({ whichTable, availability, contentName, type, setEntry, contentID }) => {
+const ContentCard = ({ whichTable, availability, contentName, type, getDataForSpecificEntry, contentID }) => {
 
     const [currentTableItemsModalVisible, setActiveTableItemsModalVisible] = useState(false)
     const [selectedElement, setSelectedElement] = useState('');
@@ -66,15 +66,15 @@ const ContentCard = ({ whichTable, availability, contentName, type, setEntry, co
         setActiveTableItemsModalVisible(true)
     }
 
-    const handleSetCurrentContent = (value) => {
+    const handleSetCurrentContent = () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-        setEntry(value)
+        getDataForSpecificEntry(selectedElement)
         handleCurrentTableItemsModalClose()
     }
 
     const openLink = () => {
 
-        if(type === 'album') {
+        if (type === 'album') {
             const encodedQuery = encodeURIComponent(contentName);
             const spotifyWebUrl = `https://open.spotify.com/search/${encodedQuery}`;
 
@@ -100,7 +100,7 @@ const ContentCard = ({ whichTable, availability, contentName, type, setEntry, co
             {availability ? (
                 <View style={cardStyles.card}>
                     {contentName === '' ? (
-                        <Text onPress={openLink} style={cardStyles.contentName}>
+                        <Text onPress={openLink} style={cardStyles.noContentName}>
                             Choose some content!
                         </Text>
                     ) : (
@@ -113,12 +113,12 @@ const ContentCard = ({ whichTable, availability, contentName, type, setEntry, co
                     ) : (
                         type !== 'book' ? (
                             <TouchableOpacity onPress={() => handlePopulateTableItemsModal(whichTable)}>
-                            <Text style={cardStyles.tableName}>
-                                {whichTable}
-                            </Text>
-                        </TouchableOpacity>
-                    ) :
-                        <></>
+                                <Text style={cardStyles.tableName}>
+                                    {whichTable}
+                                </Text>
+                            </TouchableOpacity>
+                        ) :
+                            <></>
                     )}
                     <Modal
                         animationType="slide"
@@ -147,7 +147,7 @@ const ContentCard = ({ whichTable, availability, contentName, type, setEntry, co
                                     )}
                                 </Picker>
                                 <View style={containerStyles.setCurrentContentModalButtonsContainerContainer}>
-                                    <Pressable style={containerStyles.setCurrentContentModalButtonContainer} onPress={() => handleSetCurrentContent(selectedElement)}>
+                                    <Pressable style={containerStyles.setCurrentContentModalButtonContainer} onPress={handleSetCurrentContent}>
                                         <Text style={buttonStyles.setCurrentContentModalButton}>
                                             Set
                                         </Text>

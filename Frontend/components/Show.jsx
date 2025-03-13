@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 
 import * as Haptics from 'expo-haptics';
 
-import { containerStyles } from '../Styles/AlbumStyles'
+import { containerStyles } from '../Styles/Styles'
 import { showTables } from '../Helper/lists'
 import TopScreenFunctionality from './TopScreenFunctionality'
 import MainButtons from './MainButtons'
@@ -102,20 +102,20 @@ const Show = () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
         const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/${specificTable}`)
-            if (!response.ok) {
-                throw new Error(`Failed to fetch details for ${specificTable}`);
-            }
-            const data = await response.json()
+        if (!response.ok) {
+            throw new Error(`Failed to fetch details for ${specificTable}`);
+        }
+        const data = await response.json()
 
-            console.log(data)
+        console.log(data)
 
-            setShow(data[0]['title'])
+        setShow(data[0]['title'])
 
-            // Logic to change background on each button press
+        // Logic to change background on each button press
 
-            // const bgColor = randomColor()
-            // setBackgroundColor(bgColor)
-            // localStorage.setItem('showBackgroundColor', bgColor)
+        // const bgColor = randomColor()
+        // setBackgroundColor(bgColor)
+        // localStorage.setItem('showBackgroundColor', bgColor)
     }
 
     const deleteShow = async () => {
@@ -160,7 +160,7 @@ const Show = () => {
 
             console.log(await response.json());
             console.log('Show added successfully.');
-        } catch(error) {
+        } catch (error) {
             console.error('Error in API call', error);
         }
 
@@ -197,7 +197,7 @@ const Show = () => {
                 contentName={show}
             />
         </View>
-        );
+    );
 }
 
 export default Show
