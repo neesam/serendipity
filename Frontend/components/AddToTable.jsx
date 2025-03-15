@@ -8,7 +8,7 @@ import { containerStyles, formStyles } from '../Styles/Styles'
 
 import { useEffect, useState } from "react";
 
-import { allTables } from "@/Helper/lists";
+import { allTables } from "@/helper/lists";
 
 export default function AddToTable() {
 

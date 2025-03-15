@@ -28,7 +28,25 @@ export default function TabLayout() {
                 options={{
                     title: 'Finished films',
                     tabBarIcon: ({ color, focused }) => (
+                        <Ionicons name={focused ? 'film-sharp' : 'film-outline'} color={color} size={24}/>
+                    )
+                }}
+            />
+            <Tabs.Screen
+                name="finishedContentShow"
+                options={{
+                    title: 'Finished show',
+                    tabBarIcon: ({ color, focused }) => (
                         <Ionicons name={focused ? 'tv-sharp' : 'tv-outline'} color={color} size={24}/>
+                    )
+                }}
+            />
+            <Tabs.Screen
+                name="finishedContentBook"
+                options={{
+                    title: 'Finished books',
+                    tabBarIcon: ({ color, focused }) => (
+                        <Ionicons name={focused ? 'book-sharp' : 'book-outline'} color={color} size={24}/>
                     )
                 }}
             />

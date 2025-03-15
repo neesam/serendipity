@@ -26,7 +26,7 @@ const CustomDrawerContent = (props) => {
         labelStyle={{ color: pathName === '/album' ? 'white' : 'black' }}
         style={{ backgroundColor: pathName === '/album' ? '#333' : 'white' }}
         onPress={() => {
-          router.push('/(drawer)/(content_fetcher_tabs)')
+          router.push('/(drawer)/(tabs)/album')
         }}
       />
       <DrawerItem
@@ -54,7 +54,7 @@ const CustomDrawerContent = (props) => {
         labelStyle={{ color: pathName === '/finishedContentAlbum' ? 'white' : 'black' }}
         style={{ backgroundColor: pathName === '/finishedContentAlbum' ? '#333' : 'white' }}
         onPress={() => {
-          router.push('/(drawer)/(finished_content_tabs)/finishedContentAlbum')
+          router.push('/(drawer)/finishedContentAlbum')
         }}
       />
     </DrawerContentScrollView>
@@ -65,7 +65,7 @@ export default function _layout() {
   return (
     <Drawer drawerContent={(props) => <CustomDrawerContent {...props} />} screenOptions={{ headerShown: false }}>
       <Drawer.Screen name="addToTable" options={{ headerShown: true, headerTitle: "Add to table" }} />
-      <Drawer.Screen name="(finishd_content_tabs)/finishedContentAlbum" options={{ headerShown: true, headerTitle: "Finished content" }} />
+      <Drawer.Screen name="finishedContentAlbum" options={{ headerShown: true, headerTitle: "Finished content" }} />
     </Drawer>
   )
 }

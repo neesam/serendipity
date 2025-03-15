@@ -5,9 +5,9 @@ import * as Haptics from 'expo-haptics';
 
 // import { ToastContainer, toast } from 'react-toastify';
 
-import { bookAnthologies } from '../Helper/lists';
+import { bookAnthologies } from '../helper/lists';
 import { containerStyles } from '../Styles/Styles'
-import randomColor from '../Helper/randomColor';
+import randomColor from '../helper/randomColor';
 import TopScreenFunctionality from './TopScreenFunctionality'
 import MainButtons from './MainButtons'
 import ContentCard from './ContentCard'

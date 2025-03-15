@@ -7,15 +7,15 @@ import openLink from '@/helper/openLink'
 
 export default function FinishedContentAlbums() {
 
-    const [finishedAlbums, setFinishedAlbums] = useState([])
+    const [finishedBooks, setFinishedBooks] = useState([])
 
     useEffect(() => {
-        handleLoadFinishedAlbums()
+        handleLoadFinishedBooks()
     }, [])
 
-    const handleLoadFinishedAlbums = async () => {
+    const handleLoadFinishedBooks = async () => {
         try {
-            const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/music_metadata_all`)
+            const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/book_metadata_all`)
 
             if (!response.ok) {
                 console.log(response.status)
@@ -23,7 +23,7 @@ export default function FinishedContentAlbums() {
 
             const data = await response.json()
 
-            setFinishedAlbums(data)
+            setFinishedBooks(data)
 
             console.log(data)
 
@@ -35,7 +35,7 @@ export default function FinishedContentAlbums() {
     return (
         <SafeAreaProvider>
             <SafeAreaView style={{ flex: 1 }} edges={['top']}>
-                <CustomFlatList openLink={openLink} data={finishedAlbums} type={'album'} />
+                <CustomFlatList openLink={openLink} data={finishedBooks} type={'book'} />
             </SafeAreaView>
         </SafeAreaProvider>
     )

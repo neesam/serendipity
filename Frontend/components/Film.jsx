@@ -5,10 +5,10 @@ import * as Haptics from 'expo-haptics';
 
 import { cardStyles, containerStyles, buttonStyles, modalStyles } from '../Styles/Styles'
 import TopScreenFunctionality from "./TopScreenFunctionality";
-import { filmTables } from "@/Helper/lists";
+import { filmTables } from "@/helper/lists";
 import MainButtons from "./MainButtons.jsx";
 import ContentCard from "./ContentCard.jsx";
-import randomColor from '../Helper/randomColor'
+import randomColor from '../helper/randomColor'
 
 // import { ToastContainer, toast } from 'react-toastify';
 

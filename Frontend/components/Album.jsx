@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 
 import * as Haptics from 'expo-haptics';
 
-import randomColor from '../Helper/randomColor'
-import { musicTables } from '../Helper/lists'
+import randomColor from '../helper/randomColor'
+import { musicTables } from '../helper/lists'
 import { containerStyles } from '../Styles/Styles'
 
 import TopScreenFunctionality from './TopScreenFunctionality'

@@ -1,21 +1,21 @@
-import { View, Text, Pressable, Image, FlatList, Linking } from 'react-native'
 import { useState, useEffect } from 'react'
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 
 import CustomFlatList from '@/components/CustomFlatList'
+
 import openLink from '@/helper/openLink'
 
-export default function FinishedContentAlbums() {
+export default function FinishedContentShows() {
 
-    const [finishedAlbums, setFinishedAlbums] = useState([])
+    const [finishedShows, setFinishedShows] = useState([])
 
     useEffect(() => {
-        handleLoadFinishedAlbums()
+        handleLoadFinishedShows()
     }, [])
 
-    const handleLoadFinishedAlbums = async () => {
+    const handleLoadFinishedShows = async () => {
         try {
-            const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/music_metadata_all`)
+            const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/show_metadata_all`)
 
             if (!response.ok) {
                 console.log(response.status)
@@ -23,7 +23,7 @@ export default function FinishedContentAlbums() {
 
             const data = await response.json()
 
-            setFinishedAlbums(data)
+            setFinishedShows(data)
 
             console.log(data)
 
@@ -35,7 +35,7 @@ export default function FinishedContentAlbums() {
     return (
         <SafeAreaProvider>
             <SafeAreaView style={{ flex: 1 }} edges={['top']}>
-                <CustomFlatList openLink={openLink} data={finishedAlbums} type={'album'} />
+                <CustomFlatList openLink={openLink} data={finishedShows} type={'show'} />
             </SafeAreaView>
         </SafeAreaProvider>
     )

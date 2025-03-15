@@ -4,11 +4,11 @@ import { useState, useEffect } from "react";
 import * as Haptics from 'expo-haptics';
 
 import { containerStyles } from '../Styles/Styles'
-import { showTables } from '../Helper/lists'
+import { showTables } from '../helper/lists'
 import TopScreenFunctionality from './TopScreenFunctionality'
 import MainButtons from './MainButtons'
 import ContentCard from './ContentCard'
-import randomColor from '../Helper/randomColor'
+import randomColor from '../helper/randomColor'
 
 // import { ToastContainer, toast } from 'react-toastify';
 

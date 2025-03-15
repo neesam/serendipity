@@ -6,6 +6,8 @@ import { Picker } from "@react-native-picker/picker";
 
 import { containerStyles, cardStyles, modalStyles, buttonStyles } from '../Styles/Styles'
 
+import openLink from '@/helper/openLink';
+
 const ContentCard = ({ whichTable, availability, contentName, type, getDataForSpecificEntry, contentID }) => {
 
     const [currentTableItemsModalVisible, setActiveTableItemsModalVisible] = useState(false)
@@ -72,39 +74,16 @@ const ContentCard = ({ whichTable, availability, contentName, type, getDataForSp
         handleCurrentTableItemsModalClose()
     }
 
-    const openLink = () => {
-
-        if (type === 'album') {
-            const encodedQuery = encodeURIComponent(contentName);
-            const spotifyWebUrl = `https://open.spotify.com/search/${encodedQuery}`;
-
-            // Open the Spotify app or redirect to Spotify on the web if app is not installed
-            Linking.openURL(spotifyWebUrl).catch((err) => {
-                console.error('Failed to open Spotify:', err);
-                // If Spotify is not installed, open Spotify in the browser
-                Linking.openURL(`https://open.spotify.com/search/${encodeURIComponent(searchQuery)}`);
-            });
-        } else {
-            const encodedQuery = encodeURIComponent(contentName + ' ' + type);
-            const googleUrl = `https://www.google.com/search?q=${encodedQuery}`;
-
-            Linking.openURL(googleUrl).catch((err) => {
-                console.error('Failed to open Google:', err);
-                // If Spotify is not installed, open Spotify in the browser
-            });
-        }
-    };
-
     return (
         <View style={containerStyles.cardContainer}>
             {availability ? (
                 <View style={cardStyles.card}>
                     {contentName === '' ? (
-                        <Text onPress={openLink} style={cardStyles.noContentName}>
+                        <Text style={cardStyles.noContentName}>
                             Choose some content!
                         </Text>
                     ) : (
-                        <Text onPress={openLink} style={cardStyles.contentName}>
+                        <Text onPress={() => openLink(contentName, type)} style={cardStyles.contentName}>
                             {contentName}
                         </Text>
                     )}
