@@ -22,6 +22,7 @@ export const musicTables = [
     'album_hopelessrecords',
     'album_indiepop',
     'album_latenightlofi',
+    'album_jazz',
     'album_luxelitesources',
     'album_magicsheet',
     'album_mallsoft',
@@ -116,11 +117,11 @@ export const allTables = [
     'anime_classic',
     'anime_other',
     'shows_top50',
-    'book'
+    'book_toread'
 ]
 
 export const bookAnthologies = [
-    'ted chiang', 
+    'ted chiang',
     'the stars my destination',
     'greatest short stories volume 4',
     'great american short stories',

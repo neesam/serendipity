@@ -48,7 +48,7 @@ const ContentCard = ({ whichTable, availability, contentName, type, getDataForSp
             } catch (error) {
                 console.log(error)
             }
-        } else if (table.includes('anime') || table === 'shows') {
+        } else if (table.includes('anime') || table.includes('shows')) {
             try {
                 const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/all_from_selected_shows_table/${table}`)
                 const data = await response.json()
@@ -90,14 +90,11 @@ const ContentCard = ({ whichTable, availability, contentName, type, getDataForSp
                     {contentName === '' ? (
                         <></>
                     ) : (
-                        type !== 'book' ? (
                             <TouchableOpacity onPress={() => handlePopulateTableItemsModal(whichTable)}>
                                 <Text style={cardStyles.tableName}>
                                     {whichTable}
                                 </Text>
                             </TouchableOpacity>
-                        ) :
-                            <></>
                     )}
                     <Modal
                         animationType="slide"

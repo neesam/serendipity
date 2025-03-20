@@ -110,15 +110,10 @@ const Film = () => {
             console.log(await response.json());
             console.log('Film deleted successfully.');
         } catch (error) {
-            console.error('Error during deletion:', error.message);
+            // console.error('Error during deletion:', error.message);
         }
 
-        // toast('Deleted film!', {
-        //         autoClose: 2000,
-        //         theme: "light",
-        // });
-
-        getFilm()
+        getFromSpecificTable(whichTable)
     };
 
     const getFromSpecificTable = async (specificTable) => {
@@ -143,6 +138,24 @@ const Film = () => {
 
         const bgColor = randomColor()
         setBackgroundColor(bgColor)
+    }
+
+    const getDataForSpecificEntry = async (title) => {
+        try {
+            const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/specificFilmEntry/${title}/${whichTable}`)
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.log(errorData.message)
+            }
+
+            const data = await response.json()
+
+            setFilm(data[0]['title'])
+            setFilmID(data[0]['id'])
+        } catch (error) {
+            console.log(error.message)
+        }
     }
 
     const addToQueue = async () => {
@@ -190,6 +203,8 @@ const Film = () => {
                 availability={filmAndTableAvailable}
                 type={'film'}
                 contentName={film}
+                getFromSpecificTable={getFromSpecificTable}
+                getDataForSpecificEntry={getDataForSpecificEntry}
                 setEntry={setFilm}
             />
             <MainButtons

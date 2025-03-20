@@ -26,7 +26,7 @@ const CustomDrawerContent = (props) => {
         labelStyle={{ color: pathName === '/album' ? 'white' : 'black' }}
         style={{ backgroundColor: pathName === '/album' ? '#333' : 'white' }}
         onPress={() => {
-          router.push('/(drawer)/(tabs)/album')
+          router.push('/(drawer)/(content_fetcher_tabs)/album')
         }}
       />
       <DrawerItem
@@ -54,7 +54,7 @@ const CustomDrawerContent = (props) => {
         labelStyle={{ color: pathName === '/finishedContentAlbum' ? 'white' : 'black' }}
         style={{ backgroundColor: pathName === '/finishedContentAlbum' ? '#333' : 'white' }}
         onPress={() => {
-          router.push('/(drawer)/finishedContentAlbum')
+          router.push('/(drawer)/(finished_content_tabs)/finishedContentAlbum')
         }}
       />
     </DrawerContentScrollView>

@@ -170,6 +170,24 @@ const Show = () => {
         //     });
     }
 
+    const getDataForSpecificEntry = async (title) => {
+        try {
+            const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/specificShowEntry/${title}/${whichTable}`)
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.log(errorData.message)
+            }
+
+            const data = await response.json()
+
+            setShow(data[0]['title'])
+            setShowID(data[0]['id'])
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+
     const screenStyle = {
         backgroundColor: backgroundColor
     }
@@ -188,6 +206,7 @@ const Show = () => {
                 type={'show'}
                 contentName={show}
                 setEntry={setShow}
+                getDataForSpecificEntry={getDataForSpecificEntry}
             />
             <MainButtons
                 getContent={getShow}

@@ -542,6 +542,19 @@ app.get('/api/album_indiepop', async (req, res) => {
     }
 });
 
+app.get('/api/album_jazz', async (req, res) => {
+    const sqlQuery = `select * from ${BQ_PROJECT}.${MUSIC_TABLES_DATASET}.album_jazz order by rand() limit 1`
+
+    try {
+        const [rows] = await bigquery.query({ query: sqlQuery });
+        res.json(rows)
+        console.log(rows)
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
 app.get('/api/album_latenightlofi', async (req, res) => {
     const sqlQuery = `select * from ${BQ_PROJECT}.${MUSIC_TABLES_DATASET}.album_latenightlofi order by rand() limit 1`
 
@@ -817,7 +830,7 @@ app.get('/api/album_faketable', async (req, res) => {
     }
 });
 
-app.get('/api/specificEntry/:title/:table', async (req, res) => {
+app.get('/api/specificMusicEntry/:title/:table', async (req, res) => {
 
     const title = req.params.title
     const table = req.params.table
@@ -1086,8 +1099,38 @@ app.get('/api/film_rymtop1500', async (req, res) => {
     }
 });
 
+app.get('/api/specificFilmEntry/:title/:table', async (req, res) => {
+
+    const title = req.params.title
+    const table = req.params.table
+
+    const query = `select * from ${BQ_PROJECT}.${FILM_TABLES_DATASET}.${table} where title = @title`
+
+    try {
+        // Run the query
+        const options = {
+            query,
+            params: { title, table },
+        };
+        const [job] = await bigquery.createQueryJob(options);
+        console.log(`Job ${job.id} started.`);
+
+        console.log(query, options.params)
+
+        // Wait for the query to finish
+        const [rows] = await job.getQueryResults();
+
+        console.log(rows)
+
+        res.json(rows)
+    } catch (err) {
+        console.error('Error:', err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
 app.delete('/api/film/:id/:whichTable', async (req, res) => {
-    const id = parseInt(req.params.id);
+    const id = req.params.id;
     const whichTable = req.params.whichTable;
 
     console.log(`Received DELETE request for id: ${id} from table: ${whichTable}`);
@@ -1177,6 +1220,36 @@ app.get('/api/anime_other', async (req, res) => {
     }
 })
 
+app.get('/api/specificShowEntry/:title/:table', async (req, res) => {
+
+    const title = req.params.title
+    const table = req.params.table
+
+    const query = `select * from ${BQ_PROJECT}.${SHOW_TABLES_DATASET}.${table} where title = @title`
+
+    try {
+        // Run the query
+        const options = {
+            query,
+            params: { title, table },
+        };
+        const [job] = await bigquery.createQueryJob(options);
+        console.log(`Job ${job.id} started.`);
+
+        console.log(query, options.params)
+
+        // Wait for the query to finish
+        const [rows] = await job.getQueryResults();
+
+        console.log(rows)
+
+        res.json(rows)
+    } catch (err) {
+        console.error('Error:', err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
 app.delete('/api/shows/:id', async (req, res) => {
     const id = req.params.id;
     const whichTable = req.params.whichTable;
@@ -1230,6 +1303,35 @@ app.get('/api/book_toread', async (req, res) => {
         res.status(500).send('Server Error')
     }
 })
+
+app.get('/api/specificBookEntry/:title', async (req, res) => {
+
+    const title = req.params.title
+
+    const query = `select * from ${BQ_PROJECT}.${BOOK_TABLES_DATASET}.book_toread where title = @title`
+
+    try {
+        // Run the query
+        const options = {
+            query,
+            params: { title },
+        };
+        const [job] = await bigquery.createQueryJob(options);
+        console.log(`Job ${job.id} started.`);
+
+        console.log(query, options.params)
+
+        // Wait for the query to finish
+        const [rows] = await job.getQueryResults();
+
+        console.log(rows)
+
+        res.json(rows)
+    } catch (err) {
+        console.error('Error:', err.message);
+        res.status(500).send('Server Error');
+    }
+});
 
 app.delete('/api/book_toread/:id', async (req, res) => {
     const id = req.params.id;
@@ -1673,12 +1775,11 @@ app.post('/api/add_to_show_table/:table/:entry', async (req, res) => {
 
 app.post('/api/add_to_book_table/:entry', async (req, res) => {
 
-    const table = req.params.table;
     const entry = req.params.entry;
 
 
     const query = `
-        INSERT INTO \`${BQ_PROJECT}.${BOOK_TABLES_DATASET}.${table}\`
+        INSERT INTO \`${BQ_PROJECT}.${BOOK_TABLES_DATASET}.book_toread\`
         (id, title, weight) VALUES (GENERATE_UUID(), @entry, 1)
     `;
 

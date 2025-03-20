@@ -239,7 +239,7 @@ export default function Album() {
 
     const getDataForSpecificEntry = async (title) => {
         try {
-            const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/specificEntry/${title}/${whichTable}`)
+            const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/specificMusicEntry/${title}/${whichTable}`)
 
             if (!response.ok) {
                 const errorData = await response.json();

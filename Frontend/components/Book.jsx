@@ -120,6 +120,24 @@ const Book = () => {
         //     });
     }
 
+    const getDataForSpecificEntry = async (title) => {
+        try {
+            const response = await fetch(`https://first-choice-porpoise.ngrok-free.app/api/specificBookEntry/${title}`)
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.log(errorData.message)
+            }
+
+            const data = await response.json()
+
+            setBook(data[0]['title'])
+            setBookID(data[0]['id'])
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+
     const screenStyle = {
         backgroundColor: backgroundColor
     }
@@ -136,6 +154,8 @@ const Book = () => {
                 contentName={book}
                 setEntry={setBook}
                 availability={bookAndTableAvailable}
+                whichTable={'book_toread'}
+                getDataForSpecificEntry={getDataForSpecificEntry}
             />
             <MainButtons
                 getContent={getBook}
