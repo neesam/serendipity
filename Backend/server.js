@@ -1290,7 +1290,7 @@ app.delete('/api/shows/:id', async (req, res) => {
 // books
 
 app.get('/api/book_toread', async (req, res) => {
-    const sqlQuery = `select * from ${BQ_PROJECT}.${BOOK_TABLES_DATASET}.book_toread order by rand() * weight limit 1`
+    const sqlQuery = `select *, rand() * weight as num from ${BQ_PROJECT}.${BOOK_TABLES_DATASET}.book_toread order by num limit 1`
 
     console.log(sqlQuery)
 

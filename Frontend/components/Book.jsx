@@ -211,7 +211,7 @@ const Book = () => {
                 type={'book'}
                 contentName={book}
                 availability={bookAndTableAvailable}
-                whichTable={'book_toread'}
+                whichTable={whichTable}
                 getDataForSpecificEntry={getDataForSpecificEntry}
             />
             <MainButtons
