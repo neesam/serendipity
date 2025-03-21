@@ -25,6 +25,7 @@ const TablesModalAndButton = ({ name, setEntry, addToQueue, tables, type }) => {
   }
 
   const handleGetAndSetEntry = () => {
+    console.log(selectedElement)
     setEntry(selectedElement)
     handleTablesModalClose()
   }

@@ -7,8 +7,6 @@ import TablesModalAndButton from './TablesModalAndButton.jsx'
 const TopScreenFunctionality = ({ containerStyles, tables, getFromSpecificTable, addToQueue, type }) => {
     return (
         <>
-        { type !== 'book' ? (
-            <>
             <View style={containerStyles.topLeftCornerContainer}>
                 <TablesModalAndButton
                     tables={tables}
@@ -19,17 +17,9 @@ const TopScreenFunctionality = ({ containerStyles, tables, getFromSpecificTable,
             </View>
             <View style={containerStyles.topRightCornerContainer}>
                 <Pressable onPress={addToQueue}>
-                    <Ionicons name={'add-sharp'} size={20}/>
+                    <Ionicons name={'add-sharp'} size={20} />
                 </Pressable>
             </View>
-            </>
-        ) : (
-            <View style={containerStyles.topRightCornerContainer}>
-                <Pressable onPress={addToQueue}>
-                    <Ionicons name={'add-sharp'} size={20}/>
-                </Pressable>
-            </View>
-        )}
         </>
     )
 }

@@ -1304,6 +1304,21 @@ app.get('/api/book_toread', async (req, res) => {
     }
 })
 
+app.get('/api/book_4chan', async (req, res) => {
+    const sqlQuery = `select * from ${BQ_PROJECT}.${BOOK_TABLES_DATASET}.book_4chan order by rand() limit 1`
+
+    console.log(sqlQuery)
+
+    try {
+        const [rows] = await bigquery.query({ query: sqlQuery });
+        res.json(rows)
+        console.log(rows)
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send('Server Error')
+    }
+})
+
 app.get('/api/specificBookEntry/:title', async (req, res) => {
 
     const title = req.params.title

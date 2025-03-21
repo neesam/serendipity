@@ -62,6 +62,11 @@ export const showTables = [
     'shows_top50'
 ]
 
+export const bookTables = [
+    'book_toread',
+    'book_4chan'
+]
+
 export const allTables = [
     'album_currentlyListening',
     'album_2011vwave',
