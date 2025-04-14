@@ -1,5 +1,5 @@
-import Book from '@/components/Book';
+import Book from "@/components/Book";
 
 export default function BookScreen() {
-    return <Book/>
+  return <Book />;
 }

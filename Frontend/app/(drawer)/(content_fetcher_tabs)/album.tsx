@@ -3,10 +3,9 @@ import { useState, useEffect } from "react";
 
 import Album from "@/components/Album";
 
-
 // import Button from "@/components/Button";
 // import EntCard from "@/components/Card";
 
 export default function AlbumPage() {
-    return <Album/>
+  return <Album />;
 }

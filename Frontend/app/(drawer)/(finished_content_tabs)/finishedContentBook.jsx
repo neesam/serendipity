@@ -1,7 +1,7 @@
-import { Text } from "react-native"
+import { Text } from "react-native";
 
-import FinishedContentBooks from '@/components/FinishedContentBooks'
+import FinishedContentBooks from "@/components/FinishedContentBooks";
 
 export default function BooksFinishedContentScreen() {
-    return <FinishedContentBooks />
+  return <FinishedContentBooks />;
 }

@@ -1,14 +1,21 @@
 import { View, Text, TouchableOpacity } from "react-native";
 
-import { containerStyles, buttonStyles } from '../Styles/Styles'
+import { containerStyles, buttonStyles } from "../Styles/Styles";
 
-
-const MainButtons = ({ getContent, deleteContent, type, currentlyListening, addToCurrentlyListening, availability, contentName }) => {
+const MainButtons = ({
+    getContent,
+    deleteContent,
+    type,
+    currentlyListening,
+    addToCurrentlyListening,
+    availability,
+    contentName,
+}) => {
     return (
         <>
             {availability ? (
                 <View style={containerStyles.mainButtonsContainer}>
-                    {contentName === '' ? (
+                    {contentName === "" ? (
                         <TouchableOpacity onPress={getContent}>
                             <View style={containerStyles.getContentButtonContainer}>
                                 <Text style={buttonStyles.buttonText}>Get {type}</Text>
@@ -32,7 +39,7 @@ const MainButtons = ({ getContent, deleteContent, type, currentlyListening, addT
             ) : (
                 <></>
             )}
-            {currentlyListening === 'false' && availability === true ? (
+            {currentlyListening === "false" && availability === true ? (
                 <View style={containerStyles.addToCurrentlyListeningButtonContainer}>
                     <TouchableOpacity onPress={addToCurrentlyListening}>
                         <View>
@@ -44,7 +51,7 @@ const MainButtons = ({ getContent, deleteContent, type, currentlyListening, addT
                 <></>
             )}
         </>
-    )
-}
+    );
+};
 
-export default MainButtons
+export default MainButtons;

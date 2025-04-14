@@ -3,9 +3,7 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     },
     "jsx": "react-jsx"
   },
@@ -13,6 +11,11 @@
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
-, "app/home/index.tsx", "components/Album.jsx", "components/Film.jsx", "components/Show.ksx", "app/(drawer)/(finished_content_tabs)/finishedContentAlbum.jsx"  ]
+    "expo-env.d.ts",
+    "app/home/index.tsx",
+    "components/Album.jsx",
+    "components/Film.jsx",
+    "components/Show.ksx",
+    "app/(drawer)/(finished_content_tabs)/finishedContentAlbum.jsx"
+  ]
 }
