@@ -19,10 +19,6 @@ Each medium has it's own dedicated screen having the purpose of allowing the use
 * Navigate directly to content in Spotify/Google
 * View all items in a specific table
 
-## Screenshots
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
-
 
 ## Tech Stack
 
