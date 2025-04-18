@@ -9,7 +9,7 @@ Users can choose from the following mediums:
 *  Television
 *  Books
 
-Each medium has it's own dedicated screen which has the purpose of allowing the user to fetch content from medium specific tables. 
+Each medium has it's own dedicated screen having the purpose of allowing the user to fetch content from medium specific tables. 
 ## Features
 
 * Add content to tables of one's choice
