@@ -4,6 +4,17 @@ const cors = require("cors");
 const { spawn } = require("child_process");
 const { BigQuery } = require("@google-cloud/bigquery");
 
+const { getUniqueRandomValue } = require("./helper/uniqueTable");
+
+const {
+    musicTables,
+    bookTables,
+    bookAnthologies,
+    allTables,
+    showTables,
+    filmTables,
+} = require("../Frontend/helper/lists");
+
 const app = express();
 const port = 5002;
 
@@ -83,7 +94,7 @@ app.post("/api/pipeline", async (req, res) => {
 // Add to queue table
 
 app.post("/api/addAlbumToQueue/:album", async (req, res) => {
-    const album = req.params.album;
+    const album = encodeURIComponent(req.params.album);
 
     const query = `
         INSERT INTO \`${BQ_PROJECT}.${METADATA_DATASET}.${QUEUE_TABLE}\`
@@ -215,12 +226,19 @@ app.post("/api/addShowToQueue/:show", async (req, res) => {
 // whichTable
 
 app.get("/api/whichFilmTable", async (req, res) => {
-    const sqlQuery = `select * from ${BQ_PROJECT}.${FILM_TABLES_DATASET}.${WHICH_TABLE_FILM} order by rand() limit 1`;
+    const randomTable = await getUniqueRandomValue(
+        filmTables,
+        "used_film_tables"
+    );
+
+    const sqlQuery = `select * from ${BQ_PROJECT}.${FILM_TABLES_DATASET}.${randomTable} order by rand() limit 1`;
+
+    console.log(sqlQuery);
 
     try {
         const [rows] = await bigquery.query({ query: sqlQuery });
-        res.json(rows);
-        console.log(rows);
+        const plainRows = rows.map((row) => ({ ...row }));
+        res.json({ rows: plainRows, randomTable });
     } catch (err) {
         console.error(err.message);
         res.status(500).send("Server Error");
@@ -228,12 +246,19 @@ app.get("/api/whichFilmTable", async (req, res) => {
 });
 
 app.get("/api/whichMusicTable", async (req, res) => {
-    const sqlQuery = `select * from ${BQ_PROJECT}.${MUSIC_TABLES_DATASET}.${WHICH_TABLE_MUSIC} order by rand() limit 1`;
+    const randomTable = await getUniqueRandomValue(
+        musicTables,
+        "used_music_tables"
+    );
+    console.log(randomTable);
+    const sqlQuery = `select * from ${BQ_PROJECT}.${MUSIC_TABLES_DATASET}.${randomTable} order by rand() limit 1`;
+
+    console.log(sqlQuery);
 
     try {
         const [rows] = await bigquery.query({ query: sqlQuery });
-        res.json(rows);
-        console.log(rows);
+        const plainRows = rows.map((row) => ({ ...row }));
+        res.json({ rows: plainRows, randomTable });
     } catch (err) {
         console.error(err.message);
         res.status(500).send("Server Error");
@@ -241,12 +266,17 @@ app.get("/api/whichMusicTable", async (req, res) => {
 });
 
 app.get("/api/whichShowTable", async (req, res) => {
-    const sqlQuery = `select * from ${BQ_PROJECT}.${SHOW_TABLES_DATASET}.${WHICH_TABLE_SHOW} order by rand() limit 1`;
+    const randomTable = await getUniqueRandomValue(
+        showTables,
+        "used_show_tables"
+    );
+
+    const sqlQuery = `select * from ${BQ_PROJECT}.${SHOW_TABLES_DATASET}.${randomTable} order by rand() limit 1`;
 
     try {
         const [rows] = await bigquery.query({ query: sqlQuery });
-        res.json(rows);
-        console.log(rows);
+        const plainRows = rows.map((row) => ({ ...row }));
+        res.json({ rows: plainRows, randomTable });
     } catch (err) {
         console.error(err.message);
         res.status(500).send("Server Error");
@@ -254,14 +284,19 @@ app.get("/api/whichShowTable", async (req, res) => {
 });
 
 app.get("/api/whichBookTable", async (req, res) => {
-    const sqlQuery = `select * from ${BQ_PROJECT}.${BOOK_TABLES_DATASET}.${WHICH_TABLE_BOOK} order by rand() limit 1`;
+    const randomTable = await getUniqueRandomValue(
+        bookTables,
+        "used_book_tables"
+    );
+
+    const sqlQuery = `select * from ${BQ_PROJECT}.${BOOK_TABLES_DATASET}.${randomTable} order by rand() limit 1`;
 
     console.log(sqlQuery);
 
     try {
         const [rows] = await bigquery.query({ query: sqlQuery });
-        res.json(rows);
-        console.log(rows);
+        const plainRows = rows.map((row) => ({ ...row }));
+        res.json({ rows: plainRows, randomTable });
     } catch (err) {
         console.error(err.message);
         res.status(500).send("Server Error");
@@ -874,7 +909,7 @@ app.get("/api/specificMusicEntry/:title/:table", async (req, res) => {
 });
 
 app.post("/api/addToCurrentlyListening/:album/:table", async (req, res) => {
-    const album = req.params.album;
+    const album = encodeURIComponent(req.params.album);
     const table = req.params.table;
 
     const query = `
@@ -910,9 +945,11 @@ app.post("/api/addToCurrentlyListening/:album/:table", async (req, res) => {
 
 // album deletion non-inCirculation
 
-app.delete("/api/albums/:id/:whichTable", async (req, res) => {
+app.delete("/api/albums/:id/from/:whichTable", async (req, res) => {
     const id = req.params.id;
     const whichTable = req.params.whichTable;
+
+    console.log("man wtf");
 
     console.log(
         `Received DELETE request for id: ${id} from table: ${whichTable}`
@@ -949,10 +986,43 @@ app.delete("/api/albums/:id/:whichTable", async (req, res) => {
     }
 });
 
+app.delete("/api/albums/:id/with/:album", async (req, res) => {
+    const id = req.params.id;
+    const album = encodeURIComponent(req.params.album);
+
+    console.log("fuckkkkk");
+
+    console.log(
+        `Received DELETE request for album: ${album} from table: album_currentlyListening`
+    );
+
+    // Query to delete from album_currentlyListening
+    const query1 = `
+    DELETE FROM \`${BQ_PROJECT}.${MUSIC_TABLES_DATASET}.album_currentlyListening\`
+    WHERE id = @id
+    `;
+
+    try {
+        // Execute the first query
+        const options1 = {
+            query: query1,
+            params: { id },
+        };
+        const [job1] = await bigquery.createQueryJob(options1);
+        console.log(`Job ${job1.id} started.`);
+        await job1.getQueryResults();
+
+        res.status(200).send({ message: "Album deleted successfully" });
+    } catch (err) {
+        console.error("Error:", err.message);
+        res.status(500).send({ error: "Server Error" });
+    }
+});
+
 app.delete("/api/albums/:id/:album/:original_table", async (req, res) => {
     const id = req.params.id;
     const originalTable = req.params.original_table;
-    const album = req.params.album;
+    const album = encodeURIComponent(req.params.album);
 
     console.log(
         `Received DELETE request for album: ${album} from table: ${originalTable} and album_currentlyListening`
@@ -988,37 +1058,6 @@ app.delete("/api/albums/:id/:album/:original_table", async (req, res) => {
         const [job2] = await bigquery.createQueryJob(options2);
         console.log(`Job ${job2.id} started.`);
         await job2.getQueryResults();
-
-        res.status(200).send({ message: "Album deleted successfully" });
-    } catch (err) {
-        console.error("Error:", err.message);
-        res.status(500).send({ error: "Server Error" });
-    }
-});
-
-app.delete("/api/albums/:id/:album", async (req, res) => {
-    const id = req.params.id;
-    const album = req.params.album;
-
-    console.log(
-        `Received DELETE request for album: ${album} from table: album_currentlyListening`
-    );
-
-    // Query to delete from album_currentlyListening
-    const query1 = `
-    DELETE FROM \`${BQ_PROJECT}.${MUSIC_TABLES_DATASET}.album_currentlyListening\`
-    WHERE id = @id
-    `;
-
-    try {
-        // Execute the first query
-        const options1 = {
-            query: query1,
-            params: { id },
-        };
-        const [job1] = await bigquery.createQueryJob(options1);
-        console.log(`Job ${job1.id} started.`);
-        await job1.getQueryResults();
 
         res.status(200).send({ message: "Album deleted successfully" });
     } catch (err) {
