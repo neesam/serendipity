@@ -1,4 +1,4 @@
-export const musicTables = [
+const musicTables = [
     "album_currentlyListening",
     "album_2011vwave",
     "album_allgenres",
@@ -43,7 +43,7 @@ export const musicTables = [
     "artist_underground",
 ];
 
-export const filmTables = [
+const filmTables = [
     "film_ebert",
     "film_imdb250",
     "filmrecs",
@@ -55,19 +55,13 @@ export const filmTables = [
     "film_tspdt2500",
 ];
 
-export const showTables = [
-    "shows",
-    "anime_classic",
-    "anime_other",
-    "shows_top50",
-];
+const showTables = ["shows", "anime_classic", "anime_other", "shows_top50"];
 
-export const bookTables = ["book_toread", "book_4chan"];
+const bookTables = ["book_toread", "book_4chan"];
 
-export const allTables = [
+const allTables = [
     "album_currentlyListening",
     "album_2011vwave",
-    "album_faketable",
     "album_allgenres",
     "album_ambientvaporwave",
     "album_barberbeats",
@@ -99,7 +93,7 @@ export const allTables = [
     "album_slushwave",
     "album_soundsofspotify",
     "album_tolisten",
-    "album_telepath",
+    "album_telepathsources",
     "artist_topartists",
     "album_vaporwave",
     "album_vhspop",
@@ -122,7 +116,7 @@ export const allTables = [
     "book_toread",
 ];
 
-export const bookAnthologies = [
+const bookAnthologies = [
     "ted chiang",
     "the stars my destination",
     "greatest short stories volume 4",
@@ -148,3 +142,12 @@ export const bookAnthologies = [
     "ursula k le guin",
     "harlan ellison",
 ];
+
+module.exports = {
+    musicTables,
+    filmTables,
+    showTables,
+    bookTables,
+    allTables,
+    bookAnthologies,
+};

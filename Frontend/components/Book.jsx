@@ -25,71 +25,47 @@ const Book = () => {
     const getBook = async () => {
         // Function to fetch actual album
 
-        const fetchAlbumFromWhichTable = async (whichTable) => {
-            try {
-                const response = await fetch(
-                    `https://first-choice-porpoise.ngrok-free.app/api/${whichTable}`,
-                );
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch details for ${whichTable}`);
-                }
+        setBookAndTableAvailable(false);
 
-                const data = await response.json();
-
-                if (bookAnthologies.includes(data[0]["title"])) {
-                    const getRandomInt = (min, max) => {
-                        const minCeiled = Math.ceil(min);
-                        const maxFloored = Math.floor(max);
-                        return Math.floor(
-                            Math.random() * (maxFloored - minCeiled) + minCeiled,
-                        );
-                    };
-                    setBookID(data[0]["id"]);
-                    setBook(data[0]["title"] + " " + getRandomInt(2, 5));
-                } else {
-                    setBookID(data[0]["id"]);
-                    setBook(data[0]["title"]);
-                }
-
-                // Logic to change background on each button press
-
-                const bgColor = randomColor();
-                setBackgroundColor(bgColor);
-            } catch (error) {
-                console.log(error.message);
-            } finally {
-                setBookAndTableAvailable(true);
-            }
-        };
-
-        // Function to retrieve specific table
-
-        const fetchWhichTable = async () => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-
-            setBookAndTableAvailable(false);
-
+        try {
             const response = await fetch(
-                "https://first-choice-porpoise.ngrok-free.app/api/whichBookTable",
+                `https://first-choice-porpoise.ngrok-free.app/api/whichBookTable`,
             );
 
             if (!response.ok) {
-                alert("why");
-                throw new Error("Failed to fetch whichTable");
+                throw new Error(`Failed to fetch details for book table`);
             }
 
             const data = await response.json();
-            const fetchedTable = data[0]["title"];
 
-            setWhichTable(fetchedTable);
-
-            if (data.length > 0) {
-                fetchAlbumFromWhichTable(fetchedTable);
+            if (bookAnthologies.includes(data['rows'][0]["title"])) {
+                const getRandomInt = (min, max) => {
+                    const minCeiled = Math.ceil(min);
+                    const maxFloored = Math.floor(max);
+                    return Math.floor(
+                        Math.random() * (maxFloored - minCeiled) + minCeiled,
+                    );
+                };
+                setBookID(data['rows'][0]["id"]);
+                setBook(data['rows'][0]["title"] + " " + getRandomInt(2, 5));
+            } else {
+                setBookID(data['rows'][0]["id"]);
+                setBook(data['rows'][0]["title"]);
             }
-        };
 
-        fetchWhichTable();
+            setWhichTable(data['randomTable'])
+
+            // Logic to change background on each button press
+
+            const bgColor = randomColor();
+            setBackgroundColor(bgColor);
+        } catch (error) {
+            console.log(error.message);
+        } finally {
+            setBookAndTableAvailable(true);
+        }
     };
 
     const deleteBook = async () => {

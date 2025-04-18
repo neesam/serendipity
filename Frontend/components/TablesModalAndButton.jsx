@@ -10,7 +10,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 const TablesModalAndButton = ({ name, setEntry, addToQueue, tables, type }) => {
     // State to store selected dropdown value
     const [tablesModalVisible, setTablesModalVisible] = useState(false);
-    const [selectedElement, setSelectedElement] = useState("");
+    const [selectedElement, setSelectedElement] = useState(tables[0]);
 
     const handleTablesModalOpen = () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);

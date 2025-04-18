@@ -17,88 +17,45 @@ export default function Album() {
     const [albumID, setAlbumID] = useState("");
     const [currentlyListening, setCurrentlyListening] = useState("");
     const [originalTable, setOriginalTable] = useState("");
-    const [tablesUsed, setTablesUsed] = useState([]);
     const [backgroundColor, setBackgroundColor] = useState("");
     const [albumAndTableAvailable, setAlbumAndTableAvailable] = useState(true);
 
     useEffect(() => { }, [album, whichTable]);
 
     const getAlbum = async () => {
+
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+
+        setAlbumAndTableAvailable(false);
+
         // Function to fetch actual album
 
-        const fetchAlbumFromWhichTable = async (whichTable) => {
-            const response = await fetch(
-                `https://first-choice-porpoise.ngrok-free.app/api/${whichTable}`,
-            );
-            if (!response.ok) {
-                throw new Error(`Failed to fetch details for ${whichTable}`);
-            }
-            const data = await response.json();
+        const response = await fetch(
+            `https://first-choice-porpoise.ngrok-free.app/api/whichMusicTable`,
+        );
+        if (!response.ok) {
+            throw new Error(`Failed to fetch details for ${whichTable}`);
+        }
 
-            if (data[0]["link"]) {
-                setAlbum(data[0]["link"]);
-            } else {
-                setAlbum(data[0]["title"]);
-                setAlbumID(data[0]["id"]);
-            }
+        const data = await response.json();
 
-            console.log(data);
+        if (data['rows'][0]["link"]) {
+            setAlbum(data['rows'][0]["link"]);
+        } else {
+            setAlbum(data['rows'][0]["title"]);
+            setAlbumID(data['rows'][0]["id"]);
+        }
 
-            setCurrentlyListening(data[0]["currently_listening"] || "false");
+        setCurrentlyListening(data['rows'][0]["currently_listening"] || "false");
 
-            setAlbumAndTableAvailable(true);
+        setWhichTable(data['randomTable'])
 
-            // Logic to change background on each button press
+        setAlbumAndTableAvailable(true);
 
-            const bgColor = randomColor();
-            setBackgroundColor(bgColor);
-        };
+        // Logic to change background on each button press
 
-        // Function to retrieve specific table
-
-        const fetchWhichTable = async () => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-
-            setAlbumAndTableAvailable(false);
-
-            let localTablesUsed = [...tablesUsed];
-
-            if (localTablesUsed.length === 20) {
-                localTablesUsed = [];
-                setTablesUsed([]);
-            }
-
-            let tableUsed = false;
-
-            while (!tableUsed) {
-                const response = await fetch(
-                    "https://first-choice-porpoise.ngrok-free.app/api/whichMusicTable",
-                );
-
-                if (!response.ok) {
-                    alert("why");
-                    throw new Error("Failed to fetch whichTable");
-                }
-
-                const data = await response.json();
-                const fetchedTable = data[0]["title"];
-
-                if (!localTablesUsed.includes(fetchedTable)) {
-                    tableUsed = true;
-
-                    setWhichTable(fetchedTable);
-
-                    localTablesUsed.push(fetchedTable);
-                    setTablesUsed(localTablesUsed);
-
-                    if (data.length > 0) {
-                        fetchAlbumFromWhichTable(fetchedTable); // Assuming data is an array and we're using the first item
-                    }
-                }
-            }
-        };
-
-        fetchWhichTable();
+        const bgColor = randomColor();
+        setBackgroundColor(bgColor);
     };
 
     const getFromSpecificTable = async (specificTable) => {
@@ -132,11 +89,13 @@ export default function Album() {
 
     const deleteAlbum = async () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+        console.log(currentlyListening)
 
         if (currentlyListening === "false") {
             try {
+                console.log('im happy')
                 const response = await fetch(
-                    `https://first-choice-porpoise.ngrok-free.app/api/albums/${albumID}/${whichTable}`,
+                    `https://first-choice-porpoise.ngrok-free.app/api/albums/${albumID}/from/${whichTable}`,
                     {
                         method: "DELETE",
                         headers: { "Content-type": "application/json" },
@@ -161,6 +120,7 @@ export default function Album() {
         } else {
             if (originalTable !== null) {
                 try {
+                    console.log('im ya')
                     const response = await fetch(
                         `https://first-choice-porpoise.ngrok-free.app/api/albums/${albumID}/${album}/${originalTable}`,
                         {
@@ -185,8 +145,10 @@ export default function Album() {
                 }
             } else {
                 try {
+
+                    console.log('im sad')
                     const response = await fetch(
-                        `https://first-choice-porpoise.ngrok-free.app/api/albums/${albumID}/${album}`,
+                        `https://first-choice-porpoise.ngrok-free.app/api/albums/${albumID}/with/${album}`,
                         {
                             method: "DELETE",
                             headers: { "Content-type": "application/json" },

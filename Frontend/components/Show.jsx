@@ -15,7 +15,6 @@ import randomColor from "../helper/randomColor";
 const Show = () => {
     const [whichTable, setWhichTable] = useState("");
     const [show, setShow] = useState("");
-    const [tablesUsed, setTablesUsed] = useState([]);
     const [showID, setShowID] = useState("");
     const [backgroundColor, setBackgroundColor] = useState("");
     const [showAndTableAvailable, setShowAndTableAvailable] = useState(true);
@@ -23,75 +22,29 @@ const Show = () => {
     useEffect(() => { }, [show]);
 
     const getShow = async () => {
+
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-        // Function to fetch actual show
+        setShowAndTableAvailable(false);
 
-        const fetchShowFromWhichTable = async (whichTable) => {
-            const response = await fetch(
-                `https://first-choice-porpoise.ngrok-free.app/api/${whichTable}`,
-            );
-            if (!response.ok) {
-                throw new Error(`Failed to fetch details for ${whichTable}`);
-            }
-            const data = await response.json();
+        const response = await fetch(
+            `https://first-choice-porpoise.ngrok-free.app/api/whichShowTable`,
+        );
 
-            console.log(data);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch details for ${whichTable}`);
+        }
 
-            setShow(data[0]["title"]);
+        const data = await response.json();
 
-            setShowAndTableAvailable(true);
 
-            // Logic to change background on each button press
+        setShow(data['rows'][0]["title"]);
+        setWhichTable(data['randomTable'])
 
-            const bgColor = randomColor();
-            setBackgroundColor(bgColor);
-        };
+        setShowAndTableAvailable(true);
 
-        // Function to retrieve specific table
-
-        const fetchWhichTable = async () => {
-            setShowAndTableAvailable(false);
-
-            let localTablesUsed = [...tablesUsed];
-
-            if (localTablesUsed.length === 3) {
-                localTablesUsed = [];
-                setTablesUsed([]);
-            }
-
-            let tableUsed = false;
-
-            while (!tableUsed) {
-                const response = await fetch(
-                    "https://first-choice-porpoise.ngrok-free.app/api/whichShowTable",
-                );
-
-                if (!response.ok) {
-                    throw new Error("Failed to fetch whichTable");
-                }
-
-                const data = await response.json();
-                const fetchedTable = data[0]["title"];
-                console.log(fetchedTable);
-
-                if (!localTablesUsed.includes(fetchedTable)) {
-                    tableUsed = true;
-
-                    setWhichTable(fetchedTable);
-
-                    localTablesUsed.push(fetchedTable);
-                    setTablesUsed(localTablesUsed);
-                    console.log("After update:", [...tablesUsed, fetchedTable]);
-
-                    if (data.length > 0) {
-                        fetchShowFromWhichTable(fetchedTable); // Assuming data is an array and we're using the first item
-                    }
-                }
-            }
-        };
-
-        fetchWhichTable();
+        const bgColor = randomColor();
+        setBackgroundColor(bgColor);
     };
 
     const getFromSpecificTable = async (specificTable) => {
@@ -108,12 +61,12 @@ const Show = () => {
         console.log(data);
 
         setShow(data[0]["title"]);
+        setWhichTable(specificTable)
 
         // Logic to change background on each button press
 
-        // const bgColor = randomColor()
-        // setBackgroundColor(bgColor)
-        // localStorage.setItem('showBackgroundColor', bgColor)
+        const bgColor = randomColor()
+        setBackgroundColor(bgColor)
     };
 
     const deleteShow = async () => {

@@ -21,76 +21,33 @@ const Film = () => {
     const [whichTable, setWhichTable] = useState("");
     const [film, setFilm] = useState("");
     const [filmID, setFilmID] = useState("");
-    const [tablesUsed, setTablesUsed] = useState([]);
     const [backgroundColor, setBackgroundColor] = useState("");
     const [filmAndTableAvailable, setFilmAndTableAvailable] = useState(true);
 
     useEffect(() => { }, [film, whichTable]);
 
     const getFilm = async () => {
-        const fetchFilmFromWhichTable = async (whichTable) => {
-            const response = await fetch(
-                `https://first-choice-porpoise.ngrok-free.app/api/${whichTable}`,
-            );
-            if (!response.ok) {
-                throw new Error(`Failed to fetch details for ${whichTable}`);
-            }
-            const data = await response.json();
 
-            setFilm(data[0]["title"]);
-            setFilmID(data[0]["id"]);
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-            setFilmAndTableAvailable(true);
+        setFilmAndTableAvailable(false);
+        const response = await fetch(
+            `https://first-choice-porpoise.ngrok-free.app/api/whichFilmTable`,
+        );
+        if (!response.ok) {
+            throw new Error(`Failed to fetch details for ${whichTable}`);
+        }
+        const data = await response.json();
 
-            const bgColor = randomColor();
-            setBackgroundColor(bgColor);
-        };
+        setFilm(data['rows'][0]["title"]);
+        setFilmID(data['rows'][0]["id"]);
+        setWhichTable(data['randomTable'])
 
-        const fetchWhichTable = async () => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+        setFilmAndTableAvailable(true);
 
-            setFilmAndTableAvailable(false);
+        const bgColor = randomColor();
+        setBackgroundColor(bgColor);
 
-            let localTablesUsed = [...tablesUsed];
-
-            if (localTablesUsed.length === 8) {
-                localTablesUsed = [];
-                setTablesUsed([]);
-            }
-
-            let tableUsed = false;
-
-            while (!tableUsed) {
-                const response = await fetch(
-                    "https://first-choice-porpoise.ngrok-free.app/api/whichFilmTable",
-                );
-
-                if (!response.ok) {
-                    throw new Error("Failed to fetch whichTable");
-                }
-
-                const data = await response.json();
-                const fetchedTable = data[0]["title"];
-
-                console.log(data);
-
-                if (!localTablesUsed.includes(fetchedTable)) {
-                    tableUsed = true;
-
-                    setWhichTable(fetchedTable);
-
-                    localTablesUsed.push(fetchedTable);
-                    setTablesUsed(localTablesUsed);
-                    console.log("After update:", [...tablesUsed, fetchedTable]);
-
-                    if (data.length > 0) {
-                        fetchFilmFromWhichTable(fetchedTable); // Assuming data is an array and we're using the first item
-                    }
-                }
-            }
-        };
-
-        fetchWhichTable();
     };
 
     const deleteFilm = async () => {
