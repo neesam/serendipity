@@ -33,7 +33,7 @@ const musicTables = [
     "album_slushwave",
     "album_soundsofspotify",
     "album_tolisten",
-    "album_telepath",
+    "album_telepathsources",
     "artist_topartists",
     "album_vaporwave",
     "album_vhspop",
