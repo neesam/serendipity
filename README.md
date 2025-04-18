@@ -1,8 +1,5 @@
 # Serendipity
 
-
-# Serendipity
-
 A mobile app designed to eliminate choice paralysis in entertainment discovery. 
 
 Users can choose from the following mediums:
