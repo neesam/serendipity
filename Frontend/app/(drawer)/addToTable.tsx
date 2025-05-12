@@ -1,5 +1,5 @@
-import AddToTable from "@/components/AddToTable";
+import AddToTable from "@/screens/AddToTable";
 
 export default function AddToTableScreen() {
-  return <AddToTable />;
+    return <AddToTable />;
 }

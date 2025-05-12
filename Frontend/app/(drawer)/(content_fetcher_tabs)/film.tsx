@@ -1,5 +1,5 @@
-import Film from "@/components/Film";
+import Film from "@/screens/Film";
 
 export default function FilmScreen() {
-  return <Film />;
+    return <Film />;
 }

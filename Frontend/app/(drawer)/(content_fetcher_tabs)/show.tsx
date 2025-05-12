@@ -1,6 +1,6 @@
 import { Text, View, StyleSheet } from "react-native";
-import Show from "@/components/Show";
+import Show from "@/screens/Show";
 
 export default function ShowScreen() {
-  return <Show />;
+    return <Show />;
 }

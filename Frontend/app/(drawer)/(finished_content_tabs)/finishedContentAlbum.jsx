@@ -1,7 +1,7 @@
 import { Text } from "react-native";
 
-import FinishedContentAlbums from "@/components/FinishedContentAlbums";
+import FinishedContentAlbums from "@/screens/FinishedContentAlbums";
 
 export default function AlbumsFinishedContentScreen() {
-  return <FinishedContentAlbums />;
+    return <FinishedContentAlbums />;
 }

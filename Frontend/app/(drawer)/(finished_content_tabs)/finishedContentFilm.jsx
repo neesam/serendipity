@@ -1,5 +1,5 @@
-import FinishedContentFilms from "../../../components/FinishedContentFilms";
+import FinishedContentFilms from "@/screens/FinishedContentFilms";
 
 export default function AlbumsFinishedContentScreen() {
-  return <FinishedContentFilms />;
+    return <FinishedContentFilms />;
 }
