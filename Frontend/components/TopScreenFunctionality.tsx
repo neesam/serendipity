@@ -1,4 +1,10 @@
-import { View, Pressable, ViewStyle, StyleProp } from "react-native";
+import {
+    View,
+    Pressable,
+    ViewStyle,
+    StyleProp,
+    GestureResponderEvent,
+} from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
 
@@ -8,8 +14,7 @@ interface TopScreenFunctionalityTypes {
     containerStyles: StyleProp<ViewStyle>;
     tables: string[];
     getFromSpecificTable: (input: string) => Promise<void>;
-    addToQueue: (input: string) => Promise<void>;
-    type: string;
+    addToQueue: (event: GestureResponderEvent) => void;
 }
 
 const TopScreenFunctionality = ({
@@ -17,7 +22,6 @@ const TopScreenFunctionality = ({
     tables,
     getFromSpecificTable,
     addToQueue,
-    type,
 }: TopScreenFunctionalityTypes) => {
     return (
         <>
@@ -29,7 +33,7 @@ const TopScreenFunctionality = ({
                 />
             </View>
             <View style={containerStyles!.topRightCornerContainer}>
-                <Pressable onPress={() => addToQueue}>
+                <Pressable onPress={addToQueue}>
                     <Ionicons name={"add-sharp"} size={20} />
                 </Pressable>
             </View>

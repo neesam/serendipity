@@ -37,12 +37,6 @@ app.use((req, res, next) => {
     next();
 });
 
-// BigQuery initialization
-
-const bigquery = new BigQuery({
-    keyFilename: BQ_SERVICE_ACCOUNT,
-});
-
 // ROUTES
 
 // Metadata pipeline routes

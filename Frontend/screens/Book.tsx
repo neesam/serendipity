@@ -14,6 +14,16 @@ import { bookTables } from "../helper/lists";
 const EXPO_PUBLIC_BOOK_TABLES_DATASET =
     process.env.EXPO_PUBLIC_BOOK_TABLES_DATASET;
 
+interface GetBookDataType {
+    rows: [{ title: string; id: string }];
+    randomTable: string;
+}
+
+interface SpecificEntryDataType {
+    title: string;
+    id: string;
+}
+
 const Book = () => {
     const [book, setBook] = useState("");
     const [bookID, setBookID] = useState("");
@@ -39,7 +49,7 @@ const Book = () => {
                 throw new Error(`Failed to fetch details for book table`);
             }
 
-            const data = await response.json();
+            const data: GetBookDataType = await response.json();
 
             if (bookAnthologies.includes(data["rows"][0]["title"])) {
                 const getRandomInt = (min: number, max: number) => {
@@ -138,7 +148,7 @@ const Book = () => {
                 console.log(errorData.message);
             }
 
-            const data = await response.json();
+            const data: [SpecificEntryDataType] = await response.json();
 
             setBook(data[0]["title"]);
             setBookID(data[0]["id"]);
@@ -162,7 +172,7 @@ const Book = () => {
             throw new Error(`Failed to fetch details for ${specificTable}`);
         }
 
-        const data = await response.json();
+        const data: [SpecificEntryDataType] = await response.json();
 
         console.log(data);
 

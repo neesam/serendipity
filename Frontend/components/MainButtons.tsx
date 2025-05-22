@@ -26,7 +26,7 @@ const MainButtons = ({
             {availability ? (
                 <View style={containerStyles.mainButtonsContainer}>
                     {contentName === "" ? (
-                        <TouchableOpacity onPress={() => getContent}>
+                        <TouchableOpacity onPress={getContent}>
                             <View
                                 style={
                                     containerStyles.getContentButtonContainer
@@ -39,7 +39,7 @@ const MainButtons = ({
                         </TouchableOpacity>
                     ) : (
                         <>
-                            <TouchableOpacity onPress={() => getContent}>
+                            <TouchableOpacity onPress={getContent}>
                                 <View
                                     style={
                                         containerStyles.getContentButtonContainer
@@ -50,7 +50,7 @@ const MainButtons = ({
                                     </Text>
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => deleteContent}>
+                            <TouchableOpacity onPress={deleteContent}>
                                 <View
                                     style={
                                         containerStyles.deleteContentButtonContainer
@@ -73,7 +73,7 @@ const MainButtons = ({
                         containerStyles.addToCurrentlyListeningButtonContainer
                     }
                 >
-                    <TouchableOpacity onPress={() => addToCurrentlyListening}>
+                    <TouchableOpacity onPress={addToCurrentlyListening}>
                         <View>
                             <Text style={buttonStyles.buttonText}>
                                 Add to currents

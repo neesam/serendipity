@@ -1,7 +1,7 @@
 {
-  "dependencies": {
-    "@react-navigation/drawer": "^7.1.2",
-    "react-hook-form": "^7.54.2",
-    "expo": "latest"
-  }
+    "dependencies": {
+        "@react-navigation/drawer": "^7.1.2",
+        "expo": "latest",
+        "react-hook-form": "^7.54.2"
+    }
 }
