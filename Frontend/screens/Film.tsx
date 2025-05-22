@@ -1,14 +1,9 @@
-import { View, StyleSheet, Text, Pressable } from "react-native";
+import { View } from "react-native";
 import { useState, useEffect } from "react";
 
 import * as Haptics from "expo-haptics";
 
-import {
-    cardStyles,
-    containerStyles,
-    buttonStyles,
-    modalStyles,
-} from "../styles/styles";
+import { containerStyles } from "../styles/styles";
 import TopScreenFunctionality from "../components/TopScreenFunctionality";
 import { filmTables } from "@/helper/lists";
 import MainButtons from "../components/MainButtons";
@@ -17,6 +12,16 @@ import randomColor from "../utils/randomColor";
 
 const EXPO_PUBLIC_FILM_TABLES_DATASET =
     process.env.EXPO_PUBLIC_FILM_TABLES_DATASET;
+
+interface GetFilmDataType {
+    rows: [{ title: string; id: string }];
+    randomTable: string;
+}
+
+interface SpecificEntryDataType {
+    title: string;
+    id: string;
+}
 
 const Film = () => {
     const [whichTable, setWhichTable] = useState("");
@@ -31,13 +36,16 @@ const Film = () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
         setFilmAndTableAvailable(false);
+
         const response = await fetch(
             `https://first-choice-porpoise.ngrok-free.app/api/whichFilmTable`
         );
+
         if (!response.ok) {
             throw new Error(`Failed to fetch details for ${whichTable}`);
         }
-        const data = await response.json();
+
+        const data: GetFilmDataType = await response.json();
 
         setFilm(data["rows"][0]["title"]);
         setFilmID(data["rows"][0]["id"]);
@@ -71,7 +79,9 @@ const Film = () => {
             console.log(await response.json());
             console.log("Film deleted successfully.");
         } catch (error) {
-            // console.error('Error during deletion:', error.message);
+            if (error instanceof Error) {
+                console.error("Error during deletion:", error.message);
+            }
         }
 
         getFromSpecificTable(whichTable);
@@ -80,26 +90,30 @@ const Film = () => {
     const getFromSpecificTable = async (specificTable: string) => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-        const response = await fetch(
-            `https://first-choice-porpoise.ngrok-free.app/api/film/${specificTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`
-        );
+        try {
+            const response = await fetch(
+                `https://first-choice-porpoise.ngrok-free.app/api/film/${specificTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`
+            );
 
-        if (!response.ok) {
-            throw new Error(`Failed to fetch details for ${specificTable}`);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch details for ${specificTable}`);
+            }
+
+            const data: [SpecificEntryDataType] = await response.json();
+
+            setFilm(data[0]["title"]);
+            setFilmID(data[0]["id"]);
+            setWhichTable(specificTable);
+        } catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+            }
+        } finally {
+            // Logic to change background on each button press
+
+            const bgColor = randomColor();
+            setBackgroundColor(bgColor);
         }
-
-        const data = await response.json();
-
-        console.log(data);
-
-        setFilm(data[0]["title"]);
-        setFilmID(data[0]["id"]);
-        setWhichTable(specificTable);
-
-        // Logic to change background on each button press
-
-        const bgColor = randomColor();
-        setBackgroundColor(bgColor);
     };
 
     const getDataForSpecificEntry = async (title: string) => {
@@ -113,7 +127,7 @@ const Film = () => {
                 console.log(errorData.message);
             }
 
-            const data = await response.json();
+            const data: [SpecificEntryDataType] = await response.json();
 
             setFilm(data[0]["title"]);
             setFilmID(data[0]["id"]);
@@ -143,16 +157,12 @@ const Film = () => {
                 );
             }
 
-            console.log(await response.json());
             console.log("Film added successfully.");
         } catch (error) {
-            console.error("Error in API call", error);
+            if (error instanceof Error) {
+                console.error(error.message);
+            }
         }
-
-        // toast('Added to queue!', {
-        //     autoClose: 2000,
-        //     theme: "light",
-        //     });
     };
 
     const screenStyle = {

@@ -14,16 +14,30 @@ import ContentCard from "../components/ContentCard";
 const EXPO_PUBLIC_MUSIC_TABLES_DATASET =
     process.env.EXPO_PUBLIC_MUSIC_TABLES_DATASET;
 
+interface SpecificAlbumOrEntryDataType {
+    title: string;
+    id: string;
+    currently_listening?: string;
+    original_table?: string;
+}
+
+interface GetAlbumDataType {
+    rows: [{ title: string; id: string; currently_listening?: string }];
+    randomTable: string;
+}
+
 export default function Album() {
     const [whichTable, setWhichTable] = useState("");
     const [album, setAlbum] = useState("");
     const [albumID, setAlbumID] = useState("");
     const [currentlyListening, setCurrentlyListening] = useState("");
-    const [originalTable, setOriginalTable] = useState("");
+    const [originalTable, setOriginalTable] = useState<string | null>(null);
     const [backgroundColor, setBackgroundColor] = useState("");
     const [albumAndTableAvailable, setAlbumAndTableAvailable] = useState(true);
 
-    useEffect(() => {}, [album, whichTable]);
+    useEffect(() => {
+        console.log(currentlyListening);
+    }, [album, whichTable]);
 
     const getAlbum = async () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
@@ -39,14 +53,10 @@ export default function Album() {
             throw new Error(`Failed to fetch details for ${whichTable}`);
         }
 
-        const data = await response.json();
+        const data: GetAlbumDataType = await response.json();
 
-        if (data["rows"][0]["link"]) {
-            setAlbum(data["rows"][0]["link"]);
-        } else {
-            setAlbum(data["rows"][0]["title"]);
-            setAlbumID(data["rows"][0]["id"]);
-        }
+        setAlbum(data["rows"][0]["title"]);
+        setAlbumID(data["rows"][0]["id"]);
 
         setCurrentlyListening(
             data["rows"][0]["currently_listening"] || "false"
@@ -74,11 +84,11 @@ export default function Album() {
             throw new Error(`Failed to fetch details for ${specificTable}`);
         }
 
-        const data = await response.json();
+        const data: [SpecificAlbumOrEntryDataType] = await response.json();
 
         console.log(data);
 
-        const albumVal = data[0]["link"] || data[0]["title"];
+        const albumVal = data[0]["title"];
         const albumIDVal = data[0]["id"];
         const currently_listening = data[0]["currently_listening"] || "false";
         const originalTableVal = data[0]["original_table"] || null;
@@ -141,8 +151,10 @@ export default function Album() {
                         );
                     }
 
-                    console.log(await response.json());
-                    console.log("Album deleted successfully.");
+                    const data = await response.json();
+                    console.log(
+                        `Album deleted successfully from ${originalTable} and currentlyListening.`
+                    );
 
                     getFromSpecificTable(whichTable);
                 } catch (error) {
@@ -167,7 +179,7 @@ export default function Album() {
                         );
                     }
 
-                    console.log(await response.json());
+                    const data = await response.json();
                     console.log("Album deleted successfully.");
 
                     getFromSpecificTable(whichTable);
@@ -198,7 +210,7 @@ export default function Album() {
             setCurrentlyListening("true");
         } catch (error) {
             if (error instanceof Error) {
-                console.log(error.message);
+                console.log(error);
             }
         }
     };
@@ -206,23 +218,29 @@ export default function Album() {
     const addToQueue = async () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-        const response = await fetch(
-            `https://first-choice-porpoise.ngrok-free.app/api/addAlbumToQueue/${album}`,
-            {
-                method: "POST",
-                headers: { "Content-type": "application/json" },
-            }
-        );
-
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(
-                `Post failed: ${errorData.message || "Unknown error"}`
+        try {
+            const response = await fetch(
+                `https://first-choice-porpoise.ngrok-free.app/api/addAlbumToQueue/${album}`,
+                {
+                    method: "POST",
+                    headers: { "Content-type": "application/json" },
+                }
             );
-        }
 
-        console.log(await response.json());
-        console.log("Album added successfully.");
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(
+                    `Post failed: ${errorData.message || "Unknown error"}`
+                );
+            }
+
+            console.log(await response.json());
+            console.log("Album added successfully.");
+        } catch (error) {
+            if (error instanceof Error) {
+                console.log(error);
+            }
+        }
     };
 
     const getDataForSpecificEntry = async (title: string) => {
@@ -236,7 +254,7 @@ export default function Album() {
                 console.log(errorData.message);
             }
 
-            const data = await response.json();
+            const data: [SpecificAlbumOrEntryDataType] = await response.json();
 
             setAlbum(data[0]["title"]);
             setAlbumID(data[0]["id"]);

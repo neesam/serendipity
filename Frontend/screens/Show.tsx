@@ -27,52 +27,62 @@ const Show = () => {
 
         setShowAndTableAvailable(false);
 
-        const response = await fetch(
-            `https://first-choice-porpoise.ngrok-free.app/api/whichShowTable`
-        );
+        try {
+            const response = await fetch(
+                `https://first-choice-porpoise.ngrok-free.app/api/whichShowTable`
+            );
 
-        if (!response.ok) {
-            throw new Error(`Failed to fetch details for ${whichTable}`);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch details for ${whichTable}`);
+            }
+
+            const data = await response.json();
+
+            setShow(data["rows"][0]["title"]);
+            setWhichTable(data["randomTable"]);
+
+            setShowAndTableAvailable(true);
+        } catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+            }
+        } finally {
+            const bgColor = randomColor();
+            setBackgroundColor(bgColor);
         }
-
-        const data = await response.json();
-
-        setShow(data["rows"][0]["title"]);
-        setWhichTable(data["randomTable"]);
-
-        setShowAndTableAvailable(true);
-
-        const bgColor = randomColor();
-        setBackgroundColor(bgColor);
     };
 
     const getFromSpecificTable = async (specificTable: string) => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-        const response = await fetch(
-            `https://first-choice-porpoise.ngrok-free.app/api/show/${specificTable}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}`
-        );
-        if (!response.ok) {
-            throw new Error(`Failed to fetch details for ${specificTable}`);
+        try {
+            const response = await fetch(
+                `https://first-choice-porpoise.ngrok-free.app/api/show/${specificTable}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}`
+            );
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch details for ${specificTable}`);
+            }
+
+            const data: [{ title: string }] = await response.json();
+
+            setShow(data[0]["title"]);
+            setWhichTable(specificTable);
+        } catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+            }
+        } finally {
+            // Logic to change background on each button press
+
+            const bgColor = randomColor();
+            setBackgroundColor(bgColor);
         }
-        const data = await response.json();
-
-        console.log(data);
-
-        setShow(data[0]["title"]);
-        setWhichTable(specificTable);
-
-        // Logic to change background on each button press
-
-        const bgColor = randomColor();
-        setBackgroundColor(bgColor);
     };
 
     const deleteShow = async () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-        console.log(showID);
-        console.log(`Requesting DELETE for show ID: ${showID}`);
         try {
             const response = await fetch(
                 `https://first-choice-porpoise.ngrok-free.app/api/shows/${showID}`,
@@ -81,15 +91,15 @@ const Show = () => {
                 }
             );
 
-            const data = await response.json();
-            console.log(data.message);
+            console.log(await response.json());
+            console.log("Show deleted successfully.");
         } catch (err) {
             if (err instanceof Error) {
                 console.error(err.message);
             }
+        } finally {
+            getShow();
         }
-
-        getShow();
     };
 
     const addToQueue = async () => {
@@ -111,16 +121,12 @@ const Show = () => {
                 );
             }
 
-            console.log(await response.json());
             console.log("Show added successfully.");
         } catch (error) {
-            console.error("Error in API call", error);
+            if (error instanceof Error) {
+                console.log(error.message);
+            }
         }
-
-        // toast('Added to queue!', {
-        //     autoClose: 2000,
-        //     theme: "light",
-        //     });
     };
 
     const getDataForSpecificEntry = async (title: string) => {

@@ -9,7 +9,7 @@ import { addToCurrentlyListening } from "../controllers/insert/album";
 
 // BigQuery initialization
 
-albumRoutes.get(
+albumRoutes.post(
     "/api/addToCurrentlyListening/:album/:table",
     addToCurrentlyListening
 );

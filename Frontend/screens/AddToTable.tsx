@@ -14,6 +14,7 @@ import { containerStyles, formStyles } from "../styles/styles";
 import { useEffect, useState } from "react";
 
 import { allTables } from "@/helper/lists";
+import { error } from "console";
 
 const EXPO_PUBLIC_MUSIC_TABLES_DATASET =
     process.env.EXPO_PUBLIC_MUSIC_TABLES_DATASET;
@@ -28,15 +29,18 @@ const EXPO_PUBLIC_BOOK_TABLES_DATASET =
     process.env.EXPO_PUBLIC_BOOK_TABLES_DATASET;
 
 export default function AddToTable() {
-    const [table, setTable] = useState("");
+    const [destinationTable, setDestinationTable] = useState("");
+    const [originTable, setOriginTable] = useState("");
     const [title, setTitle] = useState("");
+    const [destinationOrOrigin, setDestinationOrOrigin] = useState("");
 
     const [tablePickerShowing, setTablePickerShowing] = useState(false);
-    const [selectedElement, setSelectedElement] = useState("");
+    const [selectedElement, setSelectedElement] = useState(allTables[0]);
 
-    useEffect(() => {}, [table, title]);
+    useEffect(() => {}, [destinationTable, originTable, title]);
 
-    const handleTablePickerShow = () => {
+    const handleTablePickerShow = (type: string) => {
+        setDestinationOrOrigin(type);
         setTablePickerShowing(true);
     };
 
@@ -49,16 +53,44 @@ export default function AddToTable() {
     };
 
     const handleSetTable = () => {
-        setTable(selectedElement);
+        if (destinationOrOrigin === "destination") {
+            setDestinationTable(selectedElement);
+        } else {
+            setOriginTable(selectedElement);
+        }
         handleTablePickerClose();
     };
 
-    const addToTable = async () => {
-        if (table) {
-            if (table.includes("album") || table.includes("artist")) {
+    const addToTables = async () => {
+        if (destinationTable && !originTable) {
+            if (
+                destinationTable.includes("album") ||
+                destinationTable.includes("artist")
+            ) {
                 try {
                     const response = await fetch(
-                        `https://first-choice-porpoise.ngrok-free.app/api/add_to_music_table/${table}/${title}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
+                        `https://first-choice-porpoise.ngrok-free.app/api/add_to_music_table/${destinationTable}/${title}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
+                        {
+                            method: "POST",
+                            headers: { "Content-type": "application/json" },
+                        }
+                    );
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.log(errorData);
+                    }
+
+                    console.log("Added successfully.");
+                } catch (error) {
+                    if (error instanceof Error) {
+                        console.log("Error during addition:", error.message);
+                    }
+                }
+            } else if (destinationTable.includes("film")) {
+                try {
+                    const response = await fetch(
+                        `https://first-choice-porpoise.ngrok-free.app/api/add_to_film_table/${destinationTable}/${title}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`,
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
@@ -68,7 +100,7 @@ export default function AddToTable() {
                     if (!response.ok) {
                         const errorData = await response.json();
                         throw new Error(
-                            `Delete failed: ${
+                            `Add failed: ${
                                 errorData.message || "Unknown error"
                             }`
                         );
@@ -81,10 +113,13 @@ export default function AddToTable() {
                         console.error("Error during addition:", error.message);
                     }
                 }
-            } else if (table.includes("film")) {
+            } else if (
+                destinationTable.includes("anime") ||
+                destinationTable.includes("shows")
+            ) {
                 try {
                     const response = await fetch(
-                        `https://first-choice-porpoise.ngrok-free.app/api/add_to_film_table/${table}/${title}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`,
+                        `https://first-choice-porpoise.ngrok-free.app/api/add_to_show_table/${destinationTable}/${title}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}`,
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
@@ -94,33 +129,7 @@ export default function AddToTable() {
                     if (!response.ok) {
                         const errorData = await response.json();
                         throw new Error(
-                            `Delete failed: ${
-                                errorData.message || "Unknown error"
-                            }`
-                        );
-                    }
-
-                    console.log(await response.json());
-                    console.log("Added successfully.");
-                } catch (error) {
-                    if (error instanceof Error) {
-                        console.error("Error during addition:", error.message);
-                    }
-                }
-            } else if (table.includes("anime") || table === "shows") {
-                try {
-                    const response = await fetch(
-                        `https://first-choice-porpoise.ngrok-free.app/api/add_to_show_table/${table}/${title}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}`,
-                        {
-                            method: "POST",
-                            headers: { "Content-type": "application/json" },
-                        }
-                    );
-
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(
-                            `Delete failed: ${
+                            `Add failed: ${
                                 errorData.message || "Unknown error"
                             }`
                         );
@@ -136,7 +145,7 @@ export default function AddToTable() {
             } else {
                 try {
                     const response = await fetch(
-                        `https://first-choice-porpoise.ngrok-free.app/api/add_to_book_table/${title}/${EXPO_PUBLIC_BOOK_TABLES_DATASET}`,
+                        `https://first-choice-porpoise.ngrok-free.app/api/add_to_book_table/${destinationTable}/${title}/${EXPO_PUBLIC_BOOK_TABLES_DATASET}`,
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
@@ -146,7 +155,7 @@ export default function AddToTable() {
                     if (!response.ok) {
                         const errorData = await response.json();
                         throw new Error(
-                            `Delete failed: ${
+                            `Add failed: ${
                                 errorData.message || "Unknown error"
                             }`
                         );
@@ -160,9 +169,230 @@ export default function AddToTable() {
                     }
                 }
             }
+            setTitle("");
+            setDestinationTable("");
         }
-        setTitle("");
-        setTable("");
+        if (!destinationTable && originTable) {
+            if (
+                originTable.includes("album") ||
+                originTable.includes("artist")
+            ) {
+                try {
+                    const response = await fetch(
+                        `https://first-choice-porpoise.ngrok-free.app/api/add_to_music_table/${originTable}/${title}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
+                        {
+                            method: "POST",
+                            headers: { "Content-type": "application/json" },
+                        }
+                    );
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.log(errorData);
+                    }
+
+                    console.log("Added successfully.");
+                } catch (error) {
+                    if (error instanceof Error) {
+                        console.log("Error during addition:", error.message);
+                    }
+                }
+            } else if (originTable.includes("film")) {
+                try {
+                    const response = await fetch(
+                        `https://first-choice-porpoise.ngrok-free.app/api/add_to_film_table/${originTable}/${title}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`,
+                        {
+                            method: "POST",
+                            headers: { "Content-type": "application/json" },
+                        }
+                    );
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(
+                            `Add failed: ${
+                                errorData.message || "Unknown error"
+                            }`
+                        );
+                    }
+
+                    console.log(await response.json());
+                    console.log("Added successfully.");
+                } catch (error) {
+                    if (error instanceof Error) {
+                        console.error("Error during addition:", error.message);
+                    }
+                }
+            } else if (
+                originTable.includes("anime") ||
+                originTable.includes("shows")
+            ) {
+                try {
+                    const response = await fetch(
+                        `https://first-choice-porpoise.ngrok-free.app/api/add_to_show_table/${originTable}/${title}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}`,
+                        {
+                            method: "POST",
+                            headers: { "Content-type": "application/json" },
+                        }
+                    );
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(
+                            `Add failed: ${
+                                errorData.message || "Unknown error"
+                            }`
+                        );
+                    }
+
+                    console.log(await response.json());
+                    console.log("Added successfully.");
+                } catch (error) {
+                    if (error instanceof Error) {
+                        console.error("Error during addition:", error.message);
+                    }
+                }
+            } else {
+                try {
+                    const response = await fetch(
+                        `https://first-choice-porpoise.ngrok-free.app/api/add_to_book_table/${originTable}/${title}/${EXPO_PUBLIC_BOOK_TABLES_DATASET}`,
+                        {
+                            method: "POST",
+                            headers: { "Content-type": "application/json" },
+                        }
+                    );
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(
+                            `Add failed: ${
+                                errorData.message || "Unknown error"
+                            }`
+                        );
+                    }
+
+                    console.log(await response.json());
+                    console.log("Added successfully.");
+                } catch (error) {
+                    if (error instanceof Error) {
+                        console.error("Error during addition:", error.message);
+                    }
+                }
+            }
+            setTitle("");
+            setOriginTable("");
+        }
+        if (destinationTable && originTable) {
+            if (
+                originTable.includes("album") ||
+                originTable.includes("artist")
+            ) {
+                try {
+                    const response = await fetch(
+                        `https://first-choice-porpoise.ngrok-free.app/api/add_to_music_table/${destinationTable}/${originTable}/${title}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
+                        {
+                            method: "POST",
+                            headers: { "Content-type": "application/json" },
+                        }
+                    );
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.log(errorData);
+                    }
+
+                    console.log("Added successfully.");
+                } catch (error) {
+                    if (error instanceof Error) {
+                        console.log("Error during addition:", error.message);
+                    }
+                }
+            } else if (originTable.includes("film")) {
+                try {
+                    const response = await fetch(
+                        `https://first-choice-porpoise.ngrok-free.app/api/add_to_film_table/${destinationTable}/${originTable}/${title}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`,
+                        {
+                            method: "POST",
+                            headers: { "Content-type": "application/json" },
+                        }
+                    );
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(
+                            `Add failed: ${
+                                errorData.message || "Unknown error"
+                            }`
+                        );
+                    }
+
+                    console.log(await response.json());
+                    console.log("Added successfully.");
+                } catch (error) {
+                    if (error instanceof Error) {
+                        console.error("Error during addition:", error.message);
+                    }
+                }
+            } else if (
+                originTable.includes("anime") ||
+                originTable.includes("shows")
+            ) {
+                try {
+                    const response = await fetch(
+                        `https://first-choice-porpoise.ngrok-free.app/api/add_to_show_table/${destinationTable}/${originTable}/${title}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}`,
+                        {
+                            method: "POST",
+                            headers: { "Content-type": "application/json" },
+                        }
+                    );
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(
+                            `Add failed: ${
+                                errorData.message || "Unknown error"
+                            }`
+                        );
+                    }
+
+                    console.log(await response.json());
+                    console.log("Added successfully.");
+                } catch (error) {
+                    if (error instanceof Error) {
+                        console.error("Error during addition:", error.message);
+                    }
+                }
+            } else {
+                try {
+                    const response = await fetch(
+                        `https://first-choice-porpoise.ngrok-free.app/api/add_to_book_table/${destinationTable}/${originTable}/${title}/${EXPO_PUBLIC_BOOK_TABLES_DATASET}`,
+                        {
+                            method: "POST",
+                            headers: { "Content-type": "application/json" },
+                        }
+                    );
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(
+                            `Add failed: ${
+                                errorData.message || "Unknown error"
+                            }`
+                        );
+                    }
+
+                    console.log(await response.json());
+                    console.log("Added successfully.");
+                } catch (error) {
+                    if (error instanceof Error) {
+                        console.error("Error during addition:", error.message);
+                    }
+                }
+            }
+            setTitle("");
+            setOriginTable("");
+            setDestinationTable("");
+        }
     };
 
     const screenStyle = {
@@ -182,20 +412,20 @@ export default function AddToTable() {
                     onChangeText={setTitle}
                 />
 
-                {table ? (
+                {destinationTable ? (
                     <>
                         <Text style={formStyles.label}>Table to add to:</Text>
                         <Pressable
                             style={formStyles.button}
-                            onPress={handleTablePickerShow}
+                            onPress={() => handleTablePickerShow("destination")}
                         >
-                            <Text>{table}</Text>
+                            <Text>{destinationTable}</Text>
                         </Pressable>
                     </>
                 ) : (
                     <Pressable
                         style={formStyles.button}
-                        onPress={handleTablePickerShow}
+                        onPress={() => handleTablePickerShow("destination")}
                     >
                         <Text style={{ fontSize: 18 }}>
                             Add to which table?
@@ -203,14 +433,29 @@ export default function AddToTable() {
                     </Pressable>
                 )}
 
+                {originTable ? (
+                    <>
+                        <Text style={formStyles.label}>Table of origin:</Text>
+                        <Pressable
+                            style={formStyles.button}
+                            onPress={() => handleTablePickerShow("origin")}
+                        >
+                            <Text>{originTable}</Text>
+                        </Pressable>
+                    </>
+                ) : (
+                    <Pressable
+                        style={formStyles.button}
+                        onPress={() => handleTablePickerShow("origin")}
+                    >
+                        <Text style={{ fontSize: 18 }}>Table of origin?</Text>
+                    </Pressable>
+                )}
+
                 <Modal
                     animationType="slide"
                     transparent={true}
                     visible={tablePickerShowing}
-                    onRequestClose={() => {
-                        alert("Modal has been closed.");
-                        // setActiveTableItemsModalVisible(!currentTableItemsModalVisible);
-                    }}
                 >
                     <View style={modalStyles.centeredView}>
                         <View style={modalStyles.modalView}>
@@ -269,7 +514,7 @@ export default function AddToTable() {
                 </Modal>
 
                 <Pressable
-                    onPress={addToTable}
+                    onPress={addToTables}
                     style={[formStyles.button, { width: "auto" }]}
                 >
                     <Text style={{ fontSize: 20 }}>Submit</Text>
