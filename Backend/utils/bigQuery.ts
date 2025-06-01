@@ -3,8 +3,8 @@ dotenv.config();
 
 import { BigQuery } from "@google-cloud/bigquery";
 
-const BQ_SERVICE_ACCOUNT = process.env.BQ_SERVICE_ACCOUNT;
+const credentials = JSON.parse(process.env.GCP_CREDS);
 
 export const bigquery = new BigQuery({
-    keyFilename: BQ_SERVICE_ACCOUNT,
+    credentials,
 });
