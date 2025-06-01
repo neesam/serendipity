@@ -16,7 +16,7 @@ import {
     allTables,
     showTables,
     filmTables,
-} from "../../../Frontend/helper/lists";
+} from "../../../Backend/helper/lists";
 
 //  Environment variables
 
