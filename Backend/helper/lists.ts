@@ -5,6 +5,7 @@ const musicTables = [
     "album_bedroomAOR",
     "artist_classicalComposer",
     "album_createdbyrejection",
+    "album_dreampop",
     "album_dreamytranscendent",
     "album_emo",
     "album_greatscene",
@@ -42,7 +43,7 @@ const filmTables = [
     "film_tspdt2500",
     "film_70s",
     "film_80s",
-    "film_90s"
+    "film_90s",
 ];
 
 const showTables = ["shows", "anime_classic", "anime_other", "shows_top50"];
