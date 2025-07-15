@@ -14,6 +14,7 @@ const musicTables = [
     "album_magicsheet",
     "album_moenieandkitchie",
     "album_popalbums",
+    "album_poppunk",
     "album_risecore",
     "album_rymrecs",
     "album_rymsuggestions",
@@ -42,7 +43,7 @@ const filmTables = [
     "film_tspdt2500",
     "film_70s",
     "film_80s",
-    "film_90s"
+    "film_90s",
 ];
 
 const showTables = ["shows", "anime_classic", "anime_other", "shows_top50"];

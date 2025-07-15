@@ -15,6 +15,7 @@ const musicTables = [
     "album_magicsheet",
     "album_moenieandkitchie",
     "album_popalbums",
+    "album_poppunk",
     "album_risecore",
     "album_rymrecs",
     "album_rymsuggestions",
