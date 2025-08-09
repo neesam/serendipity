@@ -27,34 +27,110 @@ sp = spotipy.Spotify(auth=token_info)
 
 client = bigquery.Client.from_service_account_json(f"{BQ_SERVICE_ACCOUNT}", project=f"{BQ_PROJECT}")
 
-# Define the query
-QUERY = f'''
-    SELECT * FROM {BQ_PROJECT}.{MUSIC_TABLES_DATASET}.album_currentlyListening
-'''
+def getCurrentlyListeningIds():
 
-# print(QUERY)
-# Run the query
-query_job = client.query(QUERY)
-rows = query_job.result()
+    QUERY = f'''
+        SELECT * FROM {BQ_PROJECT}.{MUSIC_TABLES_DATASET}.album_currentlyListening
+    '''
 
-currently_listening = [row[1] for row in rows]
-print(currently_listening)
-currently_listening_tracks = [[] for i in range(len(currently_listening) - 1)]
-albums_to_go = len(currently_listening) - 1
-print(albums_to_go)
+    query_job = client.query(QUERY)
+    rows = query_job.result()
 
-for i in currently_listening:
-    search_result = sp.search(i, type='album')
-    album_id = search_result['albums']['items'][0]['id']
-    album = sp.album_tracks(album_id)
+    currently_listening = []
 
-    for j in album['items']:
-        currently_listening_tracks[albums_to_go - 1].append(j['id'])
-    albums_to_go -= 1
+    for row in rows:
+        if 'vinyl' in row[1]:
+            continue
+        elif 'youtube' in row[1]:
+            continue
+        else:
+            currently_listening.append(row[1])
+            
+    currently_listening_ids = [[] for i in range(len(currently_listening) - 1)]
+    albums_to_go = len(currently_listening) - 1
 
-print(json.dumps(currently_listening_tracks, indent=3))
+    for i in currently_listening:
+        try:
+            search_result = sp.search(i, type='album')
+            album_id = search_result['albums']['items'][0]['id']
+            album = sp.album_tracks(album_id)
 
-# sp.user_playlist_create(user=sp.current_user()['id'], name="Currently Listening", public=True)
+            for j in album['items']:
+                currently_listening_ids[albums_to_go - 1].append(j['id'])
+            albums_to_go -= 1
+        except:
+            continue
 
-for i in currently_listening_tracks:
-    sp.user_playlist_add_tracks(user=sp.current_user()['id'], playlist_id='2BHeysCh0gYOjVIH7pU6uy', tracks=i)
+    return currently_listening_ids
+
+def removeFromCurrentlyListeningPlaylist():
+
+    try:
+
+
+        SELECT_QUERY = f'''
+            SELECT track_ids FROM {BQ_PROJECT}.{MUSIC_TABLES_DATASET}.album_spotifyPlaylistIds
+        '''
+
+        query_job = client.query(SELECT_QUERY)
+        [rows] = query_job.result()
+
+        rows = rows[0]
+
+        tracks = [{'uri': rows[i], 'positions': [i]} for i in range(len(rows))]
+
+        tracks_to_delete = []
+
+        while len(tracks) > 0:
+            if len(tracks) < 10:
+                for i in range(0, len(tracks)):
+                    tracks_to_delete.append(tracks[i])
+                sp.user_playlist_remove_specific_occurrences_of_tracks(user=sp.current_user()['id'], playlist_id='2BHeysCh0gYOjVIH7pU6uy', tracks=tracks_to_delete)
+                tracks_to_delete.clear()
+                for i in range(0, len(tracks)):
+                    tracks.pop(0)
+            else:
+                for i in range(0, 10):
+                    tracks_to_delete.append(tracks[i])
+                sp.user_playlist_remove_specific_occurrences_of_tracks(user=sp.current_user()['id'], playlist_id='2BHeysCh0gYOjVIH7pU6uy', tracks=tracks_to_delete)
+                tracks_to_delete.clear()
+                for i in range(0, 10):
+                    tracks.pop(0)
+
+    except Exception as e:
+        print(e)
+
+    DELETE_QUERY = f'''
+        DELETE FROM {BQ_PROJECT}.{MUSIC_TABLES_DATASET}.album_spotifyPlaylistIds WHERE 1 = 1
+    '''
+
+    query_job = client.query(DELETE_QUERY)
+    query_job.result()
+
+def insertIntoCurrentlyListeningPlaylist():
+
+    currently_listening_ids = getCurrentlyListeningIds()
+
+    all = []
+
+    for i in currently_listening_ids:
+        for j in i:
+            all.append(j)
+
+    INSERT_QUERY = f'''
+        INSERT INTO {BQ_PROJECT}.{MUSIC_TABLES_DATASET}.album_spotifyPlaylistIds (id, track_ids) VALUES (1, {all})
+    '''
+
+    query_job = client.query(INSERT_QUERY)
+    query_job.result()
+
+    for album in currently_listening_ids:
+        sp.user_playlist_add_tracks(user=sp.current_user()['id'], playlist_id='2BHeysCh0gYOjVIH7pU6uy', tracks=album)
+
+def createSpotifyPlaylist():
+
+    removeFromCurrentlyListeningPlaylist()
+
+    insertIntoCurrentlyListeningPlaylist()
+
+createSpotifyPlaylist()
