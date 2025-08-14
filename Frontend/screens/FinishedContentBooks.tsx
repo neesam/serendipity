@@ -6,43 +6,43 @@ import CustomFlatList from "@/components/CustomFlatList";
 import openLink from "@/utils/openLink";
 
 export default function FinishedContentAlbums() {
-    const [finishedBooks, setFinishedBooks] = useState([]);
+	const [finishedBooks, setFinishedBooks] = useState([]);
 
-    useEffect(() => {
-        handleLoadFinishedBooks();
-    }, []);
+	useEffect(() => {
+		handleLoadFinishedBooks();
+	}, []);
 
-    const handleLoadFinishedBooks = async () => {
-        try {
-            const response = await fetch(
-                `https://first-choice-porpoise.ngrok-free.app/api/book_metadata_all`
-            );
+	const handleLoadFinishedBooks = async () => {
+		try {
+			const response = await fetch(
+				`${EXPO_PUBLIC_RAILWAY_URL}/api/book_metadata_all`
+			);
 
-            if (!response.ok) {
-                console.log(response.status);
-            }
+			if (!response.ok) {
+				console.log(response.status);
+			}
 
-            const data = await response.json();
+			const data = await response.json();
 
-            setFinishedBooks(data);
+			setFinishedBooks(data);
 
-            console.log(data);
-        } catch (error) {
-            if (error instanceof Error) {
-                console.log(error.message);
-            }
-        }
-    };
+			console.log(data);
+		} catch (error) {
+			if (error instanceof Error) {
+				console.log(error.message);
+			}
+		}
+	};
 
-    return (
-        <SafeAreaProvider>
-            <SafeAreaView style={{ flex: 1 }} edges={["top"]}>
-                <CustomFlatList
-                    openLink={openLink}
-                    data={finishedBooks}
-                    type={"book"}
-                />
-            </SafeAreaView>
-        </SafeAreaProvider>
-    );
+	return (
+		<SafeAreaProvider>
+			<SafeAreaView style={{ flex: 1 }} edges={["top"]}>
+				<CustomFlatList
+					openLink={openLink}
+					data={finishedBooks}
+					type={"book"}
+				/>
+			</SafeAreaView>
+		</SafeAreaProvider>
+	);
 }

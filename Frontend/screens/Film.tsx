@@ -11,188 +11,188 @@ import ContentCard from "../components/ContentCard";
 import randomColor from "../utils/randomColor";
 
 const EXPO_PUBLIC_FILM_TABLES_DATASET =
-    process.env.EXPO_PUBLIC_FILM_TABLES_DATASET;
+	process.env.EXPO_PUBLIC_FILM_TABLES_DATASET;
+
+const EXPO_PUBLIC_RAILWAY_URL = process.env.EXPO_PUBLIC_RAILWAY_URL;
 
 interface GetFilmDataType {
-    rows: [{ title: string; id: string }];
-    randomTable: string;
+	rows: [{ title: string; id: string }];
+	randomTable: string;
 }
 
 interface SpecificEntryDataType {
-    title: string;
-    id: string;
+	title: string;
+	id: string;
 }
 
 const Film = () => {
-    const [whichTable, setWhichTable] = useState("");
-    const [film, setFilm] = useState("");
-    const [filmID, setFilmID] = useState("");
-    const [backgroundColor, setBackgroundColor] = useState("");
-    const [filmAndTableAvailable, setFilmAndTableAvailable] = useState(true);
+	const [whichTable, setWhichTable] = useState("");
+	const [film, setFilm] = useState("");
+	const [filmID, setFilmID] = useState("");
+	const [backgroundColor, setBackgroundColor] = useState("");
+	const [filmAndTableAvailable, setFilmAndTableAvailable] = useState(true);
 
-    useEffect(() => {}, [film, whichTable]);
+	useEffect(() => {}, [film, whichTable]);
 
-    const getFilm = async () => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+	const getFilm = async () => {
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-        setFilmAndTableAvailable(false);
+		setFilmAndTableAvailable(false);
 
-        const response = await fetch(
-            `https://first-choice-porpoise.ngrok-free.app/api/whichFilmTable`
-        );
+		const response = await fetch(
+			`${EXPO_PUBLIC_RAILWAY_URL}/api/whichFilmTable`
+		);
 
-        if (!response.ok) {
-            throw new Error(`Failed to fetch details for ${whichTable}`);
-        }
+		if (!response.ok) {
+			throw new Error(`Failed to fetch details for ${whichTable}`);
+		}
 
-        const data: GetFilmDataType = await response.json();
+		const data: GetFilmDataType = await response.json();
 
-        setFilm(data["rows"][0]["title"]);
-        setFilmID(data["rows"][0]["id"]);
-        setWhichTable(data["randomTable"]);
+		setFilm(data["rows"][0]["title"]);
+		setFilmID(data["rows"][0]["id"]);
+		setWhichTable(data["randomTable"]);
 
-        setFilmAndTableAvailable(true);
+		setFilmAndTableAvailable(true);
 
-        const bgColor = randomColor();
-        setBackgroundColor(bgColor);
-    };
+		const bgColor = randomColor();
+		setBackgroundColor(bgColor);
+	};
 
-    const deleteFilm = async () => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+	const deleteFilm = async () => {
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-        try {
-            const response = await fetch(
-                `https://first-choice-porpoise.ngrok-free.app/api/film/${filmID}/from/${whichTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`,
-                {
-                    method: "DELETE",
-                    headers: { "Content-type": "application/json" },
-                }
-            );
+		try {
+			const response = await fetch(
+				`${EXPO_PUBLIC_RAILWAY_URL}/api/film/${filmID}/from/${whichTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`,
+				{
+					method: "DELETE",
+					headers: { "Content-type": "application/json" },
+				}
+			);
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(
-                    `Delete failed: ${errorData.message || "Unknown error"}`
-                );
-            }
+			if (!response.ok) {
+				const errorData = await response.json();
+				throw new Error(
+					`Delete failed: ${errorData.message || "Unknown error"}`
+				);
+			}
 
-            console.log(await response.json());
-            console.log("Film deleted successfully.");
-        } catch (error) {
-            if (error instanceof Error) {
-                console.error("Error during deletion:", error.message);
-            }
-        }
+			console.log(await response.json());
+			console.log("Film deleted successfully.");
+		} catch (error) {
+			if (error instanceof Error) {
+				console.error("Error during deletion:", error.message);
+			}
+		}
 
-        getFromSpecificTable(whichTable);
-    };
+		getFromSpecificTable(whichTable);
+	};
 
-    const getFromSpecificTable = async (specificTable: string) => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+	const getFromSpecificTable = async (specificTable: string) => {
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-        try {
-            const response = await fetch(
-                `https://first-choice-porpoise.ngrok-free.app/api/film/${specificTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`
-            );
+		try {
+			const response = await fetch(
+				`${EXPO_PUBLIC_RAILWAY_URL}/api/film/${specificTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`
+			);
 
-            if (!response.ok) {
-                throw new Error(`Failed to fetch details for ${specificTable}`);
-            }
+			if (!response.ok) {
+				throw new Error(`Failed to fetch details for ${specificTable}`);
+			}
 
-            const data: [SpecificEntryDataType] = await response.json();
+			const data: [SpecificEntryDataType] = await response.json();
 
-            setFilm(data[0]["title"]);
-            setFilmID(data[0]["id"]);
-            setWhichTable(specificTable);
-        } catch (error) {
-            if (error instanceof Error) {
-                console.log(error.message);
-            }
-        } finally {
-            // Logic to change background on each button press
+			setFilm(data[0]["title"]);
+			setFilmID(data[0]["id"]);
+			setWhichTable(specificTable);
+		} catch (error) {
+			if (error instanceof Error) {
+				console.log(error.message);
+			}
+		} finally {
+			// Logic to change background on each button press
 
-            const bgColor = randomColor();
-            setBackgroundColor(bgColor);
-        }
-    };
+			const bgColor = randomColor();
+			setBackgroundColor(bgColor);
+		}
+	};
 
-    const getDataForSpecificEntry = async (title: string) => {
-        try {
-            const response = await fetch(
-                `https://first-choice-porpoise.ngrok-free.app/api/specificFilmEntry/${title}/${whichTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`
-            );
+	const getDataForSpecificEntry = async (title: string) => {
+		try {
+			const response = await fetch(
+				`${EXPO_PUBLIC_RAILWAY_URL}/api/specificFilmEntry/${title}/${whichTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`
+			);
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.log(errorData.message);
-            }
+			if (!response.ok) {
+				const errorData = await response.json();
+				console.log(errorData.message);
+			}
 
-            const data: [SpecificEntryDataType] = await response.json();
+			const data: [SpecificEntryDataType] = await response.json();
 
-            setFilm(data[0]["title"]);
-            setFilmID(data[0]["id"]);
-        } catch (error) {
-            if (error instanceof Error) {
-                console.log(error.message);
-            }
-        }
-    };
+			setFilm(data[0]["title"]);
+			setFilmID(data[0]["id"]);
+		} catch (error) {
+			if (error instanceof Error) {
+				console.log(error.message);
+			}
+		}
+	};
 
-    const addToQueue = async () => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+	const addToQueue = async () => {
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-        try {
-            const response = await fetch(
-                `https://first-choice-porpoise.ngrok-free.app/api/addFilmToQueue/${film}`,
-                {
-                    method: "POST",
-                    headers: { "Content-type": "application/json" },
-                }
-            );
+		try {
+			const response = await fetch(
+				`${EXPO_PUBLIC_RAILWAY_URL}/api/addFilmToQueue/${film}`,
+				{
+					method: "POST",
+					headers: { "Content-type": "application/json" },
+				}
+			);
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(
-                    `Post failed: ${errorData.message || "Unknown error"}`
-                );
-            }
+			if (!response.ok) {
+				const errorData = await response.json();
+				throw new Error(`Post failed: ${errorData.message || "Unknown error"}`);
+			}
 
-            console.log("Film added successfully.");
-        } catch (error) {
-            if (error instanceof Error) {
-                console.error(error.message);
-            }
-        }
-    };
+			console.log("Film added successfully.");
+		} catch (error) {
+			if (error instanceof Error) {
+				console.error(error.message);
+			}
+		}
+	};
 
-    const screenStyle = {
-        backgroundColor: backgroundColor,
-    };
+	const screenStyle = {
+		backgroundColor: backgroundColor,
+	};
 
-    return (
-        <View style={[containerStyles.screenContainer, screenStyle]}>
-            <TopScreenFunctionality
-                containerStyles={containerStyles}
-                tables={filmTables}
-                getFromSpecificTable={getFromSpecificTable}
-                addToQueue={addToQueue}
-            />
-            <ContentCard
-                whichTable={whichTable}
-                availability={filmAndTableAvailable}
-                type={"film"}
-                contentName={film}
-                getDataForSpecificEntry={getDataForSpecificEntry}
-            />
-            <MainButtons
-                getContent={getFilm}
-                deleteContent={deleteFilm}
-                type={"film"}
-                availability={filmAndTableAvailable}
-                contentName={film}
-            />
-        </View>
-    );
+	return (
+		<View style={[containerStyles.screenContainer, screenStyle]}>
+			<TopScreenFunctionality
+				containerStyles={containerStyles}
+				tables={filmTables}
+				getFromSpecificTable={getFromSpecificTable}
+				addToQueue={addToQueue}
+			/>
+			<ContentCard
+				whichTable={whichTable}
+				availability={filmAndTableAvailable}
+				type={"film"}
+				contentName={film}
+				getDataForSpecificEntry={getDataForSpecificEntry}
+			/>
+			<MainButtons
+				getContent={getFilm}
+				deleteContent={deleteFilm}
+				type={"film"}
+				availability={filmAndTableAvailable}
+				contentName={film}
+			/>
+		</View>
+	);
 };
 
 export default Film;

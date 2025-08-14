@@ -49,7 +49,7 @@ export default function Album() {
 		// Function to fetch actual album
 
 		const response = await fetch(
-			`${EXPO_PUBLIC_RAILWAY_URL}api/whichMusicTable`
+			`${EXPO_PUBLIC_RAILWAY_URL}/api/whichMusicTable`
 		);
 		if (!response.ok) {
 			throw new Error(`Failed to fetch details for ${whichTable}`);

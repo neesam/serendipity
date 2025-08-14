@@ -6,43 +6,43 @@ import CustomFlatList from "@/components/CustomFlatList";
 import openLink from "@/utils/openLink";
 
 export default function FinishedContentShows() {
-    const [finishedShows, setFinishedShows] = useState([]);
+	const [finishedShows, setFinishedShows] = useState([]);
 
-    useEffect(() => {
-        handleLoadFinishedShows();
-    }, []);
+	useEffect(() => {
+		handleLoadFinishedShows();
+	}, []);
 
-    const handleLoadFinishedShows = async () => {
-        try {
-            const response = await fetch(
-                `https://first-choice-porpoise.ngrok-free.app/api/show_metadata_all`
-            );
+	const handleLoadFinishedShows = async () => {
+		try {
+			const response = await fetch(
+				`${EXPO_PUBLIC_RAILWAY_URL}/api/show_metadata_all`
+			);
 
-            if (!response.ok) {
-                console.log(response.status);
-            }
+			if (!response.ok) {
+				console.log(response.status);
+			}
 
-            const data = await response.json();
+			const data = await response.json();
 
-            setFinishedShows(data);
+			setFinishedShows(data);
 
-            console.log(data);
-        } catch (error) {
-            if (error instanceof Error) {
-                console.log(error.message);
-            }
-        }
-    };
+			console.log(data);
+		} catch (error) {
+			if (error instanceof Error) {
+				console.log(error.message);
+			}
+		}
+	};
 
-    return (
-        <SafeAreaProvider>
-            <SafeAreaView style={{ flex: 1 }} edges={["top"]}>
-                <CustomFlatList
-                    openLink={openLink}
-                    data={finishedShows}
-                    type={"show"}
-                />
-            </SafeAreaView>
-        </SafeAreaProvider>
-    );
+	return (
+		<SafeAreaProvider>
+			<SafeAreaView style={{ flex: 1 }} edges={["top"]}>
+				<CustomFlatList
+					openLink={openLink}
+					data={finishedShows}
+					type={"show"}
+				/>
+			</SafeAreaView>
+		</SafeAreaProvider>
+	);
 }

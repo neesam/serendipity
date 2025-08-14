@@ -12,209 +12,207 @@ import ContentCard from "../components/ContentCard";
 import { bookTables } from "../helper/lists";
 
 const EXPO_PUBLIC_BOOK_TABLES_DATASET =
-    process.env.EXPO_PUBLIC_BOOK_TABLES_DATASET;
+	process.env.EXPO_PUBLIC_BOOK_TABLES_DATASET;
 
 interface GetBookDataType {
-    rows: [{ title: string; id: string }];
-    randomTable: string;
+	rows: [{ title: string; id: string }];
+	randomTable: string;
 }
 
 interface SpecificEntryDataType {
-    title: string;
-    id: string;
+	title: string;
+	id: string;
 }
 
 const Book = () => {
-    const [book, setBook] = useState("");
-    const [bookID, setBookID] = useState("");
-    const [backgroundColor, setBackgroundColor] = useState("");
-    const [bookAndTableAvailable, setBookAndTableAvailable] = useState(true);
-    const [whichTable, setWhichTable] = useState("");
+	const [book, setBook] = useState("");
+	const [bookID, setBookID] = useState("");
+	const [backgroundColor, setBackgroundColor] = useState("");
+	const [bookAndTableAvailable, setBookAndTableAvailable] = useState(true);
+	const [whichTable, setWhichTable] = useState("");
 
-    useEffect(() => {}, [book]);
+	useEffect(() => {}, [book]);
 
-    const getBook = async () => {
-        // Function to fetch actual album
+	const getBook = async () => {
+		// Function to fetch actual album
 
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-        setBookAndTableAvailable(false);
+		setBookAndTableAvailable(false);
 
-        try {
-            const response = await fetch(
-                `https://first-choice-porpoise.ngrok-free.app/api/whichBookTable`
-            );
+		try {
+			const response = await fetch(
+				`${EXPO_PUBLIC_RAILWAY_URL}/api/whichBookTable`
+			);
 
-            if (!response.ok) {
-                throw new Error(`Failed to fetch details for book table`);
-            }
+			if (!response.ok) {
+				throw new Error(`Failed to fetch details for book table`);
+			}
 
-            const data: GetBookDataType = await response.json();
+			const data: GetBookDataType = await response.json();
 
-            if (bookAnthologies.includes(data["rows"][0]["title"])) {
-                const getRandomInt = (min: number, max: number) => {
-                    const minCeiled = Math.ceil(min);
-                    const maxFloored = Math.floor(max);
-                    return Math.floor(
-                        Math.random() * (maxFloored - minCeiled) + minCeiled
-                    );
-                };
-                setBookID(data["rows"][0]["id"]);
-                setBook(data["rows"][0]["title"] + " " + getRandomInt(2, 5));
-            } else {
-                setBookID(data["rows"][0]["id"]);
-                setBook(data["rows"][0]["title"]);
-            }
+			if (bookAnthologies.includes(data["rows"][0]["title"])) {
+				const getRandomInt = (min: number, max: number) => {
+					const minCeiled = Math.ceil(min);
+					const maxFloored = Math.floor(max);
+					return Math.floor(
+						Math.random() * (maxFloored - minCeiled) + minCeiled
+					);
+				};
+				setBookID(data["rows"][0]["id"]);
+				setBook(data["rows"][0]["title"] + " " + getRandomInt(2, 5));
+			} else {
+				setBookID(data["rows"][0]["id"]);
+				setBook(data["rows"][0]["title"]);
+			}
 
-            setWhichTable(data["randomTable"]);
+			setWhichTable(data["randomTable"]);
 
-            // Logic to change background on each button press
+			// Logic to change background on each button press
 
-            const bgColor = randomColor();
-            setBackgroundColor(bgColor);
-        } catch (error) {
-            if (error instanceof Error) {
-                console.log(error.message);
-            }
-        } finally {
-            setBookAndTableAvailable(true);
-        }
-    };
+			const bgColor = randomColor();
+			setBackgroundColor(bgColor);
+		} catch (error) {
+			if (error instanceof Error) {
+				console.log(error.message);
+			}
+		} finally {
+			setBookAndTableAvailable(true);
+		}
+	};
 
-    const deleteBook = async () => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+	const deleteBook = async () => {
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-        try {
-            const response = await fetch(
-                `https://first-choice-porpoise.ngrok-free.app/api/book/${bookID}/from/${whichTable}/${EXPO_PUBLIC_BOOK_TABLES_DATASET}`,
-                {
-                    method: "DELETE",
-                    headers: { "Content-type": "application/json" },
-                }
-            );
+		try {
+			const response = await fetch(
+				`${EXPO_PUBLIC_RAILWAY_URL}/api/book/${bookID}/from/${whichTable}/${EXPO_PUBLIC_BOOK_TABLES_DATASET}`,
+				{
+					method: "DELETE",
+					headers: { "Content-type": "application/json" },
+				}
+			);
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(
-                    `Delete failed: ${errorData.message || "Unknown error"}`
-                );
-            }
+			if (!response.ok) {
+				const errorData = await response.json();
+				throw new Error(
+					`Delete failed: ${errorData.message || "Unknown error"}`
+				);
+			}
 
-            console.log(await response.json());
-            console.log("Book deleted successfully.");
-        } catch (error) {
-            if (error instanceof Error) {
-                console.error("Error during deletion:", error.message);
-            }
-        }
+			console.log(await response.json());
+			console.log("Book deleted successfully.");
+		} catch (error) {
+			if (error instanceof Error) {
+				console.error("Error during deletion:", error.message);
+			}
+		}
 
-        getBook();
-    };
+		getBook();
+	};
 
-    const addToQueue = async () => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+	const addToQueue = async () => {
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-        try {
-            const response = await fetch(
-                `https://first-choice-porpoise.ngrok-free.app/api/addBookToQueue/${book}`,
-                {
-                    method: "POST",
-                    headers: { "Content-type": "application/json" },
-                }
-            );
+		try {
+			const response = await fetch(
+				`${EXPO_PUBLIC_RAILWAY_URL}/api/addBookToQueue/${book}`,
+				{
+					method: "POST",
+					headers: { "Content-type": "application/json" },
+				}
+			);
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(
-                    `Post failed: ${errorData.message || "Unknown error"}`
-                );
-            }
+			if (!response.ok) {
+				const errorData = await response.json();
+				throw new Error(`Post failed: ${errorData.message || "Unknown error"}`);
+			}
 
-            console.log(await response.json());
-            console.log("Book added successfully.");
-        } catch (error) {
-            console.error("Error in API call", error);
-        }
-    };
+			console.log(await response.json());
+			console.log("Book added successfully.");
+		} catch (error) {
+			console.error("Error in API call", error);
+		}
+	};
 
-    const getDataForSpecificEntry = async (title: string) => {
-        try {
-            const response = await fetch(
-                `https://first-choice-porpoise.ngrok-free.app/api/specificBookEntry/${title}/${whichTable}/${EXPO_PUBLIC_BOOK_TABLES_DATASET}`
-            );
+	const getDataForSpecificEntry = async (title: string) => {
+		try {
+			const response = await fetch(
+				`${EXPO_PUBLIC_RAILWAY_URL}/api/specificBookEntry/${title}/${whichTable}/${EXPO_PUBLIC_BOOK_TABLES_DATASET}`
+			);
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.log(errorData.message);
-            }
+			if (!response.ok) {
+				const errorData = await response.json();
+				console.log(errorData.message);
+			}
 
-            const data: [SpecificEntryDataType] = await response.json();
+			const data: [SpecificEntryDataType] = await response.json();
 
-            setBook(data[0]["title"]);
-            setBookID(data[0]["id"]);
-        } catch (error) {
-            if (error instanceof Error) {
-                console.log(error.message);
-            }
-        }
-    };
+			setBook(data[0]["title"]);
+			setBookID(data[0]["id"]);
+		} catch (error) {
+			if (error instanceof Error) {
+				console.log(error.message);
+			}
+		}
+	};
 
-    const getFromSpecificTable = async (specificTable: string) => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+	const getFromSpecificTable = async (specificTable: string) => {
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-        const response = await fetch(
-            `https://first-choice-porpoise.ngrok-free.app/api/book/${specificTable}/${EXPO_PUBLIC_BOOK_TABLES_DATASET}`
-        );
+		const response = await fetch(
+			`${EXPO_PUBLIC_RAILWAY_URL}/api/book/${specificTable}/${EXPO_PUBLIC_BOOK_TABLES_DATASET}`
+		);
 
-        console.log(response);
+		console.log(response);
 
-        if (!response.ok) {
-            throw new Error(`Failed to fetch details for ${specificTable}`);
-        }
+		if (!response.ok) {
+			throw new Error(`Failed to fetch details for ${specificTable}`);
+		}
 
-        const data: [SpecificEntryDataType] = await response.json();
+		const data: [SpecificEntryDataType] = await response.json();
 
-        console.log(data);
+		console.log(data);
 
-        const bookVal = data[0]["title"];
-        const bookIDVal = data[0]["id"];
-        const bgColor = randomColor();
+		const bookVal = data[0]["title"];
+		const bookIDVal = data[0]["id"];
+		const bgColor = randomColor();
 
-        setBook(bookVal);
-        setBookID(bookIDVal);
-        setWhichTable(specificTable);
-        setBackgroundColor(bgColor);
-    };
+		setBook(bookVal);
+		setBookID(bookIDVal);
+		setWhichTable(specificTable);
+		setBackgroundColor(bgColor);
+	};
 
-    const screenStyle = {
-        backgroundColor: backgroundColor,
-    };
+	const screenStyle = {
+		backgroundColor: backgroundColor,
+	};
 
-    return (
-        <View style={[containerStyles.screenContainer, screenStyle]}>
-            <TopScreenFunctionality
-                containerStyles={containerStyles}
-                addToQueue={addToQueue}
-                type={"book"}
-                tables={bookTables}
-                getFromSpecificTable={getFromSpecificTable}
-            />
-            <ContentCard
-                type={"book"}
-                contentName={book}
-                availability={bookAndTableAvailable}
-                whichTable={whichTable}
-                getDataForSpecificEntry={getDataForSpecificEntry}
-            />
-            <MainButtons
-                getContent={getBook}
-                deleteContent={deleteBook}
-                type={"book"}
-                availability={bookAndTableAvailable}
-                contentName={book}
-            />
-        </View>
-    );
+	return (
+		<View style={[containerStyles.screenContainer, screenStyle]}>
+			<TopScreenFunctionality
+				containerStyles={containerStyles}
+				addToQueue={addToQueue}
+				type={"book"}
+				tables={bookTables}
+				getFromSpecificTable={getFromSpecificTable}
+			/>
+			<ContentCard
+				type={"book"}
+				contentName={book}
+				availability={bookAndTableAvailable}
+				whichTable={whichTable}
+				getDataForSpecificEntry={getDataForSpecificEntry}
+			/>
+			<MainButtons
+				getContent={getBook}
+				deleteContent={deleteBook}
+				type={"book"}
+				availability={bookAndTableAvailable}
+				contentName={book}
+			/>
+		</View>
+	);
 };
 
 export default Book;

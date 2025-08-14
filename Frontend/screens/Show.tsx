@@ -11,174 +11,172 @@ import ContentCard from "../components/ContentCard";
 import randomColor from "../utils/randomColor";
 
 const EXPO_PUBLIC_SHOW_TABLES_DATASET =
-    process.env.EXPO_PUBLIC_SHOW_TABLES_DATASET;
+	process.env.EXPO_PUBLIC_SHOW_TABLES_DATASET;
 
 const Show = () => {
-    const [whichTable, setWhichTable] = useState("");
-    const [show, setShow] = useState("");
-    const [showID, setShowID] = useState("");
-    const [backgroundColor, setBackgroundColor] = useState("");
-    const [showAndTableAvailable, setShowAndTableAvailable] = useState(true);
+	const [whichTable, setWhichTable] = useState("");
+	const [show, setShow] = useState("");
+	const [showID, setShowID] = useState("");
+	const [backgroundColor, setBackgroundColor] = useState("");
+	const [showAndTableAvailable, setShowAndTableAvailable] = useState(true);
 
-    useEffect(() => {}, [show]);
+	useEffect(() => {}, [show]);
 
-    const getShow = async () => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+	const getShow = async () => {
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-        setShowAndTableAvailable(false);
+		setShowAndTableAvailable(false);
 
-        try {
-            const response = await fetch(
-                `https://first-choice-porpoise.ngrok-free.app/api/whichShowTable`
-            );
+		try {
+			const response = await fetch(
+				`${EXPO_PUBLIC_RAILWAY_URL}/api/whichShowTable`
+			);
 
-            if (!response.ok) {
-                throw new Error(`Failed to fetch details for ${whichTable}`);
-            }
+			if (!response.ok) {
+				throw new Error(`Failed to fetch details for ${whichTable}`);
+			}
 
-            const data = await response.json();
+			const data = await response.json();
 
-            setShow(data["rows"][0]["title"]);
-            setWhichTable(data["randomTable"]);
+			setShow(data["rows"][0]["title"]);
+			setWhichTable(data["randomTable"]);
 
-            setShowAndTableAvailable(true);
-        } catch (error) {
-            if (error instanceof Error) {
-                console.log(error.message);
-            }
-        } finally {
-            const bgColor = randomColor();
-            setBackgroundColor(bgColor);
-        }
-    };
+			setShowAndTableAvailable(true);
+		} catch (error) {
+			if (error instanceof Error) {
+				console.log(error.message);
+			}
+		} finally {
+			const bgColor = randomColor();
+			setBackgroundColor(bgColor);
+		}
+	};
 
-    const getFromSpecificTable = async (specificTable: string) => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+	const getFromSpecificTable = async (specificTable: string) => {
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-        try {
-            const response = await fetch(
-                `https://first-choice-porpoise.ngrok-free.app/api/show/${specificTable}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}`
-            );
+		try {
+			const response = await fetch(
+				`${EXPO_PUBLIC_RAILWAY_URL}/api/show/${specificTable}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}`
+			);
 
-            if (!response.ok) {
-                throw new Error(`Failed to fetch details for ${specificTable}`);
-            }
+			if (!response.ok) {
+				throw new Error(`Failed to fetch details for ${specificTable}`);
+			}
 
-            const data: [{ title: string }] = await response.json();
+			const data: [{ title: string }] = await response.json();
 
-            setShow(data[0]["title"]);
-            setWhichTable(specificTable);
-        } catch (error) {
-            if (error instanceof Error) {
-                console.log(error.message);
-            }
-        } finally {
-            // Logic to change background on each button press
+			setShow(data[0]["title"]);
+			setWhichTable(specificTable);
+		} catch (error) {
+			if (error instanceof Error) {
+				console.log(error.message);
+			}
+		} finally {
+			// Logic to change background on each button press
 
-            const bgColor = randomColor();
-            setBackgroundColor(bgColor);
-        }
-    };
+			const bgColor = randomColor();
+			setBackgroundColor(bgColor);
+		}
+	};
 
-    const deleteShow = async () => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+	const deleteShow = async () => {
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-        try {
-            const response = await fetch(
-                `https://first-choice-porpoise.ngrok-free.app/api/shows/${showID}`,
-                {
-                    method: "DELETE",
-                }
-            );
+		try {
+			const response = await fetch(
+				`${EXPO_PUBLIC_RAILWAY_URL}/api/shows/${showID}`,
+				{
+					method: "DELETE",
+				}
+			);
 
-            console.log(await response.json());
-            console.log("Show deleted successfully.");
-        } catch (err) {
-            if (err instanceof Error) {
-                console.error(err.message);
-            }
-        } finally {
-            getShow();
-        }
-    };
+			console.log(await response.json());
+			console.log("Show deleted successfully.");
+		} catch (err) {
+			if (err instanceof Error) {
+				console.error(err.message);
+			}
+		} finally {
+			getShow();
+		}
+	};
 
-    const addToQueue = async () => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+	const addToQueue = async () => {
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-        try {
-            const response = await fetch(
-                `https://first-choice-porpoise.ngrok-free.app/api/addShowToQueue/${show}`,
-                {
-                    method: "POST",
-                    headers: { "Content-type": "application/json" },
-                }
-            );
+		try {
+			const response = await fetch(
+				`${EXPO_PUBLIC_RAILWAY_URL}/api/addShowToQueue/${show}`,
+				{
+					method: "POST",
+					headers: { "Content-type": "application/json" },
+				}
+			);
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(
-                    `Post failed: ${errorData.message || "Unknown error"}`
-                );
-            }
+			if (!response.ok) {
+				const errorData = await response.json();
+				throw new Error(`Post failed: ${errorData.message || "Unknown error"}`);
+			}
 
-            console.log("Show added successfully.");
-        } catch (error) {
-            if (error instanceof Error) {
-                console.log(error.message);
-            }
-        }
-    };
+			console.log("Show added successfully.");
+		} catch (error) {
+			if (error instanceof Error) {
+				console.log(error.message);
+			}
+		}
+	};
 
-    const getDataForSpecificEntry = async (title: string) => {
-        try {
-            const response = await fetch(
-                `https://first-choice-porpoise.ngrok-free.app/api/specificShowEntry/${title}/${whichTable}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}`
-            );
+	const getDataForSpecificEntry = async (title: string) => {
+		try {
+			const response = await fetch(
+				`${EXPO_PUBLIC_RAILWAY_URL}/api/specificShowEntry/${title}/${whichTable}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}`
+			);
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.log(errorData.message);
-            }
+			if (!response.ok) {
+				const errorData = await response.json();
+				console.log(errorData.message);
+			}
 
-            const data = await response.json();
+			const data = await response.json();
 
-            setShow(data[0]["title"]);
-            setShowID(data[0]["id"]);
-        } catch (error) {
-            if (error instanceof Error) {
-                console.log(error.message);
-            }
-        }
-    };
+			setShow(data[0]["title"]);
+			setShowID(data[0]["id"]);
+		} catch (error) {
+			if (error instanceof Error) {
+				console.log(error.message);
+			}
+		}
+	};
 
-    const screenStyle = {
-        backgroundColor: backgroundColor,
-    };
+	const screenStyle = {
+		backgroundColor: backgroundColor,
+	};
 
-    return (
-        <View style={[containerStyles.screenContainer, screenStyle]}>
-            <TopScreenFunctionality
-                containerStyles={containerStyles}
-                tables={showTables}
-                getFromSpecificTable={getFromSpecificTable}
-                addToQueue={addToQueue}
-            />
-            <ContentCard
-                whichTable={whichTable}
-                availability={showAndTableAvailable}
-                type={"show"}
-                contentName={show}
-                getDataForSpecificEntry={getDataForSpecificEntry}
-            />
-            <MainButtons
-                getContent={getShow}
-                deleteContent={deleteShow}
-                type={"show"}
-                availability={showAndTableAvailable}
-                contentName={show}
-            />
-        </View>
-    );
+	return (
+		<View style={[containerStyles.screenContainer, screenStyle]}>
+			<TopScreenFunctionality
+				containerStyles={containerStyles}
+				tables={showTables}
+				getFromSpecificTable={getFromSpecificTable}
+				addToQueue={addToQueue}
+			/>
+			<ContentCard
+				whichTable={whichTable}
+				availability={showAndTableAvailable}
+				type={"show"}
+				contentName={show}
+				getDataForSpecificEntry={getDataForSpecificEntry}
+			/>
+			<MainButtons
+				getContent={getShow}
+				deleteContent={deleteShow}
+				type={"show"}
+				availability={showAndTableAvailable}
+				contentName={show}
+			/>
+		</View>
+	);
 };
 
 export default Show;
