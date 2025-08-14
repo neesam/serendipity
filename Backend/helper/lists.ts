@@ -24,7 +24,7 @@ const musicTables = [
 	"album_telepath",
 	"album_topalbums",
 	"artist_topartists",
-	"album_unsungdreampopp",
+	"album_unsungdreampop",
 	"album_vaporwave",
 	"album_vaporwavesources",
 	"album_vinyls",
