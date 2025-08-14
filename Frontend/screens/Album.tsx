@@ -77,7 +77,7 @@ export default function Album() {
 
 		console.log(EXPO_PUBLIC_MUSIC_TABLES_DATASET);
 		const response = await fetch(
-			`${EXPO_PUBLIC_RAILWAY_URL}/api/album/${specificTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`
+			`${}/api/album/${specificTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`
 		);
 
 		if (!response.ok) {
@@ -109,7 +109,7 @@ export default function Album() {
 		if (currentlyListening === "false") {
 			try {
 				const response = await fetch(
-					`${EXPO_PUBLIC_RAILWAY_URL}/api/albums/${albumID}/from/${whichTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
+					`${}/api/albums/${albumID}/from/${whichTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
 					{
 						method: "DELETE",
 						headers: { "Content-type": "application/json" },
@@ -135,7 +135,7 @@ export default function Album() {
 			if (originalTable !== null) {
 				try {
 					const response = await fetch(
-						`${EXPO_PUBLIC_RAILWAY_URL}/api/albums/${albumID}/${album}/${originalTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
+						`${}/api/albums/${albumID}/${album}/${originalTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
 						{
 							method: "DELETE",
 							headers: { "Content-type": "application/json" },
@@ -161,7 +161,7 @@ export default function Album() {
 			} else {
 				try {
 					const response = await fetch(
-						`${EXPO_PUBLIC_RAILWAY_URL}/api/albums/${albumID}/with/${album}`,
+						`${}/api/albums/${albumID}/with/${album}`,
 						{
 							method: "DELETE",
 							headers: { "Content-type": "application/json" },
@@ -190,7 +190,7 @@ export default function Album() {
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 		try {
 			const response = await fetch(
-				`${EXPO_PUBLIC_RAILWAY_URL}/api/addToCurrentlyListening/${album}/${whichTable}`,
+				`${}/api/addToCurrentlyListening/${album}/${whichTable}`,
 				{
 					method: "POST",
 					headers: { "Content-type": "application/json" },
@@ -216,7 +216,7 @@ export default function Album() {
 
 		try {
 			const response = await fetch(
-				`${EXPO_PUBLIC_RAILWAY_URL}/api/addAlbumToQueue/${album}`,
+				`${}/api/addAlbumToQueue/${album}`,
 				{
 					method: "POST",
 					headers: { "Content-type": "application/json" },
@@ -240,7 +240,7 @@ export default function Album() {
 	const getDataForSpecificEntry = async (title: string) => {
 		try {
 			const response = await fetch(
-				`${EXPO_PUBLIC_RAILWAY_URL}/api/specificMusicEntry/${title}/${whichTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`
+				`${}/api/specificMusicEntry/${title}/${whichTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`
 			);
 
 			if (!response.ok) {
