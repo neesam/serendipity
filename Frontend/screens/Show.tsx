@@ -13,6 +13,8 @@ import randomColor from "../utils/randomColor";
 const EXPO_PUBLIC_SHOW_TABLES_DATASET =
 	process.env.EXPO_PUBLIC_SHOW_TABLES_DATASET;
 
+const EXPO_PUBLIC_RAILWAY_URL = process.env.EXPO_PUBLIC_RAILWAY_URL;
+
 const Show = () => {
 	const [whichTable, setWhichTable] = useState("");
 	const [show, setShow] = useState("");

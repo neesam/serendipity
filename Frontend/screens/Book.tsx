@@ -14,6 +14,8 @@ import { bookTables } from "../helper/lists";
 const EXPO_PUBLIC_BOOK_TABLES_DATASET =
 	process.env.EXPO_PUBLIC_BOOK_TABLES_DATASET;
 
+const EXPO_PUBLIC_RAILWAY_URL = process.env.EXPO_PUBLIC_RAILWAY_URL;
+
 interface GetBookDataType {
 	rows: [{ title: string; id: string }];
 	randomTable: string;

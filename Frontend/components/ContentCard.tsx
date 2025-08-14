@@ -32,6 +32,8 @@ const EXPO_PUBLIC_SHOW_TABLES_DATASET =
 const EXPO_PUBLIC_BOOK_TABLES_DATASET =
 	process.env.EXPO_PUBLIC_BOOK_TABLES_DATASET;
 
+const EXPO_PUBLIC_RAILWAY_URL = process.env.EXPO_PUBLIC_RAILWAY_URL;
+
 interface ContentCardTypes {
 	whichTable: string;
 	availability: boolean;
