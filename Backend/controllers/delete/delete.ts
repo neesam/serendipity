@@ -6,6 +6,7 @@ import { Request, Response } from "express";
 const BQ_PROJECT = process.env.BQ_PROJECT;
 
 import { bigquery } from "../../utils/bigQuery";
+import { storage } from "../../utils/googleCloudStorage";
 
 const MUSIC_TABLES_DATASET = process.env.MUSIC_TABLES_DATASET;
 
@@ -13,6 +14,13 @@ const deleteFromSourceTable = async (req: Request, res: Response) => {
     const id = req.params.id;
     const whichTable = req.params.whichTable;
     const dataset = req.params.dataset;
+
+    const [buckets] = await storage.getBuckets();
+
+    console.log("Buckets:");
+    buckets.forEach((bucket) => {
+        console.log(bucket.name);
+    });
 
     console.log(
         `Received DELETE request for id: ${id} from table: ${whichTable}`

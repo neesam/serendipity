@@ -67,7 +67,9 @@ const MainButtons = ({
             ) : (
                 <></>
             )}
-            {currentlyListening === "false" && availability === true ? (
+            {currentlyListening === "false" &&
+            availability === true &&
+            type === "album" ? (
                 <View
                     style={
                         containerStyles.addToCurrentlyListeningButtonContainer
@@ -77,6 +79,23 @@ const MainButtons = ({
                         <View>
                             <Text style={buttonStyles.buttonText}>
                                 Add to currents
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            ) : (
+                <></>
+            )}
+            {type === "film" && currentlyListening === "false" ? (
+                <View
+                    style={
+                        containerStyles.addToCurrentlyListeningButtonContainer
+                    }
+                >
+                    <TouchableOpacity onPress={addToCurrentlyListening}>
+                        <View>
+                            <Text style={buttonStyles.buttonText}>
+                                Add to Stremio
                             </Text>
                         </View>
                     </TouchableOpacity>
