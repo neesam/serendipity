@@ -43,9 +43,8 @@ const whichFilmTable = async (req: Request, res: Response) => {
         try {
             const [first_rows] = await bigquery.query({ query: sqlQuery });
             const international_table = first_rows.map((row) => ({ ...row }));
-            console.log(international_table);
 
-            const secondQuery = `select * from ${BQ_PROJECT}.${FILM_TABLES_DATASET}.${international_table} order by rand() limit 1`;
+            const secondQuery = `select * from ${BQ_PROJECT}.${FILM_TABLES_DATASET}.${international_table[0]["title"]} order by rand() limit 1`;
 
             const [second_rows] = await bigquery.query({ query: secondQuery });
             const plainRows = second_rows.map((row) => ({ ...row }));
