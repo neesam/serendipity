@@ -33,23 +33,46 @@ const whichFilmTable = async (req: Request, res: Response) => {
         "used_film_tables"
     );
 
-    const sqlQuery = `select * from ${BQ_PROJECT}.${FILM_TABLES_DATASET}.${randomTable} order by rand() limit 1`;
+    if (randomTable === "film_international") {
+        const sqlQuery = `select * from ${BQ_PROJECT}.${FILM_TABLES_DATASET}.${randomTable} order by rand() limit 1`;
 
-    console.log(sqlQuery);
+        console.log(sqlQuery);
 
-    try {
-        const [rows] = await bigquery.query({ query: sqlQuery });
-        const plainRows = rows.map((row) => ({ ...row }));
-        res.json({ rows: plainRows, randomTable });
-    } catch (err) {
-        if (err instanceof Error) {
-            console.error(err.message);
+        try {
+            const [first_rows] = await bigquery.query({ query: sqlQuery });
+            const international_table = first_rows.map((row) => ({ ...row }));
+
+            const secondQuery = `select * from ${BQ_PROJECT}.${FILM_TABLES_DATASET}.${international_table} order by rand() limit 1`;
+
+            const [second_rows] = await bigquery.query({ query: secondQuery });
+            const plainRows = second_rows.map((row) => ({ ...row }));
+            res.json({ rows: plainRows, international_table });
+        } catch (err) {
+            if (err instanceof Error) {
+                console.error(err.message);
+            }
+            res.status(500).send("Server Error");
         }
-        res.status(500).send("Server Error");
+    } else {
+        const sqlQuery = `select * from ${BQ_PROJECT}.${FILM_TABLES_DATASET}.${randomTable} order by rand() limit 1`;
+
+        console.log(sqlQuery);
+
+        try {
+            const [rows] = await bigquery.query({ query: sqlQuery });
+            const plainRows = rows.map((row) => ({ ...row }));
+            res.json({ rows: plainRows, randomTable });
+        } catch (err) {
+            if (err instanceof Error) {
+                console.error(err.message);
+            }
+            res.status(500).send("Server Error");
+        }
     }
 };
 
 const whichMusicTable = async (req: Request, res: Response) => {
+    console.log("hello");
     const randomTable = await getUniqueRandomValue(
         musicTables,
         "used_music_tables"

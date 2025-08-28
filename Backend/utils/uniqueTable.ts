@@ -8,7 +8,7 @@ const redis = new Redis({
     token: process.env.REDIS_PASSWORD,
 });
 
-async function getUniqueRandomValue(tables, medium_tables) {
+async function getUniqueRandomValue(tables: string[], medium_tables: string) {
     // Step 1: Get the current list of used values
     const raw = await redis.get(medium_tables);
     const used = raw ? raw : [];

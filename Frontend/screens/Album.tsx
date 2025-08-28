@@ -16,6 +16,10 @@ const EXPO_PUBLIC_MUSIC_TABLES_DATASET =
 
 const EXPO_PUBLIC_RAILWAY_URL = process.env.EXPO_PUBLIC_RAILWAY_URL;
 
+const API_BASE_URL = __DEV__
+    ? "http://localhost:5002"
+    : EXPO_PUBLIC_RAILWAY_URL;
+
 interface SpecificAlbumOrEntryDataType {
     title: string;
     id: string;
@@ -39,6 +43,8 @@ export default function Album() {
 
     useEffect(() => {
         console.log(currentlyListening);
+        console.log("Are we in development?", __DEV__);
+        console.log("NODE_ENV:", process.env.NODE_ENV);
     }, [album, whichTable]);
 
     const getAlbum = async () => {
@@ -46,11 +52,13 @@ export default function Album() {
 
         setAlbumAndTableAvailable(false);
 
+        console.log(`${API_BASE_URL}/api/whichMusicTable`);
+
         // Function to fetch actual album
 
-        const response = await fetch(
-            `${EXPO_PUBLIC_RAILWAY_URL}/api/whichMusicTable`
-        );
+        const response = await fetch(`${API_BASE_URL}/api/whichMusicTable`);
+        console.log("here");
+
         if (!response.ok) {
             throw new Error(`Failed to fetch details for ${whichTable}`);
         }
@@ -79,7 +87,7 @@ export default function Album() {
 
         console.log(EXPO_PUBLIC_MUSIC_TABLES_DATASET);
         const response = await fetch(
-            `${EXPO_PUBLIC_RAILWAY_URL}/api/album/${specificTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`
+            `${API_BASE_URL}/api/album/${specificTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`
         );
 
         if (!response.ok) {
@@ -111,7 +119,7 @@ export default function Album() {
         if (currentlyListening === "false") {
             try {
                 const response = await fetch(
-                    `${EXPO_PUBLIC_RAILWAY_URL}/api/albums/${albumID}/from/${whichTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
+                    `${API_BASE_URL}/api/albums/${albumID}/from/${whichTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
                     {
                         method: "DELETE",
                         headers: { "Content-type": "application/json" },
@@ -137,7 +145,7 @@ export default function Album() {
             if (originalTable !== null) {
                 try {
                     const response = await fetch(
-                        `${EXPO_PUBLIC_RAILWAY_URL}/api/albums/${albumID}/${album}/${originalTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
+                        `${API_BASE_URL}/api/albums/${albumID}/${album}/${originalTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
                         {
                             method: "DELETE",
                             headers: { "Content-type": "application/json" },
@@ -165,7 +173,7 @@ export default function Album() {
             } else {
                 try {
                     const response = await fetch(
-                        `${EXPO_PUBLIC_RAILWAY_URL}/api/albums/${albumID}/with/${album}`,
+                        `${API_BASE_URL}/api/albums/${albumID}/with/${album}`,
                         {
                             method: "DELETE",
                             headers: { "Content-type": "application/json" },
@@ -196,7 +204,7 @@ export default function Album() {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
         try {
             const response = await fetch(
-                `${EXPO_PUBLIC_RAILWAY_URL}/api/addToCurrentlyListening/${album}/${whichTable}`,
+                `${API_BASE_URL}/api/addToCurrentlyListening/${album}/${whichTable}`,
                 {
                     method: "POST",
                     headers: { "Content-type": "application/json" },
@@ -222,7 +230,7 @@ export default function Album() {
 
         try {
             const response = await fetch(
-                `${EXPO_PUBLIC_RAILWAY_URL}/api/addAlbumToQueue/${album}`,
+                `${API_BASE_URL}/api/addAlbumToQueue/${album}`,
                 {
                     method: "POST",
                     headers: { "Content-type": "application/json" },
@@ -248,7 +256,7 @@ export default function Album() {
     const getDataForSpecificEntry = async (title: string) => {
         try {
             const response = await fetch(
-                `${EXPO_PUBLIC_RAILWAY_URL}/api/specificMusicEntry/${title}/${whichTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`
+                `${API_BASE_URL}/api/specificMusicEntry/${title}/${whichTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`
             );
 
             if (!response.ok) {

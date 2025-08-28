@@ -39,12 +39,14 @@
     "expo-status-bar": "~2.2.3",
     "expo-symbols": "~0.4.5",
     "expo-system-ui": "~5.0.10",
+    "expo-updates": "~0.28.17",
     "expo-web-browser": "~14.2.0",
     "react": "19.0.0",
     "react-bootstrap": "^2.10.9",
     "react-dom": "19.0.0",
     "react-hook-form": "^7.54.2",
     "react-native": "0.79.5",
+    "react-native-element-dropdown": "^2.12.4",
     "react-native-gesture-handler": "~2.24.0",
     "react-native-picker": "^4.3.7",
     "react-native-reanimated": "~3.17.4",
@@ -53,8 +55,7 @@
     "react-native-vector-icons": "^10.2.0",
     "react-native-web": "^0.20.0",
     "react-native-webview": "13.13.5",
-    "react-navigation": "^5.0.0",
-    "expo-updates": "~0.28.17"
+    "react-navigation": "^5.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",

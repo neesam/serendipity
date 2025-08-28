@@ -42,13 +42,13 @@ const filmTables = [
     "film_visualhypnagogia",
     "film_rymtop1500",
     "film_criterion",
-    "film_italian",
     "film_noir1000",
     "film_stremiolibrary",
     "film_tspdt2500",
     "film_70s",
     "film_80s",
     "film_90s",
+    "film_international",
 ];
 
 const showTables = ["shows", "anime_classic", "anime_other", "shows_top50"];

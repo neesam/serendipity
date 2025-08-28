@@ -15,6 +15,10 @@ const EXPO_PUBLIC_FILM_TABLES_DATASET =
 
 const EXPO_PUBLIC_RAILWAY_URL = process.env.EXPO_PUBLIC_RAILWAY_URL;
 
+const API_BASE_URL = __DEV__
+    ? "http://localhost:5002"
+    : EXPO_PUBLIC_RAILWAY_URL;
+
 interface GetFilmDataType {
     rows: [{ title: string; id: string; currently_in_stremio?: string }];
     randomTable: string;
@@ -41,9 +45,7 @@ const Film = () => {
 
         setFilmAndTableAvailable(false);
 
-        const response = await fetch(
-            `${EXPO_PUBLIC_RAILWAY_URL}/api/whichFilmTable`
-        );
+        const response = await fetch(`${API_BASE_URL}/api/whichFilmTable`);
 
         if (!response.ok) {
             throw new Error(`Failed to fetch details for ${whichTable}`);
@@ -67,7 +69,7 @@ const Film = () => {
 
         try {
             const response = await fetch(
-                `${EXPO_PUBLIC_RAILWAY_URL}/api/film/${filmID}/from/${whichTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`,
+                `${API_BASE_URL}/api/film/${filmID}/from/${whichTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`,
                 {
                     method: "DELETE",
                     headers: { "Content-type": "application/json" },
@@ -97,7 +99,7 @@ const Film = () => {
 
         try {
             const response = await fetch(
-                `${EXPO_PUBLIC_RAILWAY_URL}/api/film/${specificTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`
+                `${API_BASE_URL}/api/film/${specificTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`
             );
 
             if (!response.ok) {
@@ -124,7 +126,7 @@ const Film = () => {
     const getDataForSpecificEntry = async (title: string) => {
         try {
             const response = await fetch(
-                `${EXPO_PUBLIC_RAILWAY_URL}/api/specificFilmEntry/${title}/${whichTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`
+                `${API_BASE_URL}/api/specificFilmEntry/${title}/${whichTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`
             );
 
             if (!response.ok) {
@@ -147,7 +149,7 @@ const Film = () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
         try {
             const response = await fetch(
-                `${EXPO_PUBLIC_RAILWAY_URL}/api/add_to_film_table/${whichTable}/${film}/${EXPO_PUBLIC_FILM_TABLES_DATASET}/2`,
+                `${API_BASE_URL}/api/add_to_film_table/${whichTable}/${film}/${EXPO_PUBLIC_FILM_TABLES_DATASET}/2`,
                 {
                     method: "POST",
                     headers: { "Content-type": "application/json" },
@@ -174,7 +176,7 @@ const Film = () => {
 
         try {
             const response = await fetch(
-                `${EXPO_PUBLIC_RAILWAY_URL}/api/addFilmToQueue/${film}`,
+                `${API_BASE_URL}/api/addFilmToQueue/${film}`,
                 {
                     method: "POST",
                     headers: { "Content-type": "application/json" },
