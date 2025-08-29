@@ -188,7 +188,6 @@ const addToTwoTables = async (req: Request, res: Response) => {
 };
 
 const addToStremio = async (req: Request, res: Response) => {
-    console.log("hello");
     const table = req.params.table;
     const entry = req.params.entry;
     const dataset = req.params.dataset;

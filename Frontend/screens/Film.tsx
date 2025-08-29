@@ -101,7 +101,7 @@ const Film = () => {
 
         try {
             const response = await fetch(
-                `${API_BASE_URL}/api/film/${specificTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`
+                `${API_BASE_URL}/api/film/${specificTable}/null/${EXPO_PUBLIC_FILM_TABLES_DATASET}`
             );
 
             if (!response.ok) {

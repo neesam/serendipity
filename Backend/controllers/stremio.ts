@@ -26,19 +26,25 @@ const stremioLogic = async (req: Request, res: Response) => {
 
         [rows] = await job.getQueryResults();
 
-        console.log(rows);
+        console.log(rows.length);
 
         for (let i = 0; i < rows.length; i++) {
-            query = `INSERT INTO ${BQ_PROJECT}.${FILM_TABLES_DATASET}.film_addtostremio (title) values ('${rows[i]["title"]}')`;
+            try {
+                query = `INSERT INTO ${BQ_PROJECT}.${FILM_TABLES_DATASET}.film_addtostremio (title) values ("${rows[i]["title"]}")`;
 
-            console.log(query);
+                [job] = await bigquery.createQueryJob(query);
 
-            [job] = await bigquery.createQueryJob(query);
-
-            [rows] = await job.getQueryResults();
+                let [queryResults] = await job.getQueryResults();
+            } catch (error) {
+                if (error instanceof Error) {
+                    console.log(error.message);
+                }
+            }
         }
 
         query = `UPDATE ${BQ_PROJECT}.${FILM_TABLES_DATASET}.film_stremiolibrary SET date_last_accessed = '${date.toDateString()}' WHERE TRUE`;
+
+        console.log(query);
 
         [job] = await bigquery.createQueryJob(query);
 
