@@ -200,6 +200,24 @@ const Film = () => {
         }
     };
 
+    const createStremioOutput = async () => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+
+        try {
+            const response = await fetch(
+                `${API_BASE_URL}/api/create_stremio_output`
+            );
+
+            const data = await response.json();
+
+            console.log(data);
+        } catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+            }
+        }
+    };
+
     const screenStyle = {
         backgroundColor: backgroundColor,
     };
@@ -211,6 +229,8 @@ const Film = () => {
                 tables={filmTables}
                 getFromSpecificTable={getFromSpecificTable}
                 addToQueue={addToQueue}
+                createStremioOutput={createStremioOutput}
+                type={"film"}
             />
             <ContentCard
                 whichTable={whichTable}

@@ -46,10 +46,9 @@ export const containerStyles = StyleSheet.create({
         position: "absolute",
         top: 10,
         right: 10,
-        borderColor: "black",
-        borderWidth: 1,
-        borderRadius: 5,
-        padding: 10,
+        display: "flex",
+        flexDirection: "row",
+        gap: 10,
     },
     cardContainer: {
         backgroundColor: "white",

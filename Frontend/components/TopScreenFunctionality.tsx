@@ -15,6 +15,8 @@ interface TopScreenFunctionalityTypes {
     tables: string[];
     getFromSpecificTable: (input: string) => Promise<void>;
     addToQueue: (event: GestureResponderEvent) => void;
+    createStremioOutput: (event: GestureResponderEvent) => void;
+    type: string;
 }
 
 const TopScreenFunctionality = ({
@@ -22,6 +24,8 @@ const TopScreenFunctionality = ({
     tables,
     getFromSpecificTable,
     addToQueue,
+    createStremioOutput,
+    type,
 }: TopScreenFunctionalityTypes) => {
     return (
         <>
@@ -33,7 +37,30 @@ const TopScreenFunctionality = ({
                 />
             </View>
             <View style={containerStyles!.topRightCornerContainer}>
-                <Pressable onPress={addToQueue}>
+                {type === "film" ? (
+                    <Pressable
+                        style={{
+                            borderColor: "black",
+                            borderWidth: 1,
+                            borderRadius: 5,
+                            padding: 10,
+                        }}
+                        onPress={createStremioOutput}
+                    >
+                        <Ionicons name={"document"} size={20} />
+                    </Pressable>
+                ) : (
+                    <></>
+                )}
+                <Pressable
+                    style={{
+                        borderColor: "black",
+                        borderWidth: 1,
+                        borderRadius: 5,
+                        padding: 10,
+                    }}
+                    onPress={addToQueue}
+                >
                     <Ionicons name={"add-sharp"} size={20} />
                 </Pressable>
             </View>

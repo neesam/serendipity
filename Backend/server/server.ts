@@ -14,6 +14,7 @@ import { albumRoutes } from "../routes/currentlyListening";
 import { deletionRoutes } from "../routes/deletion";
 import { allEntriesFromTableRoute } from "../routes/metadata";
 import { addToTableRoute } from "../routes/addToTable";
+import { stremioRoutes } from "../routes/stremio";
 
 // Initialize express
 
@@ -96,6 +97,10 @@ app.use("/api/add_to_music_table", addToTableRoute);
 app.use("/api/add_to_film_table", addToTableRoute);
 app.use("/api/add_to_show_table", addToTableRoute);
 app.use("/api/add_to_book_table", addToTableRoute);
+
+// Run Stremio functionality
+
+app.use(stremioRoutes);
 
 // server listening function
 
