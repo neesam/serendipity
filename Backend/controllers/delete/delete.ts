@@ -8,6 +8,7 @@ const BQ_PROJECT = process.env.BQ_PROJECT;
 import { bigquery } from "../../utils/bigQuery";
 
 const MUSIC_TABLES_DATASET = process.env.MUSIC_TABLES_DATASET;
+const QUEUE_DATASET = process.env.QUEUE_DATASET;
 
 const deleteFromSourceTable = async (req: Request, res: Response) => {
     const id = req.params.id;
@@ -53,34 +54,76 @@ const deleteFromSourceTable = async (req: Request, res: Response) => {
 
 const deleteFromCurrentlyListening = async (req: Request, res: Response) => {
     const id = req.params.id;
+    const originalTable = req.params.original_table;
     const album = req.params.album;
+    const dataset = req.params.dataset;
 
     console.log(
         `Received DELETE request for album: ${album} from table: album_currentlyListening`
     );
 
-    // Query to delete from album_currentlyListening
-    const query1 = `
-    DELETE FROM \`${BQ_PROJECT}.${MUSIC_TABLES_DATASET}.album_currentlyListening\`
-    WHERE id = @id
-    `;
+    if (!originalTable) {
+        // Query to insert into queue_deletion
+        const query1 = `
+            INSERT INTO \`${BQ_PROJECT}.${MUSIC_TABLES_DATASET}.album_currentlyListening\`
+            WHERE id = @id`;
 
-    try {
-        // Execute the first query
-        const options1 = {
-            query: query1,
-            params: { id },
-        };
-        const [job1] = await bigquery.createQueryJob(options1);
-        console.log(`Job ${job1.id} started.`);
-        await job1.getQueryResults();
+        try {
+            // Execute the first query
+            const options1 = {
+                query: query1,
+                params: { id },
+            };
+            const [job1] = await bigquery.createQueryJob(options1);
+            console.log(`Job ${job1.id} started.`);
+            await job1.getQueryResults();
 
-        res.status(200).send({ message: "Album deleted successfully" });
-    } catch (err) {
-        if (err instanceof Error) {
-            console.error(err.message);
+            res.status(200).send({ message: "Album deleted successfully" });
+        } catch (err) {
+            if (err instanceof Error) {
+                console.error(err.message);
+            }
+            res.status(500).send({ error: "Server Error" });
         }
-        res.status(500).send({ error: "Server Error" });
+    } else {
+        console.log(
+            `Received DELETE request for album: ${album} from table: ${originalTable} and album_currentlyListening`
+        );
+
+        // Query to delete from album_currentlyListening
+        const query1 = `
+            DELETE FROM \`${BQ_PROJECT}.${dataset}.album_currentlyListening\`
+            WHERE id = @id`;
+        // Query to delete from the original table
+        const query2 = `
+            DELETE FROM \`${BQ_PROJECT}.${dataset}.${originalTable}\`
+            WHERE title = @album`;
+        try {
+            // Execute the first query
+            const options1 = {
+                query: query1,
+                params: { id },
+            };
+            const [job1] = await bigquery.createQueryJob(options1);
+            console.log(`Job ${job1.id} started.`);
+            await job1.getQueryResults();
+
+            // Execute the second query
+            const options2 = {
+                query: query2,
+                params: { album },
+            };
+            const [job2] = await bigquery.createQueryJob(options2);
+            console.log(`Job ${job2.id} started.`);
+            await job2.getQueryResults();
+
+            res.status(200).send({ message: "Album deleted successfully" });
+        } catch (err) {
+            if (err instanceof Error) {
+                console.error(err.message);
+            }
+            res.status(500).send({ error: "Server Error" });
+        }
     }
 };
 
@@ -88,8 +131,6 @@ const deleteFromCurrentlyListeningAndOgTable = async (
     req: Request,
     res: Response
 ) => {
-    console.log("hello");
-
     const id = req.params.id;
     const originalTable = req.params.original_table;
     const album = req.params.album;
@@ -137,6 +178,10 @@ const deleteFromCurrentlyListeningAndOgTable = async (
         }
         res.status(500).send({ error: "Server Error" });
     }
+};
+
+const deleteInGeneral = async (req: Request, res: Response) => {
+    const originTable = req.params.originTable;
 };
 
 export {

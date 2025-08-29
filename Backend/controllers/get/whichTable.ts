@@ -28,12 +28,10 @@ const SHOW_TABLES_DATASET = process.env.SHOW_TABLES_DATASET;
 const BOOK_TABLES_DATASET = process.env.BOOK_TABLES_DATASET;
 
 const whichFilmTable = async (req: Request, res: Response) => {
-    // const randomTable = await getUniqueRandomValue(
-    //     filmTables,
-    //     "used_film_tables"
-    // );
-
-    const randomTable = "film_international";
+    const randomTable = await getUniqueRandomValue(
+        filmTables,
+        "used_film_tables"
+    );
 
     if (randomTable === "film_international") {
         const sqlQuery = `select * from ${BQ_PROJECT}.${FILM_TABLES_DATASET}.${randomTable} order by rand() limit 1`;

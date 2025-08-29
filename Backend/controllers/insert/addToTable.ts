@@ -193,17 +193,23 @@ const addToStremio = async (req: Request, res: Response) => {
     const entry = req.params.entry;
     const dataset = req.params.dataset;
 
-    const query1 = `
+    console.log(entry, typeof entry);
+
+    let query = `
         INSERT INTO \`${BQ_PROJECT}.${dataset}.film_stremiolibrary\`
         (id, title, currently_in_stremio) VALUES (GENERATE_UUID(), @entry, 'true')
     `;
     try {
         // Run the query
         const options = {
-            query1,
+            query,
             params: { entry },
         };
+        console.log(options);
+
         const [job] = await bigquery.createQueryJob(options);
+        console.log(job);
+
         console.log(`Job ${job.id} started.`);
 
         // Wait for the query to finish
@@ -215,19 +221,19 @@ const addToStremio = async (req: Request, res: Response) => {
         });
     } catch (err) {
         if (err instanceof Error) {
-            console.error(err.message);
+            console.error("this: " + err.message);
         }
         res.status(500).send("Server Error");
     }
 
-    const query2 = `
+    query = `
         DELETE FROM \`${BQ_PROJECT}.${dataset}.${table}\`
         WHERE title = @entry
     `;
     try {
         // Run the query
         const options = {
-            query2,
+            query,
             params: { entry },
         };
         const [job] = await bigquery.createQueryJob(options);

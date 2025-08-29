@@ -12,23 +12,42 @@ import { bigquery } from "../../utils/bigQuery";
 const getEntryFromSpecificTable = async (req: Request, res: Response) => {
     const table = req.params.table;
     const dataset = req.params.dataset;
+    const title = req.params.title;
 
     console.log(table);
     console.log(req.params);
 
-    const sqlQuery = `select * from ${BQ_PROJECT}.${dataset}.${table} order by rand() limit 1`;
+    if (title !== "null") {
+        const sqlQuery = `select * from ${BQ_PROJECT}.${dataset}.${table} where title != '${title}' order by rand() limit 1`;
 
-    try {
-        const [rows] = await bigquery.query({ query: sqlQuery });
-        res.json(rows);
-        console.log(rows);
-    } catch (err) {
-        if (err instanceof Error) {
+        console.log(sqlQuery);
+        try {
+            const [rows] = await bigquery.query({ query: sqlQuery });
+            res.json(rows);
+            console.log(rows);
+        } catch (err) {
             if (err instanceof Error) {
-                console.error(err.message);
+                if (err instanceof Error) {
+                    console.error(err.message);
+                }
             }
+            res.status(500).send("Server Error");
         }
-        res.status(500).send("Server Error");
+    } else {
+        const sqlQuery = `select * from ${BQ_PROJECT}.${dataset}.${table} order by rand() limit 1`;
+
+        try {
+            const [rows] = await bigquery.query({ query: sqlQuery });
+            res.json(rows);
+            console.log(rows);
+        } catch (err) {
+            if (err instanceof Error) {
+                if (err instanceof Error) {
+                    console.error(err.message);
+                }
+            }
+            res.status(500).send("Server Error");
+        }
     }
 };
 

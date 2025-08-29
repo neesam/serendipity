@@ -17,7 +17,7 @@ const EXPO_PUBLIC_MUSIC_TABLES_DATASET =
 const EXPO_PUBLIC_RAILWAY_URL = process.env.EXPO_PUBLIC_RAILWAY_URL;
 
 const API_BASE_URL = __DEV__
-    ? "http://localhost:5002"
+    ? "http://10.0.0.164:5002"
     : EXPO_PUBLIC_RAILWAY_URL;
 
 interface SpecificAlbumOrEntryDataType {
@@ -43,8 +43,6 @@ export default function Album() {
 
     useEffect(() => {
         console.log(currentlyListening);
-        console.log("Are we in development?", __DEV__);
-        console.log("NODE_ENV:", process.env.NODE_ENV);
     }, [album, whichTable]);
 
     const getAlbum = async () => {
@@ -85,41 +83,75 @@ export default function Album() {
     const getFromSpecificTable = async (specificTable: string) => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-        console.log(EXPO_PUBLIC_MUSIC_TABLES_DATASET);
-        const response = await fetch(
-            `${API_BASE_URL}/api/album/${specificTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`
-        );
+        if (album.length > 0) {
+            const response = await fetch(
+                `${API_BASE_URL}/api/album/${specificTable}/${album}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`
+            );
 
-        if (!response.ok) {
-            throw new Error(`Failed to fetch details for ${specificTable}`);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch details for ${specificTable}`);
+            }
+
+            const data: [SpecificAlbumOrEntryDataType] = await response.json();
+
+            console.log(data);
+
+            const albumVal = data[0]["title"];
+            const albumIDVal = data[0]["id"];
+            const currently_listening =
+                data[0]["currently_listening"] || "false";
+            const originalTableVal = data[0]["original_table"] || null;
+            const bgColor = randomColor();
+
+            setAlbum(albumVal);
+            setAlbumID(albumIDVal);
+            setCurrentlyListening(currently_listening);
+            setOriginalTable(originalTableVal);
+            setWhichTable(specificTable);
+            setBackgroundColor(bgColor);
+        } else {
+            const response = await fetch(
+                `${API_BASE_URL}/api/album/${specificTable}/null/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`
+            );
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch details for ${specificTable}`);
+            }
+
+            const data: [SpecificAlbumOrEntryDataType] = await response.json();
+
+            console.log(data);
+
+            const albumVal = data[0]["title"];
+            const albumIDVal = data[0]["id"];
+            const currently_listening =
+                data[0]["currently_listening"] || "false";
+            const originalTableVal = data[0]["original_table"] || null;
+            const bgColor = randomColor();
+
+            setAlbum(albumVal);
+            setAlbumID(albumIDVal);
+            setCurrentlyListening(currently_listening);
+            setOriginalTable(originalTableVal);
+            setWhichTable(specificTable);
+            setBackgroundColor(bgColor);
         }
-
-        const data: [SpecificAlbumOrEntryDataType] = await response.json();
-
-        console.log(data);
-
-        const albumVal = data[0]["title"];
-        const albumIDVal = data[0]["id"];
-        const currently_listening = data[0]["currently_listening"] || "false";
-        const originalTableVal = data[0]["original_table"] || null;
-        const bgColor = randomColor();
-
-        setAlbum(albumVal);
-        setAlbumID(albumIDVal);
-        setCurrentlyListening(currently_listening);
-        setOriginalTable(originalTableVal);
-        setWhichTable(specificTable);
-        setBackgroundColor(bgColor);
     };
 
     const deleteAlbum = async () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
         console.log(currentlyListening);
 
+        const tempAlbumID = albumID;
+        const tempAlbum = album;
+        const tempWhichTable = whichTable;
+        const tempOriginalTable = originalTable;
+
         if (currentlyListening === "false") {
             try {
+                getFromSpecificTable(whichTable);
                 const response = await fetch(
-                    `${API_BASE_URL}/api/albums/${albumID}/from/${whichTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
+                    `${API_BASE_URL}/api/albums/${tempAlbumID}/from/${tempWhichTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
                     {
                         method: "DELETE",
                         headers: { "Content-type": "application/json" },
@@ -136,66 +168,54 @@ export default function Album() {
 
                 console.log(await response.json());
                 console.log("Album deleted successfully.");
-
+            } catch (error) {
+                // console.error('Error during deletion:', error.message);
+            }
+        } else if (originalTable) {
+            try {
                 getFromSpecificTable(whichTable);
+                const response = await fetch(
+                    `${API_BASE_URL}/api/albums/${tempAlbumID}/${tempAlbum}/${tempOriginalTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
+                    {
+                        method: "DELETE",
+                        headers: { "Content-type": "application/json" },
+                    }
+                );
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(
+                        `Delete failed: ${errorData.message || "Unknown error"}`
+                    );
+                }
+
+                const data = await response.json();
+                console.log("Album deleted successfully.");
             } catch (error) {
                 // console.error('Error during deletion:', error.message);
             }
         } else {
-            if (originalTable !== null) {
-                try {
-                    const response = await fetch(
-                        `${API_BASE_URL}/api/albums/${albumID}/${album}/${originalTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
-                        {
-                            method: "DELETE",
-                            headers: { "Content-type": "application/json" },
-                        }
-                    );
-
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(
-                            `Delete failed: ${
-                                errorData.message || "Unknown error"
-                            }`
-                        );
+            try {
+                getFromSpecificTable(whichTable);
+                const response = await fetch(
+                    `${API_BASE_URL}/api/albums/${tempAlbumID}/${tempAlbum}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
+                    {
+                        method: "DELETE",
+                        headers: { "Content-type": "application/json" },
                     }
+                );
 
-                    const data = await response.json();
-                    console.log(
-                        `Album deleted successfully from ${originalTable} and currentlyListening.`
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(
+                        `Delete failed: ${errorData.message || "Unknown error"}`
                     );
-
-                    getFromSpecificTable(whichTable);
-                } catch (error) {
-                    // console.error('Error during deletion:', error.message);
                 }
-            } else {
-                try {
-                    const response = await fetch(
-                        `${API_BASE_URL}/api/albums/${albumID}/with/${album}`,
-                        {
-                            method: "DELETE",
-                            headers: { "Content-type": "application/json" },
-                        }
-                    );
 
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(
-                            `Delete failed: ${
-                                errorData.message || "Unknown error"
-                            }`
-                        );
-                    }
-
-                    const data = await response.json();
-                    console.log("Album deleted successfully.");
-
-                    getFromSpecificTable(whichTable);
-                } catch (error) {
-                    // console.error('Error during deletion:', error.message);
-                }
+                const data = await response.json();
+                console.log("Album deleted successfully.");
+            } catch (error) {
+                // console.error('Error during deletion:', error.message);
             }
         }
     };

@@ -7,6 +7,6 @@ import { getEntryFromSpecificTable } from "../controllers/get/specificTable";
 
 const specificTableRoute = express.Router();
 
-specificTableRoute.get("/:table/:dataset", getEntryFromSpecificTable);
+specificTableRoute.get("/:table/:title/:dataset", getEntryFromSpecificTable);
 
 export { specificTableRoute };

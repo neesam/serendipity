@@ -11,7 +11,7 @@ import {
 const addToTableRoute = express.Router();
 
 addToTableRoute.post("/:table/:entry/:dataset", addToOneTable);
-addToTableRoute.post("/:destination/:origin/:entry/:dataset", addToTwoTables);
 addToTableRoute.post("/:table/:entry/:dataset/2", addToStremio);
+addToTableRoute.post("/:destination/:origin/:entry/:dataset", addToTwoTables);
 
 export { addToTableRoute };

@@ -16,7 +16,7 @@ const EXPO_PUBLIC_FILM_TABLES_DATASET =
 const EXPO_PUBLIC_RAILWAY_URL = process.env.EXPO_PUBLIC_RAILWAY_URL;
 
 const API_BASE_URL = __DEV__
-    ? "http://localhost:5002"
+    ? "http://10.0.0.164:5002"
     : EXPO_PUBLIC_RAILWAY_URL;
 
 interface GetFilmDataType {
@@ -67,9 +67,13 @@ const Film = () => {
     const deleteFilm = async () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
+        const tempFilmID = filmID;
+
+        getFromSpecificTable(whichTable);
+
         try {
             const response = await fetch(
-                `${API_BASE_URL}/api/film/${filmID}/from/${whichTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`,
+                `${API_BASE_URL}/api/film/${tempFilmID}/from/${whichTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`,
                 {
                     method: "DELETE",
                     headers: { "Content-type": "application/json" },
@@ -90,8 +94,6 @@ const Film = () => {
                 console.error("Error during deletion:", error.message);
             }
         }
-
-        getFromSpecificTable(whichTable);
     };
 
     const getFromSpecificTable = async (specificTable: string) => {
