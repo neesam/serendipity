@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import * as Haptics from "expo-haptics";
 
 import randomColor from "../utils/randomColor";
-import { musicTables } from "../helper/lists";
+import { musicTables, musicTablesMap } from "../helper/lists";
 import { containerStyles } from "../styles/styles";
 
 import TopScreenFunctionality from "../components/TopScreenFunctionality";
@@ -17,7 +17,7 @@ const EXPO_PUBLIC_MUSIC_TABLES_DATASET =
 const EXPO_PUBLIC_RAILWAY_URL = process.env.EXPO_PUBLIC_RAILWAY_URL;
 
 const API_BASE_URL = __DEV__
-    ? "http://10.0.0.164:5002"
+    ? "http://172.20.10.4:5002"
     : EXPO_PUBLIC_RAILWAY_URL;
 
 interface SpecificAlbumOrEntryDataType {
@@ -70,7 +70,7 @@ export default function Album() {
             data["rows"][0]["currently_listening"] || "false"
         );
 
-        setWhichTable(data["randomTable"]);
+        setWhichTable(musicTablesMap[data["randomTable"]]);
 
         setAlbumAndTableAvailable(true);
 
@@ -107,7 +107,7 @@ export default function Album() {
             setAlbumID(albumIDVal);
             setCurrentlyListening(currently_listening);
             setOriginalTable(originalTableVal);
-            setWhichTable(specificTable);
+            setWhichTable(musicTablesMap[specificTable]);
             setBackgroundColor(bgColor);
         } else {
             const response = await fetch(
@@ -133,7 +133,7 @@ export default function Album() {
             setAlbumID(albumIDVal);
             setCurrentlyListening(currently_listening);
             setOriginalTable(originalTableVal);
-            setWhichTable(specificTable);
+            setWhichTable(musicTablesMap[specificTable]);
             setBackgroundColor(bgColor);
         }
     };

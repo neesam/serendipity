@@ -5,7 +5,7 @@ import * as Haptics from "expo-haptics";
 
 import { containerStyles } from "../styles/styles";
 import TopScreenFunctionality from "../components/TopScreenFunctionality";
-import { filmTables } from "@/helper/lists";
+import { filmTables, filmTablesMap } from "@/helper/lists";
 import MainButtons from "../components/MainButtons";
 import ContentCard from "../components/ContentCard";
 import randomColor from "../utils/randomColor";
@@ -16,7 +16,7 @@ const EXPO_PUBLIC_FILM_TABLES_DATASET =
 const EXPO_PUBLIC_RAILWAY_URL = process.env.EXPO_PUBLIC_RAILWAY_URL;
 
 const API_BASE_URL = __DEV__
-    ? "http://10.0.0.164:5002"
+    ? "http://172.20.10.4:5002"
     : EXPO_PUBLIC_RAILWAY_URL;
 
 interface GetFilmDataType {
@@ -36,7 +36,6 @@ const Film = () => {
     const [backgroundColor, setBackgroundColor] = useState("");
     const [filmAndTableAvailable, setFilmAndTableAvailable] = useState(true);
     const [inStremio, setInStremio] = useState("");
-    const stremio = "stremio";
 
     useEffect(() => {}, [film, whichTable]);
 
@@ -55,7 +54,7 @@ const Film = () => {
 
         setFilm(data["rows"][0]["title"]);
         setFilmID(data["rows"][0]["id"]);
-        setWhichTable(data["randomTable"]);
+        setWhichTable(filmTablesMap[data["randomTable"]]);
         setInStremio(data["rows"][0]["currently_in_stremio"] || "false");
 
         setFilmAndTableAvailable(true);
@@ -112,7 +111,8 @@ const Film = () => {
 
             setFilm(data[0]["title"]);
             setFilmID(data[0]["id"]);
-            setWhichTable(specificTable);
+            setWhichTable(filmTablesMap[specificTable]);
+            setInStremio(data[0]["currently_in_stremio"] || "false");
         } catch (error) {
             if (error instanceof Error) {
                 console.log(error.message);

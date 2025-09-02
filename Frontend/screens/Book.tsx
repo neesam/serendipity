@@ -17,7 +17,7 @@ const EXPO_PUBLIC_BOOK_TABLES_DATASET =
 const EXPO_PUBLIC_RAILWAY_URL = process.env.EXPO_PUBLIC_RAILWAY_URL;
 
 const API_BASE_URL = __DEV__
-    ? "http://10.0.0.164:5002"
+    ? "http://172.20.10.4:5002"
     : EXPO_PUBLIC_RAILWAY_URL;
 
 interface GetBookDataType {

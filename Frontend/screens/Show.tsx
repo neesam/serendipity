@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import * as Haptics from "expo-haptics";
 
 import { containerStyles } from "../styles/styles";
-import { showTables } from "../helper/lists";
+import { showTables, showTablesMap } from "../helper/lists";
 import TopScreenFunctionality from "../components/TopScreenFunctionality";
 import MainButtons from "../components/MainButtons";
 import ContentCard from "../components/ContentCard";
@@ -16,7 +16,7 @@ const EXPO_PUBLIC_SHOW_TABLES_DATASET =
 const EXPO_PUBLIC_RAILWAY_URL = process.env.EXPO_PUBLIC_RAILWAY_URL;
 
 const API_BASE_URL = __DEV__
-    ? "http://10.0.0.164:5002"
+    ? "http://172.20.10.4:5002"
     : EXPO_PUBLIC_RAILWAY_URL;
 
 const Show = () => {
@@ -43,7 +43,7 @@ const Show = () => {
             const data = await response.json();
 
             setShow(data["rows"][0]["title"]);
-            setWhichTable(data["randomTable"]);
+            setWhichTable(showTablesMap[data["randomTable"]]);
 
             setShowAndTableAvailable(true);
         } catch (error) {
@@ -71,7 +71,7 @@ const Show = () => {
             const data: [{ title: string }] = await response.json();
 
             setShow(data[0]["title"]);
-            setWhichTable(specificTable);
+            setWhichTable(showTablesMap[specificTable]);
         } catch (error) {
             if (error instanceof Error) {
                 console.log(error.message);

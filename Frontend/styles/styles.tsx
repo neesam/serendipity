@@ -25,6 +25,9 @@ export const cardStyles = StyleSheet.create({
     card: {
         alignItems: "center",
     },
+    source: {
+        fontWeight: "bold",
+    },
 });
 
 export const containerStyles = StyleSheet.create({
