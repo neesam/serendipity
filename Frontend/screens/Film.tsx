@@ -37,7 +37,9 @@ const Film = () => {
     const [filmAndTableAvailable, setFilmAndTableAvailable] = useState(true);
     const [inStremio, setInStremio] = useState("");
 
-    useEffect(() => {}, [film, whichTable]);
+    useEffect(() => {
+        console.log(inStremio);
+    }, [film, whichTable]);
 
     const getFilm = async () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
@@ -109,6 +111,8 @@ const Film = () => {
 
             const data: [SpecificEntryDataType] = await response.json();
 
+            console.log(data);
+
             setFilm(data[0]["title"]);
             setFilmID(data[0]["id"]);
             setWhichTable(filmTablesMap[specificTable]);
@@ -126,9 +130,12 @@ const Film = () => {
     };
 
     const getDataForSpecificEntry = async (title: string) => {
+        const whichTableKey = Object.keys(filmTablesMap).find(
+            (key) => filmTablesMap[key] == whichTable
+        );
         try {
             const response = await fetch(
-                `${API_BASE_URL}/api/specificFilmEntry/${title}/${whichTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`
+                `${API_BASE_URL}/api/specificFilmEntry/${title}/${whichTableKey}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`
             );
 
             if (!response.ok) {

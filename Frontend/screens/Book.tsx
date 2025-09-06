@@ -9,7 +9,7 @@ import randomColor from "../utils/randomColor";
 import TopScreenFunctionality from "../components/TopScreenFunctionality";
 import MainButtons from "../components/MainButtons";
 import ContentCard from "../components/ContentCard";
-import { bookTables } from "../helper/lists";
+import { bookTables, bookTablesMap } from "../helper/lists";
 
 const EXPO_PUBLIC_BOOK_TABLES_DATASET =
     process.env.EXPO_PUBLIC_BOOK_TABLES_DATASET;
@@ -142,9 +142,13 @@ const Book = () => {
     };
 
     const getDataForSpecificEntry = async (title: string) => {
+        const whichTableKey = Object.keys(bookTablesMap).find(
+            (key) => bookTablesMap[key] == whichTable
+        );
+
         try {
             const response = await fetch(
-                `${API_BASE_URL}/api/specificBookEntry/${title}/${whichTable}/${EXPO_PUBLIC_BOOK_TABLES_DATASET}`
+                `${API_BASE_URL}/api/specificBookEntry/${title}/${whichTableKey}/${EXPO_PUBLIC_BOOK_TABLES_DATASET}`
             );
 
             if (!response.ok) {
@@ -186,7 +190,7 @@ const Book = () => {
 
         setBook(bookVal);
         setBookID(bookIDVal);
-        setWhichTable(specificTable);
+        setWhichTable(bookTablesMap[specificTable]);
         setBackgroundColor(bgColor);
     };
 

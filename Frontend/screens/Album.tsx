@@ -274,9 +274,15 @@ export default function Album() {
     };
 
     const getDataForSpecificEntry = async (title: string) => {
+        console.log("this is the title:", title);
+        console.log(whichTable);
+
+        const whichTableKey = Object.keys(musicTablesMap).find(
+            (key) => musicTablesMap[key] == whichTable
+        );
         try {
             const response = await fetch(
-                `${API_BASE_URL}/api/specificMusicEntry/${title}/${whichTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`
+                `${API_BASE_URL}/api/specificMusicEntry/${title}/${whichTableKey}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`
             );
 
             if (!response.ok) {
@@ -306,6 +312,8 @@ export default function Album() {
                 tables={musicTables}
                 getFromSpecificTable={getFromSpecificTable}
                 addToQueue={addToQueue}
+                contentName={album}
+                type={"album"}
             />
             <ContentCard
                 whichTable={whichTable}

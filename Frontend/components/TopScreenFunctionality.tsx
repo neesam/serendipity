@@ -9,6 +9,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 
 import TablesModalAndButton from "./TablesModalAndButton";
+import { openRYM } from "@/utils/openLink";
 
 interface TopScreenFunctionalityTypes {
     containerStyles: StyleProp<ViewStyle>;
@@ -17,6 +18,7 @@ interface TopScreenFunctionalityTypes {
     addToQueue: (event: GestureResponderEvent) => void;
     createStremioOutput: (event: GestureResponderEvent) => void;
     type: string;
+    contentName: string;
 }
 
 const TopScreenFunctionality = ({
@@ -26,6 +28,7 @@ const TopScreenFunctionality = ({
     addToQueue,
     createStremioOutput,
     type,
+    contentName,
 }: TopScreenFunctionalityTypes) => {
     return (
         <>
@@ -48,6 +51,21 @@ const TopScreenFunctionality = ({
                         onPress={createStremioOutput}
                     >
                         <Ionicons name={"document"} size={20} />
+                    </Pressable>
+                ) : (
+                    <></>
+                )}
+                {type === "album" ? (
+                    <Pressable
+                        style={{
+                            borderColor: "black",
+                            borderWidth: 1,
+                            borderRadius: 5,
+                            padding: 10,
+                        }}
+                        onPress={() => openRYM(contentName)}
+                    >
+                        <Ionicons name={"star"} size={20} />
                     </Pressable>
                 ) : (
                     <></>

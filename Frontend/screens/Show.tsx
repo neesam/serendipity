@@ -134,9 +134,13 @@ const Show = () => {
     };
 
     const getDataForSpecificEntry = async (title: string) => {
+        const whichTableKey = Object.keys(showTablesMap).find(
+            (key) => showTablesMap[key] == whichTable
+        );
+
         try {
             const response = await fetch(
-                `${API_BASE_URL}/api/specificShowEntry/${title}/${whichTable}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}`
+                `${API_BASE_URL}/api/specificShowEntry/${title}/${whichTableKey}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}`
             );
 
             if (!response.ok) {

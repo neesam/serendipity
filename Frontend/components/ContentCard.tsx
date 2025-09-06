@@ -20,7 +20,7 @@ import {
 
 import { musicTablesMap, filmTablesMap, showTablesMap } from "@/helper/lists";
 
-import openLink from "@/utils/openLink";
+import { openLink } from "@/utils/openLink";
 
 const EXPO_PUBLIC_MUSIC_TABLES_DATASET =
     process.env.EXPO_PUBLIC_MUSIC_TABLES_DATASET;
@@ -126,6 +126,7 @@ const ContentCard = ({
 
     const handleSetCurrentContent = () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+        console.log("this is the selected element:", selectedElement);
         getDataForSpecificEntry(selectedElement);
         handleCurrentTableItemsModalClose();
     };
@@ -176,7 +177,7 @@ const ContentCard = ({
                             }
                         >
                             <Text style={cardStyles.tableName}>
-                                <Text style={cardStyles.source}>Source:</Text>{" "}
+                                <Text style={cardStyles.source}>Table:</Text>{" "}
                                 {whichTable}
                             </Text>
                         </TouchableOpacity>

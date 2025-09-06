@@ -2,7 +2,7 @@ import { Linking } from "react-native";
 
 import * as Haptics from "expo-haptics";
 
-export default function openLink(title: string, type: string) {
+export function openLink(title: string, type: string) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
     if (type === "album") {
@@ -26,4 +26,19 @@ export default function openLink(title: string, type: string) {
             // If Spotify is not installed, open Spotify in the browser
         });
     }
+}
+
+export function openRYM(title: string) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+
+    const encodedQuery = encodeURIComponent(title);
+    const rymWebUrl = `https://rateyourmusic.com/search?searchterm=${encodedQuery}&searchtype=l`;
+
+    Linking.openURL(rymWebUrl).catch((err) => {
+        console.error("Failed to open RYM:", err);
+        // If Spotify is not installed, open Spotify in the browser
+        // Linking.openURL(
+        //     `https://open.spotify.com/search/${encodeURIComponent(title)}`
+        // );
+    });
 }
