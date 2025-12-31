@@ -1,0 +1,10 @@
+node_modules
+.cache/
+.DS_Store/
+.expo/
+eas.json
+app.json
+supabase/
+*.ipynb
+songTitlesToFilenames.json
+csvs/

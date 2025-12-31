@@ -1,0 +1,195 @@
+import { View } from "react-native";
+import { useState, useEffect } from "react";
+
+import * as Haptics from "expo-haptics";
+
+import { containerStyles } from "../styles/styles";
+import { showTables, showTablesMap } from "../helper/lists";
+import TopScreenFunctionality from "../components/TopScreenFunctionality";
+import MainButtons from "../components/MainButtons";
+import ContentCard from "../components/ContentCard";
+import randomColor from "../utils/randomColor";
+
+const EXPO_PUBLIC_SHOW_TABLES_DATASET =
+    process.env.EXPO_PUBLIC_SHOW_TABLES_DATASET;
+
+const EXPO_PUBLIC_RAILWAY_URL = process.env.EXPO_PUBLIC_RAILWAY_URL;
+
+const API_BASE_URL = __DEV__
+    ? "http://10.0.0.164:5002"
+    : EXPO_PUBLIC_RAILWAY_URL;
+
+const Show = () => {
+    const [whichTable, setWhichTable] = useState("");
+    const [show, setShow] = useState("");
+    const [showID, setShowID] = useState("");
+    const [backgroundColor, setBackgroundColor] = useState("");
+    const [showAndTableAvailable, setShowAndTableAvailable] = useState(true);
+
+    useEffect(() => {}, [show]);
+
+    const getShow = async () => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+
+        setShowAndTableAvailable(false);
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/whichShowTable`);
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch details for ${whichTable}`);
+            }
+
+            const data = await response.json();
+
+            setShow(data["data"][0]["title"]);
+            setWhichTable(showTablesMap[data["randomTable"]]);
+
+            setShowAndTableAvailable(true);
+        } catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+            }
+        } finally {
+            const bgColor = randomColor();
+            setBackgroundColor(bgColor);
+        }
+    };
+
+    const getFromSpecificTable = async (specificTable: string) => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+
+        try {
+            const response = await fetch(
+                `${API_BASE_URL}/api/${specificTable}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}/show`
+            );
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch details for ${specificTable}`);
+            }
+
+            const data: [{ title: string }] = await response.json();
+
+            setShow(data["data"][0]["title"]);
+            setWhichTable(showTablesMap[specificTable]);
+        } catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+            }
+        } finally {
+            // Logic to change background on each button press
+
+            const bgColor = randomColor();
+            setBackgroundColor(bgColor);
+        }
+    };
+
+    const deleteShow = async () => {
+        const whichTableKey = Object.keys(showTablesMap).find(
+            (key) => showTablesMap[key] == whichTable
+        );
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+
+        try {
+            const response = await fetch(
+                `${API_BASE_URL}/api/shows/${showID}/from/${whichTableKey}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}`,
+                {
+                    method: "DELETE",
+                }
+            );
+
+            console.log(await response.json());
+            console.log("Show deleted successfully.");
+        } catch (err) {
+            if (err instanceof Error) {
+                console.error(err.message);
+            }
+        } finally {
+            getShow();
+        }
+    };
+
+    const addToQueue = async () => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+
+        try {
+            const response = await fetch(
+                `${API_BASE_URL}/api/addShowToQueue/${show}`,
+                {
+                    method: "POST",
+                    headers: { "Content-type": "application/json" },
+                }
+            );
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(
+                    `Post failed: ${errorData.message || "Unknown error"}`
+                );
+            }
+
+            console.log("Show added successfully.");
+        } catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+            }
+        }
+    };
+
+    const getDataForSpecificEntry = async (title: string) => {
+        const whichTableKey = Object.keys(showTablesMap).find(
+            (key) => showTablesMap[key] == whichTable
+        );
+
+        try {
+            const response = await fetch(
+                `${API_BASE_URL}/api/specificShowEntry/${title}/${whichTableKey}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}`
+            );
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.log(errorData.message);
+            }
+
+            const data = await response.json();
+
+            setShow(data[0]["title"]);
+            setShowID(data[0]["id"]);
+        } catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+            }
+        }
+    };
+
+    const screenStyle = {
+        backgroundColor: backgroundColor,
+    };
+
+    return (
+        <View style={[containerStyles.screenContainer, screenStyle]}>
+            <TopScreenFunctionality
+                containerStyles={containerStyles}
+                tables={showTables}
+                getFromSpecificTable={getFromSpecificTable}
+                addToQueue={addToQueue}
+            />
+            <ContentCard
+                whichTable={whichTable}
+                availability={showAndTableAvailable}
+                type={"show"}
+                contentName={show}
+                getDataForSpecificEntry={getDataForSpecificEntry}
+            />
+            <MainButtons
+                getContent={getShow}
+                deleteContent={deleteShow}
+                type={"show"}
+                availability={showAndTableAvailable}
+                contentName={show}
+            />
+        </View>
+    );
+};
+
+export default Show;
