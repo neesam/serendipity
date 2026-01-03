@@ -30,6 +30,10 @@ const EXPO_PUBLIC_BOOK_TABLES_DATASET =
 
 const EXPO_PUBLIC_RAILWAY_URL = process.env.EXPO_PUBLIC_RAILWAY_URL;
 
+const API_BASE_URL = __DEV__
+    ? "http://10.0.0.164:5002"
+    : EXPO_PUBLIC_RAILWAY_URL;
+
 export default function AddToTable() {
     const [destinationTable, setDestinationTable] = useState("");
     const [originTable, setOriginTable] = useState("");
@@ -71,7 +75,7 @@ export default function AddToTable() {
             ) {
                 try {
                     const response = await fetch(
-                        `${EXPO_PUBLIC_RAILWAY_URL}/api/add_to_music_table/${destinationTable}/${title}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
+                        `${API_BASE_URL}/api/add_to_music_table/${title}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}/currentlyListening/3/4`,
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
@@ -92,7 +96,7 @@ export default function AddToTable() {
             } else if (destinationTable.includes("film")) {
                 try {
                     const response = await fetch(
-                        `${EXPO_PUBLIC_RAILWAY_URL}/api/add_to_film_table/${destinationTable}/${title}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`,
+                        `${API_BASE_URL}/api/add_to_film_table/${destinationTable}/${title}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`,
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
@@ -121,7 +125,7 @@ export default function AddToTable() {
             ) {
                 try {
                     const response = await fetch(
-                        `${EXPO_PUBLIC_RAILWAY_URL}/api/add_to_show_table/${destinationTable}/${title}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}`,
+                        `${API_BASE_URL}/api/add_to_show_table/${destinationTable}/${title}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}`,
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
@@ -147,7 +151,7 @@ export default function AddToTable() {
             } else {
                 try {
                     const response = await fetch(
-                        `${EXPO_PUBLIC_RAILWAY_URL}/api/add_to_book_table/${destinationTable}/${title}/${EXPO_PUBLIC_BOOK_TABLES_DATASET}`,
+                        `${API_BASE_URL}/api/add_to_book_table/${destinationTable}/${title}/${EXPO_PUBLIC_BOOK_TABLES_DATASET}`,
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
@@ -181,7 +185,7 @@ export default function AddToTable() {
             ) {
                 try {
                     const response = await fetch(
-                        `${EXPO_PUBLIC_RAILWAY_URL}/api/add_to_music_table/${originTable}/${title}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
+                        `${API_BASE_URL}/api/add_to_music_table/${originTable}/${title}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
@@ -202,7 +206,7 @@ export default function AddToTable() {
             } else if (originTable.includes("film")) {
                 try {
                     const response = await fetch(
-                        `${EXPO_PUBLIC_RAILWAY_URL}/api/add_to_film_table/${originTable}/${title}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`,
+                        `${API_BASE_URL}/api/add_to_film_table/${originTable}/${title}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`,
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
@@ -231,7 +235,7 @@ export default function AddToTable() {
             ) {
                 try {
                     const response = await fetch(
-                        `${EXPO_PUBLIC_RAILWAY_URL}/api/add_to_show_table/${originTable}/${title}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}`,
+                        `${API_BASE_URL}/api/add_to_show_table/${originTable}/${title}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}`,
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
@@ -257,7 +261,7 @@ export default function AddToTable() {
             } else {
                 try {
                     const response = await fetch(
-                        `${EXPO_PUBLIC_RAILWAY_URL}/api/add_to_book_table/${originTable}/${title}/${EXPO_PUBLIC_BOOK_TABLES_DATASET}`,
+                        `${API_BASE_URL}/api/add_to_book_table/${originTable}/${title}/${EXPO_PUBLIC_BOOK_TABLES_DATASET}`,
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
@@ -291,7 +295,7 @@ export default function AddToTable() {
             ) {
                 try {
                     const response = await fetch(
-                        `${EXPO_PUBLIC_RAILWAY_URL}/api/add_to_music_table/${destinationTable}/${originTable}/${title}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
+                        `${API_BASE_URL}/api/add_to_music_table/${destinationTable}/${originTable}/${title}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
@@ -312,7 +316,7 @@ export default function AddToTable() {
             } else if (originTable.includes("film")) {
                 try {
                     const response = await fetch(
-                        `${EXPO_PUBLIC_RAILWAY_URL}/api/add_to_film_table/${destinationTable}/${originTable}/${title}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`,
+                        `${API_BASE_URL}/api/add_to_film_table/${destinationTable}/${originTable}/${title}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`,
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
@@ -341,7 +345,7 @@ export default function AddToTable() {
             ) {
                 try {
                     const response = await fetch(
-                        `${EXPO_PUBLIC_RAILWAY_URL}/api/add_to_show_table/${destinationTable}/${originTable}/${title}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}`,
+                        `${API_BASE_URL}/api/add_to_show_table/${destinationTable}/${originTable}/${title}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}`,
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
@@ -367,7 +371,7 @@ export default function AddToTable() {
             } else {
                 try {
                     const response = await fetch(
-                        `${EXPO_PUBLIC_RAILWAY_URL}/api/add_to_book_table/${destinationTable}/${originTable}/${title}/${EXPO_PUBLIC_BOOK_TABLES_DATASET}`,
+                        `${API_BASE_URL}/api/add_to_book_table/${destinationTable}/${originTable}/${title}/${EXPO_PUBLIC_BOOK_TABLES_DATASET}`,
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },

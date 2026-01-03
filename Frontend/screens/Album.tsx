@@ -136,10 +136,15 @@ export default function Album() {
             (key) => musicTablesMap[key] == originalTable
         );
 
-        console.log("------->", originalTable, originalTableKey);
+        console.log(
+            "-------> for original Table",
+            originalTable,
+            originalTableKey
+        );
         // If album is not in currently listening table...
 
         if (currentlyListening === "false") {
+            console.log("Not currently listening");
             try {
                 const response = await fetch(
                     `${API_BASE_URL}/api/albums/${tempAlbumID}/from/${originalTableKey}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
@@ -167,6 +172,7 @@ export default function Album() {
 
             getFromSpecificTable(whichTableKey);
         } else if (originalTable) {
+            console.log("Currently listening and ");
             try {
                 const response = await fetch(
                     `${API_BASE_URL}/api/albums/${tempAlbumID}/${tempAlbum}/${originalTableKey}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
@@ -231,7 +237,7 @@ export default function Album() {
         );
         try {
             const response = await fetch(
-                `${API_BASE_URL}/api/add_to_music_table/${album}/${whichTableKey}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}/currentlyListening/2`,
+                `${API_BASE_URL}/api/add_to_music_table/${album}/${whichTableKey}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}/4/5`,
                 {
                     method: "POST",
                     headers: { "Content-type": "application/json" },
@@ -330,6 +336,7 @@ export default function Album() {
             />
             <ContentCard
                 whichTable={whichTable}
+                originTable={originalTable}
                 availability={albumAndTableAvailable}
                 type={"album"}
                 contentName={album}

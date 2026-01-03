@@ -42,6 +42,7 @@ const API_BASE_URL = __DEV__
 
 interface ContentCardTypes {
     whichTable: string;
+    originTable: string;
     availability: boolean;
     contentName: string;
     type: string;
@@ -57,6 +58,7 @@ interface TableEntriesTypes {
 
 const ContentCard = ({
     whichTable,
+    originTable,
     availability,
     contentName,
     type,
@@ -206,6 +208,17 @@ const ContentCard = ({
                     )}
                     {contentName === "" ? (
                         <></>
+                    ) : whichTable === "Currently listening" ? (
+                        <TouchableOpacity
+                            onPress={() =>
+                                handlePopulateTableItemsModal(whichTableKey)
+                            }
+                        >
+                            <Text style={cardStyles.tableName}>
+                                <Text style={cardStyles.source}>Table:</Text>{" "}
+                                {originTable}
+                            </Text>
+                        </TouchableOpacity>
                     ) : (
                         <TouchableOpacity
                             onPress={() =>
