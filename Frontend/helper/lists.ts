@@ -9,6 +9,7 @@ const musicTables = [
     "album_dreamytranscendent",
     "album_easycore",
     "album_emo",
+    "album_fantano",
     "album_folk",
     "album_greatscene",
     "album_hopelessrecords",
@@ -81,6 +82,7 @@ const allTables = [
     "album_dreamytranscendent",
     "album_easycore",
     "album_emo",
+    "album_fantano",
     "album_folk",
     "album_greatscene",
     "album_hopelessrecords",
@@ -99,6 +101,7 @@ const allTables = [
     "album_rymsuggestions",
     "album_soothingambient",
     "album_soundsofspotify",
+    "album_soundcloud",
     "album_telepath",
     "album_tolisten",
     "album_tweepunk",
@@ -201,6 +204,7 @@ const musicTablesMap = {
     artist_underground: "Top underground rap artists",
     album_4Point5: "Albums I gave a 4.5",
     album_easycore: "Top easycore albums",
+    album_fantano: "Top Fantano albums",
 };
 
 const filmTablesMap = {
