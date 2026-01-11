@@ -58,6 +58,7 @@ const filmTables = [
     "film_90s",
     "film_international",
     "film_cult",
+    "film_weird",
 ];
 
 const showTables = ["shows", "anime_classic", "anime_other", "shows_top50"];
@@ -124,6 +125,7 @@ const allTables = [
     "film_80s",
     "film_90s",
     "film_cult",
+    "film_weird",
     "shows",
     "anime_classic",
     "anime_other",

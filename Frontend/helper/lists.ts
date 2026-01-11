@@ -57,6 +57,7 @@ const filmTables = [
     "film_towatch",
     "film_tspdt2500",
     "film_visualhypnagogia",
+    "film_weird",
     "filmrecs",
 ];
 
@@ -131,6 +132,7 @@ const allTables = [
     "film_towatch",
     "film_tspdt2500",
     "film_visualhypnagogia",
+    "film_weird",
     "filmrecs",
     "shows",
     "shows_top50",
@@ -224,6 +226,7 @@ const filmTablesMap = {
     film_addtostremio: "Add to stremio",
     film_international: "International films",
     film_cult: "Cult classics",
+    film_weird: "366 Weird Films",
 };
 
 const showTablesMap = {
