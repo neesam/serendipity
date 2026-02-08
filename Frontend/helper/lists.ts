@@ -10,6 +10,7 @@ const musicTables = [
     "album_crabcore",
     "album_dreamytranscendent",
     "album_easycore",
+    "album_easylistening",
     "album_emo",
     "album_fantano",
     "album_folk",
@@ -36,6 +37,7 @@ const musicTables = [
     "album_topalbums",
     "album_tweepunk",
     "album_unsungdreampop",
+    "album_utopianscholastic",
     "album_vaporwave",
     "album_vaporwavesources",
     "album_vinyls",
@@ -88,6 +90,7 @@ const allTables = [
     "album_crabcore",
     "album_dreamytranscendent",
     "album_easycore",
+    "album_easylistening",
     "album_emo",
     "album_fantano",
     "album_folk",
@@ -115,6 +118,7 @@ const allTables = [
     "album_tolisten",
     "album_tweepunk",
     "album_unsungdreampop",
+    "album_utopianscholastic",
     "album_vaporwave",
     "album_vinyls",
     "album_waterloggedEars",
@@ -219,6 +223,8 @@ const musicTablesMap = {
     album_pluggnb: "Top pluggnb albums",
     album_alternativer_b: "Top alternative r&b albums",
     album_contemporaryr_b: "Top contemporary r&b albums",
+    album_utopianscholastic: "Utopian Scholastic playlist",
+    album_easylistening: "Easy listening playlist",
 };
 
 const filmTablesMap = {
