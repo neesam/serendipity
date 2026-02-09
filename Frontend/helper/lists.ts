@@ -45,6 +45,7 @@ const musicTables = [
     "artist_classicalComposer",
     "artist_topartists",
     "artist_underground",
+    "album_urban",
 ];
 
 const filmTables = [
@@ -122,6 +123,7 @@ const allTables = [
     "album_vaporwave",
     "album_vinyls",
     "album_waterloggedEars",
+    "album_urban",
     "anime_classic",
     "anime_other",
     "artist_classicalComposer",
@@ -225,6 +227,7 @@ const musicTablesMap = {
     album_contemporaryr_b: "Top contemporary r&b albums",
     album_utopianscholastic: "Utopian Scholastic playlist",
     album_easylistening: "Easy listening playlist",
+    album_urban: "Urban albums",
 };
 
 const filmTablesMap = {
