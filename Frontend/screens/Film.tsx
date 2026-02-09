@@ -68,19 +68,23 @@ const Film = () => {
 
         const tempFilmID = filmID;
 
+        const whichTableKey = Object.keys(filmTablesMap).find(
+            (key) => filmTablesMap[key] == whichTable,
+        );
+
         try {
             const response = await fetch(
-                `${API_BASE_URL}/api/film/${tempFilmID}/from/${whichTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`,
+                `${API_BASE_URL}/api/film/${tempFilmID}/from/${whichTableKey}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`,
                 {
                     method: "DELETE",
                     headers: { "Content-type": "application/json" },
-                }
+                },
             );
 
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(
-                    `Delete failed: ${errorData.message || "Unknown error"}`
+                    `Delete failed: ${errorData.message || "Unknown error"}`,
                 );
             }
 
@@ -101,12 +105,12 @@ const Film = () => {
         if (specificTable === "film_international") {
             try {
                 const response = await fetch(
-                    `${API_BASE_URL}/api/${specificTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}/film`
+                    `${API_BASE_URL}/api/${specificTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}/film`,
                 );
 
                 if (!response.ok) {
                     throw new Error(
-                        `Failed to fetch details for ${specificTable}`
+                        `Failed to fetch details for ${specificTable}`,
                     );
                 }
 
@@ -118,7 +122,7 @@ const Film = () => {
                 setFilmID(data["data"][0]["id"]);
                 setWhichTable(filmTablesMap[specificTable]);
                 setInStremio(
-                    data["data"][0]["currently_in_stremio"] || "false"
+                    data["data"][0]["currently_in_stremio"] || "false",
                 );
             } catch (error) {
                 if (error instanceof Error) {
@@ -133,12 +137,12 @@ const Film = () => {
         } else {
             try {
                 const response = await fetch(
-                    `${API_BASE_URL}/api/${specificTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}/film`
+                    `${API_BASE_URL}/api/${specificTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}/film`,
                 );
 
                 if (!response.ok) {
                     throw new Error(
-                        `Failed to fetch details for ${specificTable}`
+                        `Failed to fetch details for ${specificTable}`,
                     );
                 }
 
@@ -148,7 +152,7 @@ const Film = () => {
                 setFilmID(data["data"][0]["id"]);
                 setWhichTable(filmTablesMap[specificTable]);
                 setInStremio(
-                    data["data"][0]["currently_in_stremio"] || "false"
+                    data["data"][0]["currently_in_stremio"] || "false",
                 );
             } catch (error) {
                 if (error instanceof Error) {
@@ -165,11 +169,11 @@ const Film = () => {
 
     const getDataForSpecificEntry = async (title: string) => {
         const whichTableKey = Object.keys(filmTablesMap).find(
-            (key) => filmTablesMap[key] == whichTable
+            (key) => filmTablesMap[key] == whichTable,
         );
         try {
             const response = await fetch(
-                `${API_BASE_URL}/api/specificFilmEntry/${title}/${whichTableKey}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`
+                `${API_BASE_URL}/api/specificFilmEntry/${title}/${whichTableKey}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`,
             );
 
             if (!response.ok) {
@@ -196,7 +200,7 @@ const Film = () => {
                 {
                     method: "POST",
                     headers: { "Content-type": "application/json" },
-                }
+                },
             );
 
             if (!response.ok) {
@@ -223,13 +227,13 @@ const Film = () => {
                 {
                     method: "POST",
                     headers: { "Content-type": "application/json" },
-                }
+                },
             );
 
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(
-                    `Post failed: ${errorData.message || "Unknown error"}`
+                    `Post failed: ${errorData.message || "Unknown error"}`,
                 );
             }
 
@@ -246,7 +250,7 @@ const Film = () => {
 
         try {
             const response = await fetch(
-                `${API_BASE_URL}/api/create_stremio_output`
+                `${API_BASE_URL}/api/create_stremio_output`,
             );
 
             const data = await response.json();
