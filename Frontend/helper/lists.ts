@@ -62,6 +62,7 @@ const filmTables = [
     "film_80s",
     "film_90s",
     "film_addtostremio",
+    "film_cahiers",
     "film_criterion",
     "film_cult",
     "film_ebert",
@@ -157,6 +158,7 @@ const allTables = [
     "film_90s",
     "film_cult",
     "film_weird",
+    "film_cahiers",
     "shows",
     "anime_classic",
     "anime_other",
@@ -269,6 +271,7 @@ const filmTablesMap = {
     film_international: "International films",
     film_cult: "Cult classics",
     film_weird: "366 Weird Films",
+    film_cahiers: "Cahiers du Cinema Annual Top 10",
 };
 
 const showTablesMap = {
