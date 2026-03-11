@@ -28,6 +28,7 @@ const musicTables = [
     "album_indiefolk",
     "album_indiepop",
     "album_jazz",
+    "album_kpop",
     "album_magicsheet",
     "album_moenieandkitchie",
     "album_neosoul",
@@ -118,6 +119,8 @@ const allTables = [
     "album_hypnoticsynthpop",
     "album_indiefolk",
     "album_indiepop",
+    "album_jazz",
+    "album_kpop",
     "album_magicsheet",
     "album_mallsoft",
     "album_moenieandkitchie",
@@ -250,7 +253,8 @@ const musicTablesMap = {
     album_emopop: "Emo pop",
     album_dreamygarage: "Dreamy garage",
     album_2000smidwest: "2000s Midwest Emo",
-    album_dreamyhiphop: "Dreamy hiph hop",
+    album_dreamyhiphop: "Dreamy hip-hop",
+    album_kpop: "Kpop albums",
 };
 
 const filmTablesMap = {
