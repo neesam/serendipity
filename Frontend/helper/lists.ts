@@ -41,6 +41,7 @@ const musicTables = [
     "album_risecore",
     "album_rymrecs",
     "album_rymsuggestions",
+    "album_smoothjazz",
     "album_soothingambient",
     "album_soundsofspotify",
     "album_telepath",
@@ -134,6 +135,7 @@ const allTables = [
     "album_risecore",
     "album_rymrecs",
     "album_rymsuggestions",
+    "album_smoothjazz",
     "album_soundsofspotify",
     "album_tolisten",
     "album_telepath",
@@ -255,6 +257,7 @@ const musicTablesMap = {
     album_2000smidwest: "2000s Midwest Emo",
     album_dreamyhiphop: "Dreamy hip-hop",
     album_kpop: "Kpop albums",
+    album_smoothjazz: "Top smooth jazz albums",
 };
 
 const filmTablesMap = {
