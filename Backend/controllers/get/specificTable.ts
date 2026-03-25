@@ -40,6 +40,8 @@ const getEntryFromSpecificFilmTable = async (req: Request, res: Response) => {
                 });
             }
 
+            console.log(data);
+
             randomInternationalTable = data["data"][0]["name"];
 
             console.log(randomInternationalTable);
