@@ -27,8 +27,6 @@ const getEntryFromSpecificFilmTable = async (req: Request, res: Response) => {
                 },
             );
 
-            randomInternationalTable = data["data"][0]["name"];
-
             if (error) {
                 return res.status(500).json({
                     message: `Fetch failed for table: ${table}`,
@@ -42,6 +40,10 @@ const getEntryFromSpecificFilmTable = async (req: Request, res: Response) => {
                 });
             }
 
+            randomInternationalTable = data["data"][0]["name"];
+
+            console.log(randomInternationalTable);
+
             try {
                 const { data, error } = await supabase.rpc(
                     "get_random_from_table",
@@ -50,6 +52,8 @@ const getEntryFromSpecificFilmTable = async (req: Request, res: Response) => {
                         dataset: dataset,
                     },
                 );
+
+                console.log("HERES THE DATA", data);
 
                 if (error) {
                     return res.status(500).json({
