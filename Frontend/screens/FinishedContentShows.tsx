@@ -21,7 +21,7 @@ export default function FinishedContentShows() {
     const handleLoadFinishedShows = async () => {
         try {
             const response = await fetch(
-                `${API_BASE_URL}/api/show_metadata_all`
+                `${API_BASE_URL}/api/show_metadata_all`,
             );
 
             if (!response.ok) {

@@ -60,7 +60,7 @@ const Book = () => {
                     const minCeiled = Math.ceil(min);
                     const maxFloored = Math.floor(max);
                     return Math.floor(
-                        Math.random() * (maxFloored - minCeiled) + minCeiled
+                        Math.random() * (maxFloored - minCeiled) + minCeiled,
                     );
                 };
                 setBookID(data["data"][0]["id"]);
@@ -94,13 +94,13 @@ const Book = () => {
                 {
                     method: "DELETE",
                     headers: { "Content-type": "application/json" },
-                }
+                },
             );
 
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(
-                    `Delete failed: ${errorData.message || "Unknown error"}`
+                    `Delete failed: ${errorData.message || "Unknown error"}`,
                 );
             }
 
@@ -124,13 +124,13 @@ const Book = () => {
                 {
                     method: "POST",
                     headers: { "Content-type": "application/json" },
-                }
+                },
             );
 
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(
-                    `Post failed: ${errorData.message || "Unknown error"}`
+                    `Post failed: ${errorData.message || "Unknown error"}`,
                 );
             }
 
@@ -143,12 +143,12 @@ const Book = () => {
 
     const getDataForSpecificEntry = async (title: string) => {
         const whichTableKey = Object.keys(bookTablesMap).find(
-            (key) => bookTablesMap[key] == whichTable
+            (key) => bookTablesMap[key] == whichTable,
         );
 
         try {
             const response = await fetch(
-                `${API_BASE_URL}/api/specificBookEntry/${title}/${whichTableKey}/${EXPO_PUBLIC_BOOK_TABLES_DATASET}`
+                `${API_BASE_URL}/api/specificBookEntry/${title}/${whichTableKey}/${EXPO_PUBLIC_BOOK_TABLES_DATASET}`,
             );
 
             if (!response.ok) {
@@ -171,7 +171,7 @@ const Book = () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
         const response = await fetch(
-            `${API_BASE_URL}/api/${specificTable}/${EXPO_PUBLIC_BOOK_TABLES_DATASET}/book`
+            `${API_BASE_URL}/api/${specificTable}/${EXPO_PUBLIC_BOOK_TABLES_DATASET}/book`,
         );
 
         if (!response.ok) {

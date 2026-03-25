@@ -71,7 +71,7 @@ export default function Album() {
         setAlbumID(data["data"][0]["id"]);
 
         setCurrentlyListening(
-            data["data"][0]["currently_listening"] || "false"
+            data["data"][0]["currently_listening"] || "false",
         );
 
         setWhichTable(musicTablesMap[data["randomTable"]]);
@@ -88,11 +88,11 @@ export default function Album() {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
         const response = await fetch(
-            `${API_BASE_URL}/api/${specificTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}/album`
+            `${API_BASE_URL}/api/${specificTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}/album`,
         );
 
         console.log(
-            `${API_BASE_URL}/api/${specificTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}/album`
+            `${API_BASE_URL}/api/${specificTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}/album`,
         );
 
         if (response["error"]) {
@@ -127,19 +127,19 @@ export default function Album() {
         // Gets actual title of table for whichTable
 
         const whichTableKey = Object.keys(musicTablesMap).find(
-            (key) => musicTablesMap[key] == whichTable
+            (key) => musicTablesMap[key] == whichTable,
         );
 
         // Gets actual title of table for tempWhichTable
 
         const originalTableKey = Object.keys(musicTablesMap).find(
-            (key) => musicTablesMap[key] == originalTable
+            (key) => musicTablesMap[key] == originalTable,
         );
 
         console.log(
             "-------> for original Table",
             originalTable,
-            originalTableKey
+            originalTableKey,
         );
         // If album is not in currently listening table...
 
@@ -151,14 +151,14 @@ export default function Album() {
                     {
                         method: "DELETE",
                         headers: { "Content-type": "application/json" },
-                    }
+                    },
                 );
 
                 if (!response.ok) {
                     const errorData = await response.json();
                     console.log(errorData);
                     throw new Error(
-                        `Delete failed: ${errorData.message || "Unknown error"}`
+                        `Delete failed: ${errorData.message || "Unknown error"}`,
                     );
                 }
 
@@ -179,13 +179,13 @@ export default function Album() {
                     {
                         method: "DELETE",
                         headers: { "Content-type": "application/json" },
-                    }
+                    },
                 );
 
                 if (!response.ok) {
                     const errorData = await response.json();
                     throw new Error(
-                        `Delete failed: ${errorData.message || "Unknown error"}`
+                        `Delete failed: ${errorData.message || "Unknown error"}`,
                     );
                 }
 
@@ -207,13 +207,13 @@ export default function Album() {
                     {
                         method: "DELETE",
                         headers: { "Content-type": "application/json" },
-                    }
+                    },
                 );
 
                 if (!response.ok) {
                     const errorData = await response.json();
                     throw new Error(
-                        `Delete failed: ${errorData.message || "Unknown error"}`
+                        `Delete failed: ${errorData.message || "Unknown error"}`,
                     );
                 }
 
@@ -233,7 +233,7 @@ export default function Album() {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
         const whichTableKey = Object.keys(musicTablesMap).find(
-            (key) => musicTablesMap[key] == whichTable
+            (key) => musicTablesMap[key] == whichTable,
         );
         try {
             const response = await fetch(
@@ -241,7 +241,7 @@ export default function Album() {
                 {
                     method: "POST",
                     headers: { "Content-type": "application/json" },
-                }
+                },
             );
 
             if (!response.ok) {
@@ -267,13 +267,13 @@ export default function Album() {
                 {
                     method: "POST",
                     headers: { "Content-type": "application/json" },
-                }
+                },
             );
 
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(
-                    `Post failed: ${errorData.message || "Unknown error"}`
+                    `Post failed: ${errorData.message || "Unknown error"}`,
                 );
             }
 
@@ -291,16 +291,16 @@ export default function Album() {
         console.log(title);
 
         const whichTableKey = Object.keys(musicTablesMap).find(
-            (key) => musicTablesMap[key] == whichTable
+            (key) => musicTablesMap[key] == whichTable,
         );
 
         console.log(
-            `${API_BASE_URL}/api/specificMusicEntry/${title}/${whichTableKey}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`
+            `${API_BASE_URL}/api/specificMusicEntry/${title}/${whichTableKey}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
         );
 
         try {
             const response = await fetch(
-                `${API_BASE_URL}/api/specificMusicEntry/${title}/${whichTableKey}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`
+                `${API_BASE_URL}/api/specificMusicEntry/${title}/${whichTableKey}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
             );
 
             if (!response.ok) {

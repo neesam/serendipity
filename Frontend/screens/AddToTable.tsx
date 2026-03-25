@@ -79,7 +79,7 @@ export default function AddToTable() {
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
-                        }
+                        },
                     );
 
                     if (!response.ok) {
@@ -100,7 +100,7 @@ export default function AddToTable() {
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
-                        }
+                        },
                     );
 
                     if (!response.ok) {
@@ -108,7 +108,7 @@ export default function AddToTable() {
                         throw new Error(
                             `Add failed: ${
                                 errorData.message || "Unknown error"
-                            }`
+                            }`,
                         );
                     }
 
@@ -129,7 +129,7 @@ export default function AddToTable() {
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
-                        }
+                        },
                     );
 
                     if (!response.ok) {
@@ -137,7 +137,7 @@ export default function AddToTable() {
                         throw new Error(
                             `Add failed: ${
                                 errorData.message || "Unknown error"
-                            }`
+                            }`,
                         );
                     }
 
@@ -155,7 +155,7 @@ export default function AddToTable() {
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
-                        }
+                        },
                     );
 
                     if (!response.ok) {
@@ -163,7 +163,7 @@ export default function AddToTable() {
                         throw new Error(
                             `Add failed: ${
                                 errorData.message || "Unknown error"
-                            }`
+                            }`,
                         );
                     }
 
@@ -189,7 +189,7 @@ export default function AddToTable() {
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
-                        }
+                        },
                     );
 
                     if (!response.ok) {
@@ -210,7 +210,7 @@ export default function AddToTable() {
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
-                        }
+                        },
                     );
 
                     if (!response.ok) {
@@ -218,7 +218,7 @@ export default function AddToTable() {
                         throw new Error(
                             `Add failed: ${
                                 errorData.message || "Unknown error"
-                            }`
+                            }`,
                         );
                     }
 
@@ -239,7 +239,7 @@ export default function AddToTable() {
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
-                        }
+                        },
                     );
 
                     if (!response.ok) {
@@ -247,7 +247,7 @@ export default function AddToTable() {
                         throw new Error(
                             `Add failed: ${
                                 errorData.message || "Unknown error"
-                            }`
+                            }`,
                         );
                     }
 
@@ -265,7 +265,7 @@ export default function AddToTable() {
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
-                        }
+                        },
                     );
 
                     if (!response.ok) {
@@ -273,7 +273,7 @@ export default function AddToTable() {
                         throw new Error(
                             `Add failed: ${
                                 errorData.message || "Unknown error"
-                            }`
+                            }`,
                         );
                     }
 
@@ -299,7 +299,7 @@ export default function AddToTable() {
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
-                        }
+                        },
                     );
 
                     if (!response.ok) {
@@ -320,7 +320,7 @@ export default function AddToTable() {
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
-                        }
+                        },
                     );
 
                     if (!response.ok) {
@@ -328,7 +328,7 @@ export default function AddToTable() {
                         throw new Error(
                             `Add failed: ${
                                 errorData.message || "Unknown error"
-                            }`
+                            }`,
                         );
                     }
 
@@ -349,7 +349,7 @@ export default function AddToTable() {
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
-                        }
+                        },
                     );
 
                     if (!response.ok) {
@@ -357,7 +357,7 @@ export default function AddToTable() {
                         throw new Error(
                             `Add failed: ${
                                 errorData.message || "Unknown error"
-                            }`
+                            }`,
                         );
                     }
 
@@ -375,7 +375,7 @@ export default function AddToTable() {
                         {
                             method: "POST",
                             headers: { "Content-type": "application/json" },
-                        }
+                        },
                     );
 
                     if (!response.ok) {
@@ -383,7 +383,7 @@ export default function AddToTable() {
                         throw new Error(
                             `Add failed: ${
                                 errorData.message || "Unknown error"
-                            }`
+                            }`,
                         );
                     }
 

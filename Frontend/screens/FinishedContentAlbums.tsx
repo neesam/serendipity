@@ -21,7 +21,7 @@ export default function FinishedContentAlbums() {
     const handleLoadFinishedAlbums = async () => {
         try {
             const response = await fetch(
-                `${API_BASE_URL}/api/music_metadata_all`
+                `${API_BASE_URL}/api/music_metadata_all`,
             );
 
             if (!response.ok) {

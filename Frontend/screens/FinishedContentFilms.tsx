@@ -27,7 +27,7 @@ export default function FinishedContentFilms() {
     const handleLoadFinishedFilms = async () => {
         try {
             const response = await fetch(
-                `${API_BASE_URL}/api/film_metadata_all/${EXPO_PUBLIC_METADATA_DATASET}/${EXPO_PUBLIC_MUSIC_METADATA_TABLE}`
+                `${API_BASE_URL}/api/film_metadata_all/${EXPO_PUBLIC_METADATA_DATASET}/${EXPO_PUBLIC_MUSIC_METADATA_TABLE}`,
             );
 
             if (!response.ok) {

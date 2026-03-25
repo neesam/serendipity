@@ -61,7 +61,7 @@ const Show = () => {
 
         try {
             const response = await fetch(
-                `${API_BASE_URL}/api/${specificTable}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}/show`
+                `${API_BASE_URL}/api/${specificTable}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}/show`,
             );
 
             if (!response.ok) {
@@ -86,7 +86,7 @@ const Show = () => {
 
     const deleteShow = async () => {
         const whichTableKey = Object.keys(showTablesMap).find(
-            (key) => showTablesMap[key] == whichTable
+            (key) => showTablesMap[key] == whichTable,
         );
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
@@ -95,7 +95,7 @@ const Show = () => {
                 `${API_BASE_URL}/api/shows/${showID}/from/${whichTableKey}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}`,
                 {
                     method: "DELETE",
-                }
+                },
             );
 
             console.log(await response.json());
@@ -118,13 +118,13 @@ const Show = () => {
                 {
                     method: "POST",
                     headers: { "Content-type": "application/json" },
-                }
+                },
             );
 
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(
-                    `Post failed: ${errorData.message || "Unknown error"}`
+                    `Post failed: ${errorData.message || "Unknown error"}`,
                 );
             }
 
@@ -138,12 +138,12 @@ const Show = () => {
 
     const getDataForSpecificEntry = async (title: string) => {
         const whichTableKey = Object.keys(showTablesMap).find(
-            (key) => showTablesMap[key] == whichTable
+            (key) => showTablesMap[key] == whichTable,
         );
 
         try {
             const response = await fetch(
-                `${API_BASE_URL}/api/specificShowEntry/${title}/${whichTableKey}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}`
+                `${API_BASE_URL}/api/specificShowEntry/${title}/${whichTableKey}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}`,
             );
 
             if (!response.ok) {

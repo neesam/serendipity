@@ -21,7 +21,7 @@ export default function FinishedContentAlbums() {
     const handleLoadFinishedBooks = async () => {
         try {
             const response = await fetch(
-                `${API_BASE_URL}/api/book_metadata_all`
+                `${API_BASE_URL}/api/book_metadata_all`,
             );
 
             if (!response.ok) {

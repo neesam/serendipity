@@ -90,19 +90,19 @@ const ContentCard = ({
         if (table.includes("album") || table.includes("artist")) {
             try {
                 const response = await fetch(
-                    `${API_BASE_URL}/api/all_from_selected_music_table/${table}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`
+                    `${API_BASE_URL}/api/all_from_selected_music_table/${table}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
                 );
                 const data = await response.json();
                 console.log(
-                    data["data"].filter((item) => item.title !== contentName)
+                    data["data"].filter((item) => item.title !== contentName),
                 );
                 setActiveTableEntries(
-                    data["data"].filter((item) => item.title !== contentName)
+                    data["data"].filter((item) => item.title !== contentName),
                 );
                 setSelectedElement(
                     data["data"].filter(
-                        (item) => item.title !== contentName
-                    )[0]["title"]
+                        (item) => item.title !== contentName,
+                    )[0]["title"],
                 );
             } catch (error) {
                 console.log(error);
@@ -110,16 +110,16 @@ const ContentCard = ({
         } else if (table.includes("film")) {
             try {
                 const response = await fetch(
-                    `${API_BASE_URL}/api/all_from_selected_film_table/${table}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`
+                    `${API_BASE_URL}/api/all_from_selected_film_table/${table}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`,
                 );
                 const data = await response.json();
                 setActiveTableEntries(
-                    data["data"].filter((item) => item.title !== contentName)
+                    data["data"].filter((item) => item.title !== contentName),
                 );
                 setSelectedElement(
                     data["data"].filter(
-                        (item) => item.title !== contentName
-                    )[0]["title"]
+                        (item) => item.title !== contentName,
+                    )[0]["title"],
                 );
             } catch (error) {
                 console.log(error);
@@ -127,16 +127,16 @@ const ContentCard = ({
         } else if (table.includes("anime") || table.includes("shows")) {
             try {
                 const response = await fetch(
-                    `${API_BASE_URL}/api/all_from_selected_shows_table/${table}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}`
+                    `${API_BASE_URL}/api/all_from_selected_shows_table/${table}/${EXPO_PUBLIC_SHOW_TABLES_DATASET}`,
                 );
                 const data = await response.json();
                 setActiveTableEntries(
-                    data["data"].filter((item) => item.title !== contentName)
+                    data["data"].filter((item) => item.title !== contentName),
                 );
                 setSelectedElement(
                     data["data"].filter(
-                        (item) => item.title !== contentName
-                    )[0]["title"]
+                        (item) => item.title !== contentName,
+                    )[0]["title"],
                 );
             } catch (error) {
                 console.log(error);
@@ -144,16 +144,16 @@ const ContentCard = ({
         } else {
             try {
                 const response = await fetch(
-                    `${API_BASE_URL}/api/all_from_selected_book_table/${table}/${EXPO_PUBLIC_BOOK_TABLES_DATASET}`
+                    `${API_BASE_URL}/api/all_from_selected_book_table/${table}/${EXPO_PUBLIC_BOOK_TABLES_DATASET}`,
                 );
                 const data = await response.json();
                 setActiveTableEntries(
-                    data["data"].filter((item) => item.title !== contentName)
+                    data["data"].filter((item) => item.title !== contentName),
                 );
                 setSelectedElement(
                     data["data"].filter(
-                        (item) => item.title !== contentName
-                    )[0]["title"]
+                        (item) => item.title !== contentName,
+                    )[0]["title"],
                 );
             } catch (error) {
                 console.log(error);
@@ -174,17 +174,17 @@ const ContentCard = ({
     switch (type) {
         case "album":
             whichTableKey = Object.keys(musicTablesMap).find(
-                (key) => musicTablesMap[key] == whichTable
+                (key) => musicTablesMap[key] == whichTable,
             );
             break;
         case "film":
             whichTableKey = Object.keys(filmTablesMap).find(
-                (key) => filmTablesMap[key] == whichTable
+                (key) => filmTablesMap[key] == whichTable,
             );
             break;
         case "show":
             whichTableKey = Object.keys(showTablesMap).find(
-                (key) => showTablesMap[key] == whichTable
+                (key) => showTablesMap[key] == whichTable,
             );
         default:
             break;
@@ -238,7 +238,7 @@ const ContentCard = ({
                         onRequestClose={() => {
                             alert("Modal has been closed.");
                             setActiveTableItemsModalVisible(
-                                !currentTableItemsModalVisible
+                                !currentTableItemsModalVisible,
                             );
                         }}
                     >
@@ -259,7 +259,7 @@ const ContentCard = ({
                                                 label={item.title}
                                                 value={item.title}
                                             />
-                                        )
+                                        ),
                                     )}
                                 </Picker>
                                 <View

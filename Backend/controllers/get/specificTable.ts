@@ -24,7 +24,7 @@ const getEntryFromSpecificFilmTable = async (req: Request, res: Response) => {
                 {
                     random_table_name: table,
                     dataset: dataset,
-                }
+                },
             );
 
             randomInternationalTable = data["data"][0]["name"];
@@ -41,37 +41,37 @@ const getEntryFromSpecificFilmTable = async (req: Request, res: Response) => {
                     message: `Couldn't fetch for table: ${table}`,
                 });
             }
-        } catch (error) {
-            console.log(error);
-        }
 
-        try {
-            const { data, error } = await supabase.rpc(
-                "get_random_from_table",
-                {
-                    random_table_name: randomInternationalTable,
-                    dataset: dataset,
+            try {
+                const { data, error } = await supabase.rpc(
+                    "get_random_from_table",
+                    {
+                        random_table_name: randomInternationalTable,
+                        dataset: dataset,
+                    },
+                );
+
+                if (error) {
+                    return res.status(500).json({
+                        message: `Fetch failed for table: ${table}`,
+                        error: error.message,
+                    });
                 }
-            );
 
-            if (error) {
-                return res.status(500).json({
-                    message: `Fetch failed for table: ${table}`,
-                    error: error.message,
+                if (!data || data.length === 0) {
+                    return res.status(404).json({
+                        message: `Couldn't fetch for table: ${table}`,
+                    });
+                }
+
+                return res.status(200).json({
+                    message: `Fetched successfully for table: ${table}`,
+                    data: data,
+                    randomTable: randomInternationalTable,
                 });
+            } catch (error) {
+                console.log(error);
             }
-
-            if (!data || data.length === 0) {
-                return res.status(404).json({
-                    message: `Couldn't fetch for table: ${table}`,
-                });
-            }
-
-            return res.status(200).json({
-                message: `Fetched successfully for table: ${table}`,
-                data: data,
-                randomTable: randomInternationalTable,
-            });
         } catch (error) {
             console.log(error);
         }
@@ -82,7 +82,7 @@ const getEntryFromSpecificFilmTable = async (req: Request, res: Response) => {
                 {
                     random_table_name: table,
                     dataset: dataset,
-                }
+                },
             );
 
             if (error) {
