@@ -22,6 +22,7 @@ const musicTables = [
     "album_etherealslowcore",
     "album_fantano",
     "album_folk",
+    "album_glitch",
     "album_greatscene",
     "album_hopelessrecords",
     "album_hypnoticsynthpop",
@@ -115,6 +116,7 @@ const allTables = [
     "album_etherealslowcore",
     "album_fantano",
     "album_folk",
+    "album_glitch",
     "album_greatscene",
     "album_hopelessrecords",
     "album_hypnoticsynthpop",
@@ -258,6 +260,7 @@ const musicTablesMap = {
     album_dreamyhiphop: "Dreamy hip-hop",
     album_kpop: "Kpop albums",
     album_smoothjazz: "Top smooth jazz albums",
+    album_glitch: "Dreamy glitch albums",
 };
 
 const filmTablesMap = {
