@@ -91,7 +91,13 @@ const filmTables = [
     "film_cahiers",
 ];
 
-const showTables = ["shows", "anime_classic", "anime_other", "shows_top50"];
+const showTables = [
+    "shows",
+    "anime_classic",
+    "anime_other",
+    "shows_top50",
+    "shows_stremio",
+];
 
 const bookTables = [
     "book_toread",
@@ -193,6 +199,7 @@ const allTables = [
     "anime_classic",
     "anime_other",
     "shows_top50",
+    "shows_stremio",
     "book_toread",
     "book_manga",
     "book_1001",
