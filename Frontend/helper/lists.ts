@@ -78,6 +78,7 @@ const filmTables = [
     "film_addtostremio",
     "film_cahiers",
     "film_criterion",
+    "film_cry",
     "film_cult",
     "film_ebert",
     "film_imdb250",
@@ -85,6 +86,7 @@ const filmTables = [
     "film_noir1000",
     "film_rymtop1500",
     "film_stremiolibrary",
+    "film_top150fromhappiness",
     "film_towatch",
     "film_tspdt2500",
     "film_visualhypnagogia",
@@ -180,6 +182,8 @@ const allTables = [
     "film_imdb250",
     "filmrecs",
     "film_towatch",
+    "film_top150fromhappiness",
+    "film_cry",
     "film_visualhypnagogia",
     "film_rymtop1500",
     "film_criterion",
@@ -318,6 +322,8 @@ const filmTablesMap = {
     film_cult: "Cult classics",
     film_weird: "366 Weird Films",
     film_cahiers: "Cahiers du Cinema Annual Top 10",
+    film_cry: "Crying movies JamesLovesWeirdness",
+    film_top150fromhappiness: "JamesLovesWeirdness favs",
 };
 
 const showTablesMap = {

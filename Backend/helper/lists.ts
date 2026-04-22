@@ -89,6 +89,8 @@ const filmTables = [
     "film_cult",
     "film_weird",
     "film_cahiers",
+    "film_cry",
+    "film_top150fromhappiness",
 ];
 
 const showTables = [
@@ -195,6 +197,8 @@ const allTables = [
     "film_cult",
     "film_weird",
     "film_cahiers",
+    "film_cry",
+    "film_top150fromhappiness",
     "shows",
     "anime_classic",
     "anime_other",
