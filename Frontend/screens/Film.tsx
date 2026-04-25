@@ -100,6 +100,8 @@ const Film = () => {
     const getFromSpecificTable = async (specificTable: string) => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
+        console.log(specificTable);
+
         if (specificTable === "film_international") {
             try {
                 const response = await fetch(
