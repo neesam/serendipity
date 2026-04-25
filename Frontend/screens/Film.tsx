@@ -66,15 +66,13 @@ const Film = () => {
     const deleteFilm = async () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
-        const tempFilmID = filmID;
-
         const whichTableKey = Object.keys(filmTablesMap).find(
             (key) => filmTablesMap[key] == whichTable,
         );
 
         try {
             const response = await fetch(
-                `${API_BASE_URL}/api/film/${tempFilmID}/from/${whichTableKey}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`,
+                `${API_BASE_URL}/api/film/${filmID}/from/${whichTableKey}/${EXPO_PUBLIC_FILM_TABLES_DATASET}`,
                 {
                     method: "DELETE",
                     headers: { "Content-type": "application/json" },
@@ -96,7 +94,7 @@ const Film = () => {
             }
         }
 
-        getFromSpecificTable(whichTable);
+        getFromSpecificTable(whichTableKey);
     };
 
     const getFromSpecificTable = async (specificTable: string) => {
