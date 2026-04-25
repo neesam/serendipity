@@ -30,7 +30,7 @@ const BOOK_TABLES_DATASET = process.env.BOOK_TABLES_DATASET;
 const whichFilmTable = async (req: Request, res: Response) => {
     const randomTable = await getUniqueRandomValue(
         filmTables,
-        "used_film_tables"
+        "used_film_tables",
     );
 
     if (randomTable === "film_international") {
@@ -41,10 +41,10 @@ const whichFilmTable = async (req: Request, res: Response) => {
                 {
                     random_table_name: randomTable,
                     dataset: FILM_TABLES_DATASET,
-                }
+                },
             );
 
-            randomInternationalTable = data["data"][0]["name"];
+            randomInternationalTable = data["title"];
 
             if (error) {
                 return res.status(500).json({
@@ -67,7 +67,7 @@ const whichFilmTable = async (req: Request, res: Response) => {
                 {
                     random_table_name: randomInternationalTable,
                     dataset: FILM_TABLES_DATASET,
-                }
+                },
             );
 
             if (error) {
@@ -94,7 +94,7 @@ const whichFilmTable = async (req: Request, res: Response) => {
     } else {
         const randomTable = await getUniqueRandomValue(
             filmTables,
-            "used_film_tables"
+            "used_film_tables",
         );
         console.log(randomTable);
 
@@ -127,7 +127,7 @@ const whichFilmTable = async (req: Request, res: Response) => {
 const whichMusicTable = async (req: Request, res: Response) => {
     const randomTable = await getUniqueRandomValue(
         musicTables,
-        "used_music_tables"
+        "used_music_tables",
     );
     console.log(randomTable);
 
@@ -160,7 +160,7 @@ const whichShowTable = async (req: Request, res: Response) => {
     console.log("haha");
     const randomTable = await getUniqueRandomValue(
         showTables,
-        "used_show_tables"
+        "used_show_tables",
     );
     console.log(randomTable);
 
@@ -194,7 +194,7 @@ const whichShowTable = async (req: Request, res: Response) => {
 const whichBookTable = async (req: Request, res: Response) => {
     const randomTable = await getUniqueRandomValue(
         bookTables,
-        "used_book_tables"
+        "used_book_tables",
     );
     console.log(randomTable);
 

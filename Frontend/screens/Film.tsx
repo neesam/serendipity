@@ -48,19 +48,19 @@ const Film = () => {
 
         if (!response.ok) {
             throw new Error(`Failed to fetch details for ${whichTable}`);
+        } else {
+            const data: GetFilmDataType = await response.json();
+
+            setFilm(data["data"][0]["title"]);
+            setFilmID(data["data"][0]["id"]);
+            setWhichTable(filmTablesMap[data["randomTable"]]);
+            setInStremio(data["data"][0]["currently_in_stremio"] || "false");
+
+            setFilmAndTableAvailable(true);
+
+            const bgColor = randomColor();
+            setBackgroundColor(bgColor);
         }
-
-        const data: GetFilmDataType = await response.json();
-
-        setFilm(data["data"][0]["title"]);
-        setFilmID(data["data"][0]["id"]);
-        setWhichTable(filmTablesMap[data["randomTable"]]);
-        setInStremio(data["data"][0]["currently_in_stremio"] || "false");
-
-        setFilmAndTableAvailable(true);
-
-        const bgColor = randomColor();
-        setBackgroundColor(bgColor);
     };
 
     const deleteFilm = async () => {
@@ -86,10 +86,10 @@ const Film = () => {
                 throw new Error(
                     `Delete failed: ${errorData.message || "Unknown error"}`,
                 );
+            } else {
+                console.log(await response.json());
+                console.log("Film deleted successfully.");
             }
-
-            console.log(await response.json());
-            console.log("Film deleted successfully.");
         } catch (error) {
             if (error instanceof Error) {
                 console.error("Error during deletion:", error.message);
@@ -112,18 +112,18 @@ const Film = () => {
                     throw new Error(
                         `Failed to fetch details for ${specificTable}`,
                     );
+                } else {
+                    const data: [SpecificEntryDataType] = await response.json();
+
+                    console.log(data);
+
+                    setFilm(data["data"][0]["title"]);
+                    setFilmID(data["data"][0]["id"]);
+                    setWhichTable(filmTablesMap[specificTable]);
+                    setInStremio(
+                        data["data"][0]["currently_in_stremio"] || "false",
+                    );
                 }
-
-                const data: [SpecificEntryDataType] = await response.json();
-
-                console.log(data);
-
-                setFilm(data["data"][0]["title"]);
-                setFilmID(data["data"][0]["id"]);
-                setWhichTable(filmTablesMap[specificTable]);
-                setInStremio(
-                    data["data"][0]["currently_in_stremio"] || "false",
-                );
             } catch (error) {
                 if (error instanceof Error) {
                     console.log("Error in getFromSpecificTable", error.message);
@@ -144,16 +144,16 @@ const Film = () => {
                     throw new Error(
                         `Failed to fetch details for ${specificTable}`,
                     );
+                } else {
+                    const data: [SpecificEntryDataType] = await response.json();
+
+                    setFilm(data["data"][0]["title"]);
+                    setFilmID(data["data"][0]["id"]);
+                    setWhichTable(filmTablesMap[specificTable]);
+                    setInStremio(
+                        data["data"][0]["currently_in_stremio"] || "false",
+                    );
                 }
-
-                const data: [SpecificEntryDataType] = await response.json();
-
-                setFilm(data["data"][0]["title"]);
-                setFilmID(data["data"][0]["id"]);
-                setWhichTable(filmTablesMap[specificTable]);
-                setInStremio(
-                    data["data"][0]["currently_in_stremio"] || "false",
-                );
             } catch (error) {
                 if (error instanceof Error) {
                     console.log("Error in getFromSpecificTable", error.message);
@@ -179,12 +179,12 @@ const Film = () => {
             if (!response.ok) {
                 const errorData = await response.json();
                 console.log(errorData.message);
+            } else {
+                const data: [SpecificEntryDataType] = await response.json();
+
+                setFilm(data["data"][0]["title"]);
+                setFilmID(data["data"][0]["id"]);
             }
-
-            const data: [SpecificEntryDataType] = await response.json();
-
-            setFilm(data["data"][0]["title"]);
-            setFilmID(data["data"][0]["id"]);
         } catch (error) {
             if (error instanceof Error) {
                 console.log(error.message);
@@ -196,7 +196,7 @@ const Film = () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
         try {
             const response = await fetch(
-                `${API_BASE_URL}/api/add_to_film_table/${whichTable}/${film}/${EXPO_PUBLIC_FILM_TABLES_DATASET}/2`,
+                `${API_BASE_URL}/api/add_to_film_table/film_stremiolibrary/${film}/${EXPO_PUBLIC_FILM_TABLES_DATASET}/2`,
                 {
                     method: "POST",
                     headers: { "Content-type": "application/json" },
@@ -207,10 +207,10 @@ const Film = () => {
                 console.log(response);
                 const errorData = await response.json();
                 console.log(errorData.message);
+            } else {
+                const data = await response.json();
+                setInStremio("true");
             }
-
-            const data = await response.json();
-            setInStremio("true");
         } catch (error) {
             if (error instanceof Error) {
                 console.log(error, "fuck");
@@ -235,9 +235,9 @@ const Film = () => {
                 throw new Error(
                     `Post failed: ${errorData.message || "Unknown error"}`,
                 );
+            } else {
+                console.log("Film added successfully.");
             }
-
-            console.log("Film added successfully.");
         } catch (error) {
             if (error instanceof Error) {
                 console.error(error.message);
