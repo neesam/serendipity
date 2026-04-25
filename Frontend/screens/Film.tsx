@@ -102,68 +102,34 @@ const Film = () => {
 
         console.log(specificTable);
 
-        if (specificTable === "film_international") {
-            try {
-                const response = await fetch(
-                    `${API_BASE_URL}/api/${specificTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}/film`,
+        try {
+            const response = await fetch(
+                `${API_BASE_URL}/api/${specificTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}/film`,
+            );
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch details for ${specificTable}`);
+            } else {
+                const data: [SpecificEntryDataType] = await response.json();
+
+                console.log(data);
+
+                setFilm(data["data"][0]["title"]);
+                setFilmID(data["data"][0]["id"]);
+                setWhichTable(filmTablesMap[specificTable]);
+                setInStremio(
+                    data["data"][0]["currently_in_stremio"] || "false",
                 );
-
-                if (!response.ok) {
-                    throw new Error(
-                        `Failed to fetch details for ${specificTable}`,
-                    );
-                } else {
-                    const data: [SpecificEntryDataType] = await response.json();
-
-                    console.log(data);
-
-                    setFilm(data["data"][0]["title"]);
-                    setFilmID(data["data"][0]["id"]);
-                    setWhichTable(filmTablesMap[specificTable]);
-                    setInStremio(
-                        data["data"][0]["currently_in_stremio"] || "false",
-                    );
-                }
-            } catch (error) {
-                if (error instanceof Error) {
-                    console.log("Error in getFromSpecificTable", error.message);
-                }
-            } finally {
-                // Logic to change background on each button press
-
-                const bgColor = randomColor();
-                setBackgroundColor(bgColor);
             }
-        } else {
-            try {
-                const response = await fetch(
-                    `${API_BASE_URL}/api/${specificTable}/${EXPO_PUBLIC_FILM_TABLES_DATASET}/film`,
-                );
-
-                if (!response.ok) {
-                    throw new Error(
-                        `Failed to fetch details for ${specificTable}`,
-                    );
-                } else {
-                    const data: [SpecificEntryDataType] = await response.json();
-
-                    setFilm(data["data"][0]["title"]);
-                    setFilmID(data["data"][0]["id"]);
-                    setWhichTable(filmTablesMap[specificTable]);
-                    setInStremio(
-                        data["data"][0]["currently_in_stremio"] || "false",
-                    );
-                }
-            } catch (error) {
-                if (error instanceof Error) {
-                    console.log("Error in getFromSpecificTable", error.message);
-                }
-            } finally {
-                // Logic to change background on each button press
-
-                const bgColor = randomColor();
-                setBackgroundColor(bgColor);
+        } catch (error) {
+            if (error instanceof Error) {
+                console.log("Error in getFromSpecificTable", error.message);
             }
+        } finally {
+            // Logic to change background on each button press
+
+            const bgColor = randomColor();
+            setBackgroundColor(bgColor);
         }
     };
 
