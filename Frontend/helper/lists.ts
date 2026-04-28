@@ -43,6 +43,7 @@ const musicTables = [
     "album_magicsheet",
     "album_mallsoft",
     "album_meditativepostrock",
+    "album_midwest",
     "album_moenieandkitchie",
     "album_neosoul",
     "album_orangemilkrecords",
@@ -162,6 +163,7 @@ const allTables = [
     "album_magicsheet",
     "album_mallsoft",
     "album_meditativepostrock",
+    "album_midwest",
     "album_moenieandkitchie",
     "album_neosoul",
     "album_orangemilkrecords",
@@ -325,6 +327,7 @@ const musicTablesMap = {
     album_shoegazefemale: "Female fronted shoegaze",
     album_janglefemale: "Female fronted jangle pop",
     album_baggy: "Top 20 baggy on RYM",
+    album_midwest: "Twinkly midwest artists",
 };
 
 const filmTablesMap = {
