@@ -42,6 +42,7 @@ const musicTables = [
     "album_kpop",
     "album_magicsheet",
     "album_mallsoft",
+    "album_mathpostemo",
     "album_meditativepostrock",
     "album_midwest",
     "album_moenieandkitchie",
@@ -162,6 +163,7 @@ const allTables = [
     "album_kpop",
     "album_magicsheet",
     "album_mallsoft",
+    "album_mathpostemo",
     "album_meditativepostrock",
     "album_midwest",
     "album_moenieandkitchie",
@@ -328,6 +330,7 @@ const musicTablesMap = {
     album_janglefemale: "Female fronted jangle pop",
     album_baggy: "Top 20 baggy on RYM",
     album_midwest: "Twinkly midwest artists",
+    album_mathpostemo: "Math/post rock, post hardcore, emo",
 };
 
 const filmTablesMap = {
