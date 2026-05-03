@@ -42,8 +42,10 @@ const musicTables = [
     "album_kpop",
     "album_magicsheet",
     "album_mallsoft",
+    "album_mathpop",
     "album_mathpostemo",
     "album_meditativepostrock",
+    "album_metalcore",
     "album_midwest",
     "album_moenieandkitchie",
     "album_neosoul",
@@ -165,8 +167,10 @@ const allTables = [
     "album_kpop",
     "album_magicsheet",
     "album_mallsoft",
+    "album_mathpop",
     "album_mathpostemo",
     "album_meditativepostrock",
+    "album_metalcore",
     "album_midwest",
     "album_moenieandkitchie",
     "album_neosoul",
@@ -335,6 +339,8 @@ const musicTablesMap = {
     album_baggy: "Top 20 baggy on RYM",
     album_midwest: "Twinkly midwest artists",
     album_mathpostemo: "Math/post rock, post hardcore, emo",
+    album_mathpop: "Top math pop albums",
+    album_metalcore: "Top metalcore albums",
 };
 
 const filmTablesMap = {
