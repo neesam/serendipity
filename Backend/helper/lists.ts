@@ -116,6 +116,8 @@ const bookTables = [
     "book_1001",
     "book_manga",
     "book_anthologies",
+    "book_penguinmodern",
+    "book_penguinblack",
 ];
 
 const allTables = [
@@ -225,6 +227,8 @@ const allTables = [
     "book_toread",
     "book_manga",
     "book_1001",
+    "book_penguinmodern",
+    "book_penguinblack",
 ];
 
 const bookAnthologies = [

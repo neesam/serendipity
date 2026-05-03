@@ -226,6 +226,8 @@ const allTables = [
     "book_toread",
     "book_manga",
     "book_1001",
+    "book_penguinmodern",
+    "book_penguinblack",
 ];
 
 const bookAnthologies = [
@@ -370,6 +372,8 @@ const bookTablesMap = {
     book_1001: "Goodreads Top 1001",
     book_manga: "Top manga",
     book_anthologies: "My anthologies",
+    book_penguinblack: "Little black classics",
+    book_penguinmodern: "Little modern classics",
 };
 
 export {
