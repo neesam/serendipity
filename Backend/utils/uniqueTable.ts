@@ -14,7 +14,7 @@ async function getUniqueRandomValue(tables: string[], medium_tables: string) {
     const used = raw ? raw : [];
 
     // Step 2: Reset if all have been used
-    if (used.length >= tables.length) {
+    if (used.length >= 10) {
         await redis.del(medium_tables);
         return getUniqueRandomValue(tables, medium_tables); // Recursive call after reset
     }
