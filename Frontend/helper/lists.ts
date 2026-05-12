@@ -48,6 +48,7 @@ const musicTables = [
     "album_metalcore",
     "album_midwest",
     "album_moenieandkitchie",
+    "album_neonpoppunk",
     "album_neosoul",
     "album_orangemilkrecords",
     "album_pluggnb",
@@ -173,6 +174,7 @@ const allTables = [
     "album_metalcore",
     "album_midwest",
     "album_moenieandkitchie",
+    "album_neonpoppunk",
     "album_neosoul",
     "album_orangemilkrecords",
     "album_pluggnb",
@@ -313,7 +315,7 @@ const musicTablesMap = {
     album_easylistening: "Easy listening playlist",
     album_urban: "Urban albums",
     album_dreamysophisti: "Dreamy sophisti-pop",
-    album_hypnoticsyntpop: "Hypnotic synth pop",
+    album_hypnoticsynthpop: "Hypnotic synth pop",
     album_etherealslowcore: "Ethereal slowcore",
     album_emopop: "Emo pop",
     album_dreamygarage: "Dreamy garage",
@@ -341,6 +343,7 @@ const musicTablesMap = {
     album_mathpostemo: "Math/post rock, post hardcore, emo",
     album_mathpop: "Top math pop albums",
     album_metalcore: "Top metalcore albums",
+    album_neonpoppunk: "Neon pop punk"
 };
 
 const filmTablesMap = {
