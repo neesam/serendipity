@@ -8,6 +8,7 @@ WORKDIR /app
 
 COPY package*.json ./
 RUN npm ci
+RUN npm install -g tsx
 
 # Install Python dependencies
 COPY requirements.txt ./
@@ -17,4 +18,4 @@ COPY . .
 
 EXPOSE 5002
 
-CMD ["npx", "tsx", "server/server.ts"]
+CMD ["tsx", "server/server.ts"]
