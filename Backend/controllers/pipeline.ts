@@ -41,6 +41,8 @@ const pipelineLogic = async (req: Request, res: Response) => {
 };
 
 const spotifyPipeline = async (req: Request, res: Response) => {
+    console.log('PATH VAR:', process.env.SPOTIFY_PIPELINE_FILE_PATH);
+    console.log('PYTHON VAR:', process.env.PYTHON_PACKAGE);
     const python = spawn(`${PYTHON_PACKAGE}`, [`${SPOTIFY_PIPELINE_FILE_PATH}`]);
 
     let responseSent = false;
