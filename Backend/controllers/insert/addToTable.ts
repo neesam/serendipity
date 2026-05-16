@@ -244,7 +244,6 @@ const addToStremio = async (req: Request, res: Response) => {
 };
 
 const addToCurrentlyListening = async (req: Request, res: Response) => {
-    const python = spawn(`${PYTHON_PACKAGE}`, [`${SPOTIFY_PIPELINE_FILE_PATH}`]);
 
     const entry = req.params.entry;
     const origin = req.params.origin;
