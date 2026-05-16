@@ -2,22 +2,21 @@ from dotenv import load_dotenv
 import os
 import json
 
-from google.cloud import bigquery
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+from supabase import create_client
 
 load_dotenv()
 
-BQ_SERVICE_ACCOUNT = os.getenv('BQ_SERVICE_ACCOUNT')
-BQ_PROJECT = os.getenv('BQ_PROJECT')
-MUSIC_TABLES_DATASET= os.getenv('MUSIC_TABLES_DATASET')
 SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
 SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+SUPABASE_URL = os.getenv("SUPABASE_URL")
 
 sp_oauth = SpotifyOAuth(
     client_id=SPOTIFY_CLIENT_ID,
     client_secret=SPOTIFY_CLIENT_SECRET,
-    redirect_uri="http://localhost:3000/",
+    redirect_uri="https://example.com/callback",
     scope="playlist-modify-public playlist-modify-private"
 )
 
@@ -25,45 +24,38 @@ token_info = sp_oauth.get_access_token(as_dict=False)
 
 sp = spotipy.Spotify(auth=token_info)
 
-client = bigquery.Client.from_service_account_json(f"{BQ_SERVICE_ACCOUNT}", project=f"{BQ_PROJECT}")
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 def getCurrentlyListeningIds():
 
-    QUERY = f'''
-        SELECT * FROM {BQ_PROJECT}.{MUSIC_TABLES_DATASET}.album_currentlyListening
-    '''
+    currently_listening_playlist_res = json.loads(supabase.schema("music_tables").table("album_spotifyPlaylistIds").select().execute().model_dump_json())['data']
+    currently_listening_table_res = json.loads(supabase.schema("music_tables").table("album_currentlyListening").select().execute().model_dump_json())['data']
 
-    query_job = client.query(QUERY)
-    rows = query_job.result()
+    playlist_albums = set(i['album'] for i in currently_listening_playlist_res)
 
-    currently_listening = []
+    table_albums = set(i['title'] for i in currently_listening_table_res if i['original_table'] not in ('youtube', 'vinyl', None))
 
-    for row in rows:
-        if 'vinyl' in row[1]:
-            continue
-        elif 'youtube' in row[1]:
-            continue
-        else:
-            currently_listening.append(row[1])
-            
-    currently_listening_ids = [[] for i in range(len(currently_listening) - 1)]
-    albums_to_go = len(currently_listening) - 1
+    new = table_albums - playlist_albums
 
-    for i in currently_listening:
-        try:
-            search_result = sp.search(i, type='album')
-            album_id = search_result['albums']['items'][0]['id']
-            album = sp.album_tracks(album_id)
+    if new:
+        currently_listening_ids = [{'album': i, 'tracks': [], 'album_id': ""} for i in new]
+                
+        for i in currently_listening_ids:
+            try:
+                search_result = sp.search(i['album'], type='album')
+                album_id = search_result['albums']['items'][0]['id']
+                i['album_id'] = album_id
+                
+                album = sp.album_tracks(album_id)
 
-            for j in album['items']:
-                currently_listening_ids[albums_to_go - 1].append(j['id'])
-            albums_to_go -= 1
-        except:
-            continue
+                for j in album['items']:
+                    i['tracks'].append(j['id'])
+            except:
+                continue
 
     return currently_listening_ids
 
-def removeFromCurrentlyListeningPlaylist():
+# def removeFromCurrentlyListeningPlaylist():
 
     try:
 
@@ -111,26 +103,12 @@ def insertIntoCurrentlyListeningPlaylist():
 
     currently_listening_ids = getCurrentlyListeningIds()
 
-    all = []
+    for entry in currently_listening_ids:
+        for track in entry['tracks']:
+            supabase.schema("music_tables").table("album_spotifyPlaylistIds").insert({"album": entry['album'], "album_id": entry['album_id'], "track": track}).execute()
 
-    for i in currently_listening_ids:
-        for j in i:
-            all.append(j)
 
-    INSERT_QUERY = f'''
-        INSERT INTO {BQ_PROJECT}.{MUSIC_TABLES_DATASET}.album_spotifyPlaylistIds (id, track_ids) VALUES (1, {all})
-    '''
+    for entry in currently_listening_ids:
+        sp.user_playlist_add_tracks(user=sp.current_user()['id'], playlist_id='2BHeysCh0gYOjVIH7pU6uy', tracks=entry['tracks'])
 
-    query_job = client.query(INSERT_QUERY)
-    query_job.result()
-
-    for album in currently_listening_ids:
-        sp.user_playlist_add_tracks(user=sp.current_user()['id'], playlist_id='2BHeysCh0gYOjVIH7pU6uy', tracks=album)
-
-def createSpotifyPlaylist():
-
-    removeFromCurrentlyListeningPlaylist()
-
-    insertIntoCurrentlyListeningPlaylist()
-
-createSpotifyPlaylist()
+insertIntoCurrentlyListeningPlaylist()

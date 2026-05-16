@@ -4,6 +4,10 @@ dotenv.config();
 import { Request, Response } from "express";
 
 import { supabase } from "../../utils/supabase";
+import { spawn } from "child_process";
+
+export const SPOTIFY_PIPELINE_FILE_PATH = process.env.SPOTIFY_PIPELINE_FILE_PATH;
+export const PYTHON_PACKAGE = process.env.PYTHON_PACKAGE;
 
 const addToOneTable = async (req: Request, res: Response) => {
     console.log("a");
@@ -240,7 +244,7 @@ const addToStremio = async (req: Request, res: Response) => {
 };
 
 const addToCurrentlyListening = async (req: Request, res: Response) => {
-    console.log("d");
+    const python = spawn(`${PYTHON_PACKAGE}`, [`${SPOTIFY_PIPELINE_FILE_PATH}`]);
 
     const entry = req.params.entry;
     const origin = req.params.origin;
