@@ -9,6 +9,6 @@ const pipelineRoutes = express.Router();
 
 pipelineRoutes.post("/api/pipeline", pipelineLogic);
 pipelineRoutes.post("/api/spotifyPipeline", spotifyPipeline)
-pipelineRoutes.post("/api/testPipeline", testPipeline)
+pipelineRoutes.post("/api/testPipeline/:album", testPipeline)
 
 export { pipelineRoutes };
