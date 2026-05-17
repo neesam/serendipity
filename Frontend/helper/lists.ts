@@ -31,6 +31,7 @@ const musicTables = [
     "album_emopop",
     "album_etherealslowcore",
     "album_fantano",
+    "album_faketable",
     "album_folk",
     "album_glitch",
     "album_greatscene",
@@ -356,6 +357,7 @@ const musicTablesMap = {
     album_late2000sindie: "Late 2000s indie",
     album_hypnagogicpop: "Hypnagogic pop",
     album_indiesleaze: "Indie sleaze",
+    album_faketable: "FAKE TABLE"
 };
 
 const filmTablesMap = {

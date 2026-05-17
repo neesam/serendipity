@@ -17,7 +17,7 @@ const EXPO_PUBLIC_MUSIC_TABLES_DATASET =
 const EXPO_PUBLIC_RAILWAY_URL = process.env.EXPO_PUBLIC_RAILWAY_URL;
 
 const API_BASE_URL = __DEV__
-    ? "http://10.0.0.164:5002"
+    ? "http://192.168.0.86:5002"
     : EXPO_PUBLIC_RAILWAY_URL;
 
 // interface SpecificAlbumOrEntryDataType {
@@ -167,6 +167,27 @@ export default function Album() {
             } catch (error) {
                 if (error instanceof Error) {
                     console.error("Error during deletion:", error.message);
+                }
+            }
+
+            try {
+                const response = await fetch(
+                    `${API_BASE_URL}/api/testPipeline/${album}`,
+                    {
+                        method: "POST",
+                        headers: { "Content-type": "application/json" },
+                    },
+                );
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.log(errorData.message);
+                }
+
+                const data = await response.json();
+            } catch (error) {
+                if (error instanceof Error) {
+                    console.log(error);
                 }
             }
 
