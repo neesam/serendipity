@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 import * as Haptics from "expo-haptics";
 
@@ -37,20 +37,9 @@ export default function Album() {
     const [album, setAlbum] = useState("");
     const [albumID, setAlbumID] = useState("");
     const [currentlyListening, setCurrentlyListening] = useState("");
-    const [originalTable, setOriginalTable] = useState("");
+    const [originalTable, setOriginalTable] = useState<string | null>(null);
     const [backgroundColor, setBackgroundColor] = useState("");
     const [albumAndTableAvailable, setAlbumAndTableAvailable] = useState(true);
-
-    const originalTableRef = useRef(originalTable);
-    const currentlyListeningRef = useRef(currentlyListening);
-
-    useEffect(() => {
-        originalTableRef.current = originalTable;
-    }, [originalTable]);
-
-    useEffect(() => {
-        currentlyListeningRef.current = currentlyListening;
-    }, [currentlyListening]);
 
     useEffect(() => {
         console.log(currentlyListening);
@@ -144,7 +133,7 @@ export default function Album() {
 
         // If album is not in currently listening table...
 
-        if (currentlyListeningRef.current === "false") {
+        if (currentlyListening === "false") {
             console.log("Not currently listening");
             try {
                 const response = await fetch(
@@ -172,11 +161,11 @@ export default function Album() {
             }
 
             getFromSpecificTable(whichTableKey);
-        } else if (originalTableRef.current) {
+        } else if (originalTable) {
             console.log("Currently listening and ");
             try {
                 const response = await fetch(
-                    `${API_BASE_URL}/api/albums/${tempAlbumID}/${tempAlbum}/${originalTableRef.current}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
+                    `${API_BASE_URL}/api/albums/${tempAlbumID}/${tempAlbum}/${originalTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
                     {
                         method: "DELETE",
                         headers: { "Content-type": "application/json" },
@@ -217,8 +206,6 @@ export default function Album() {
                 }
 
                 const data = await response.json();
-
-                console.log(data)
             } catch (error) {
                 if (error instanceof Error) {
                     console.log(error);
