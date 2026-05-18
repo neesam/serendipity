@@ -62,4 +62,6 @@ sp = spotipy.Spotify(auth=token_info)
 
 album = sys.argv[1]
 
-supabase.schema("music_tables").table("album_faketable").insert({"id": uuid.uuid4(), "title": album + uuid.uuid4()}).execute()
+tracks_res = json.loads(supabase.schema("music_tables").table("album_spotifyPlaylistIds").select("track").eq("album", album).execute().model_dump_json())['data']
+
+sp.user_playlist_remove_specific_occurrences_of_tracks(user=sp.current_user()['id'], playlist_id='2BHeysCh0gYOjVIH7pU6uy', tracks=tracks_res)
