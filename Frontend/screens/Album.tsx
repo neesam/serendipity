@@ -17,7 +17,7 @@ const EXPO_PUBLIC_MUSIC_TABLES_DATASET =
 const EXPO_PUBLIC_RAILWAY_URL = process.env.EXPO_PUBLIC_RAILWAY_URL;
 
 const API_BASE_URL = __DEV__
-    ? "http://192.168.0.86:5002"
+    ? "http://192.168.0.29:5002"
     : EXPO_PUBLIC_RAILWAY_URL;
 
 // interface SpecificAlbumOrEntryDataType {
@@ -43,6 +43,7 @@ export default function Album() {
 
     useEffect(() => {
         console.log(currentlyListening);
+        console.log(originalTable, "heres og")
     }, [album, whichTable]);
 
     const getAlbum = async () => {
@@ -170,6 +171,8 @@ export default function Album() {
                         headers: { "Content-type": "application/json" },
                     },
                 );
+                console.log(`${API_BASE_URL}/api/albums/${tempAlbumID}/${tempAlbum}/${originalTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,)
+
 
                 if (!response.ok) {
                     const errorData = await response.json();
@@ -203,6 +206,8 @@ export default function Album() {
                 }
 
                 const data = await response.json();
+
+                console.log(data)
             } catch (error) {
                 if (error instanceof Error) {
                     console.log(error);

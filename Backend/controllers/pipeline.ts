@@ -74,7 +74,7 @@ const spotifyPipeline = async (req: Request, res: Response) => {
 
 const testPipeline = async (req: Request, res: Response) => {
 
-    const { album } = req.body;
+    const { album } = req.params.album;
 
     const python = spawn(`${PYTHON_PACKAGE}`, [`${SPOTIFY_DELETE_FROM_PLAYLIST_PATH}`, `${album}`]);
 
@@ -85,6 +85,7 @@ const testPipeline = async (req: Request, res: Response) => {
         if (!responseSent) {
             responseSent = true;
             res.send(data.toString());
+            console.log("Deleted", album)
         }
     });
 
