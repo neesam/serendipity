@@ -67,3 +67,5 @@ tracks_res = json.loads(supabase.schema("music_tables").table("album_spotifyPlay
 tracks = [i['track'] for i in tracks_res]
 
 sp.user_playlist_remove_specific_occurrences_of_tracks(user=sp.current_user()['id'], playlist_id='2BHeysCh0gYOjVIH7pU6uy', tracks=tracks)
+
+supabase.schema("music_tables").table("album_spotifyPlaylistIds").delete().eq("album", album).execute()
