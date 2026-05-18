@@ -141,6 +141,6 @@ def insertIntoCurrentlyListeningPlaylist():
 
 
     for entry in currently_listening_ids:
-        sp.user_playlist_add_tracks(user=sp.current_user()['id'], playlist_id='2BHeysCh0gYOjVIH7pU6uy', tracks=entry['tracks'])
+        sp.playlist_add_items(playlist_id='2BHeysCh0gYOjVIH7pU6uy', items=entry['tracks'])
 
 insertIntoCurrentlyListeningPlaylist()
