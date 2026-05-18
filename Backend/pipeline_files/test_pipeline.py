@@ -64,4 +64,6 @@ album = sys.argv[1]
 
 tracks_res = json.loads(supabase.schema("music_tables").table("album_spotifyPlaylistIds").select("track").eq("album", album).execute().model_dump_json())['data']
 
-sp.user_playlist_remove_specific_occurrences_of_tracks(user=sp.current_user()['id'], playlist_id='2BHeysCh0gYOjVIH7pU6uy', tracks=tracks_res)
+tracks = [i['track'] for i in tracks_res]
+
+sp.user_playlist_remove_specific_occurrences_of_tracks(user=sp.current_user()['id'], playlist_id='2BHeysCh0gYOjVIH7pU6uy', tracks=tracks)
