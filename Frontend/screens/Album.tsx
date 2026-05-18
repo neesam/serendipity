@@ -37,7 +37,7 @@ export default function Album() {
     const [album, setAlbum] = useState("");
     const [albumID, setAlbumID] = useState("");
     const [currentlyListening, setCurrentlyListening] = useState("");
-    const [originalTable, setOriginalTable] = useState<string | null>(null);
+    const [originalTable, setOriginalTable] = useState("");
     const [backgroundColor, setBackgroundColor] = useState("");
     const [albumAndTableAvailable, setAlbumAndTableAvailable] = useState(true);
 
