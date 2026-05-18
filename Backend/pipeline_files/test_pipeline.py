@@ -1,6 +1,7 @@
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import os
 import json
+import sys
 import uuid
 
 import spotipy
@@ -8,7 +9,7 @@ from spotipy.oauth2 import SpotifyOAuth
 from spotipy.cache_handler import CacheHandler
 from supabase import create_client
 
-load_dotenv()
+# load_dotenv()
 
 SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
 SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
@@ -59,4 +60,6 @@ sp_oauth = SpotifyOAuth(
 token_info = sp_oauth.get_access_token(as_dict=False)
 sp = spotipy.Spotify(auth=token_info)
 
-supabase.schema("music_tables").table("album_faketable").insert({"id": uuid.uuid4(), "title": str(uuid.uuid4())}).execute()
+album = sys.argv[1]
+
+supabase.schema("music_tables").table("album_faketable").insert({"id": uuid.uuid4(), "title": album + uuid.uuid4()}).execute()
