@@ -130,24 +130,13 @@ export default function Album() {
             (key) => musicTablesMap[key] == whichTable,
         );
 
-        // Gets actual title of table for tempWhichTable
-
-        const originalTableKey = Object.keys(musicTablesMap).find(
-            (key) => musicTablesMap[key] == originalTable,
-        );
-
-        console.log(
-            "-------> for original Table",
-            originalTable,
-            originalTableKey,
-        );
         // If album is not in currently listening table...
 
         if (currentlyListening === "false") {
             console.log("Not currently listening");
             try {
                 const response = await fetch(
-                    `${API_BASE_URL}/api/albums/${tempAlbumID}/from/${originalTableKey}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
+                    `${API_BASE_URL}/api/albums/${tempAlbumID}/from/${originalTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
                     {
                         method: "DELETE",
                         headers: { "Content-type": "application/json" },
@@ -175,7 +164,7 @@ export default function Album() {
             console.log("Currently listening and ");
             try {
                 const response = await fetch(
-                    `${API_BASE_URL}/api/albums/${tempAlbumID}/${tempAlbum}/${originalTableKey}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
+                    `${API_BASE_URL}/api/albums/${tempAlbumID}/${tempAlbum}/${originalTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
                     {
                         method: "DELETE",
                         headers: { "Content-type": "application/json" },
