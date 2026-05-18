@@ -7,6 +7,7 @@ import { spawn } from "child_process";
 
 export const PYTHON_PACKAGE = process.env.PYTHON_PACKAGE;
 export const PIPELINE_FILE_PATH = process.env.PIPELINE_FILE_PATH;
+export const SPOTIFY_PIPELINE_FILE_PATH = process.env.SPOTIFY_PIPELINE_FILE_PATH;
 export const SPOTIFY_DELETE_FROM_PLAYLIST_PATH = process.env.SPOTIFY_DELETE_FROM_PLAYLIST_PATH;
 
 const pipelineLogic = async (req: Request, res: Response) => {
@@ -74,7 +75,7 @@ const spotifyPipeline = async (req: Request, res: Response) => {
 
 const testPipeline = async (req: Request, res: Response) => {
 
-    const { album } = req.params.album;
+    const album = req.params.album;
 
     const python = spawn(`${PYTHON_PACKAGE}`, [`${SPOTIFY_DELETE_FROM_PLAYLIST_PATH}`, `${album}`]);
 

@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import * as Haptics from "expo-haptics";
 
@@ -40,6 +40,17 @@ export default function Album() {
     const [originalTable, setOriginalTable] = useState<string | null>(null);
     const [backgroundColor, setBackgroundColor] = useState("");
     const [albumAndTableAvailable, setAlbumAndTableAvailable] = useState(true);
+
+    const originalTableRef = useRef(originalTable);
+    const currentlyListeningRef = useRef(currentlyListening);
+
+    useEffect(() => {
+        originalTableRef.current = originalTable;
+    }, [originalTable]);
+
+    useEffect(() => {
+        currentlyListeningRef.current = currentlyListening;
+    }, [currentlyListening]);
 
     useEffect(() => {
         console.log(currentlyListening);
@@ -133,7 +144,7 @@ export default function Album() {
 
         // If album is not in currently listening table...
 
-        if (currentlyListening === "false") {
+        if (currentlyListeningRef.current === "false") {
             console.log("Not currently listening");
             try {
                 const response = await fetch(
@@ -161,11 +172,11 @@ export default function Album() {
             }
 
             getFromSpecificTable(whichTableKey);
-        } else if (originalTable) {
+        } else if (originalTableRef.current) {
             console.log("Currently listening and ");
             try {
                 const response = await fetch(
-                    `${API_BASE_URL}/api/albums/${tempAlbumID}/${tempAlbum}/${originalTable}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
+                    `${API_BASE_URL}/api/albums/${tempAlbumID}/${tempAlbum}/${originalTableRef.current}/${EXPO_PUBLIC_MUSIC_TABLES_DATASET}`,
                     {
                         method: "DELETE",
                         headers: { "Content-type": "application/json" },
