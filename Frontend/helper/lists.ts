@@ -161,6 +161,7 @@ const allTables = [
     "album_emogaze",
     "album_emopop",
     "album_etherealslowcore",
+    "album_faketable",
     "album_fantano",
     "album_folk",
     "album_glitch",
