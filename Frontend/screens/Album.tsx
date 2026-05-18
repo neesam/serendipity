@@ -170,27 +170,6 @@ export default function Album() {
                 }
             }
 
-            try {
-                const response = await fetch(
-                    `${API_BASE_URL}/api/testPipeline/${album}`,
-                    {
-                        method: "POST",
-                        headers: { "Content-type": "application/json" },
-                    },
-                );
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    console.log(errorData.message);
-                }
-
-                const data = await response.json();
-            } catch (error) {
-                if (error instanceof Error) {
-                    console.log(error);
-                }
-            }
-
             getFromSpecificTable(whichTableKey);
         } else if (originalTable) {
             console.log("Currently listening and ");
@@ -219,6 +198,27 @@ export default function Album() {
             }
 
             getFromSpecificTable(whichTableKey);
+
+            try {
+                const response = await fetch(
+                    `${API_BASE_URL}/api/testPipeline/${album}`,
+                    {
+                        method: "POST",
+                        headers: { "Content-type": "application/json" },
+                    },
+                );
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.log(errorData.message);
+                }
+
+                const data = await response.json();
+            } catch (error) {
+                if (error instanceof Error) {
+                    console.log(error);
+                }
+            }
 
             // If album was added to currently listening table manually...
         } else {
