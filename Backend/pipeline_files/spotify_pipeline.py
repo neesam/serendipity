@@ -119,6 +119,8 @@ def insertIntoCurrentlyListeningPlaylist():
 
     currently_listening_ids = getCurrentlyListeningIds()
 
+    currently_listening_first_ids = [[i['tracks'][0]] for i in currently_listening_ids]
+
     for entry in currently_listening_ids:
         for track in entry['tracks']:
             supabase.schema("music_tables").table("album_spotifyPlaylistIds").insert({"album": entry['album'], "album_id": entry['album_id'], "track": track}).execute()
@@ -126,5 +128,8 @@ def insertIntoCurrentlyListeningPlaylist():
 
     for entry in currently_listening_ids:
         sp.playlist_add_items(playlist_id='2BHeysCh0gYOjVIH7pU6uy', items=entry['tracks'])
+
+    for entry in currently_listening_first_ids:
+        sp.playlist_add_items(playlist_id="6Gm5NaBxTJVUQycxYhsEeP", items=entry)
 
 insertIntoCurrentlyListeningPlaylist()
