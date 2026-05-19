@@ -9,10 +9,10 @@ from supabase import create_client
 
 load_dotenv()
 
-SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
-SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
-SUPABASE_URL = os.getenv("SUPABASE_URL")
+SPOTIFY_CLIENT_ID="605d05a00aa14712a79431a7cbfabbf2"
+SPOTIFY_CLIENT_SECRET="46cb5a23de0b44cd92d0d95d2766ddc6"
+SUPABASE_URL="https://nfjhkibvtegcvxgwbtqz.supabase.co"
+SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mamhraWJ2dGVnY3Z4Z3didHF6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NDY5MjY2MCwiZXhwIjoyMDgwMjY4NjYwfQ.y3AzmIIRunUWGZqilX4dpeK0c7ud-4Ar6rCAcWMZWmM"
 
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
@@ -71,9 +71,12 @@ def getCurrentlyListeningIds():
 
     if new:
         currently_listening_ids = [{'album': i, 'tracks': [], 'album_id': ""} for i in new]
-                
+
+        to_remove = []
+
         for i in currently_listening_ids:
             try:
+                album_id = ""
                 search_result = sp.search(i['album'], type='album')
 
                 albums = search_result['albums']['items']
@@ -102,7 +105,12 @@ def getCurrentlyListeningIds():
                             album_id = search_result['albums']['items'][index]['id']
                             break
                         else:
+                            currently_listening_ids.remove({'album': i['album'], 'tracks': [], 'album_id': ""})
                             continue
+
+                if not album_id:
+                    to_remove.append({'album': i['album'], 'tracks': [], 'album_id': ""})
+                    continue
 
                 i['album_id'] = album_id
                 
@@ -112,6 +120,9 @@ def getCurrentlyListeningIds():
                     i['tracks'].append(j['id'])
             except:
                 continue
+
+        for album in to_remove:
+            currently_listening_ids.remove(album)
 
     return currently_listening_ids
 
