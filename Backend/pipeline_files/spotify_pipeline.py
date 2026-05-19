@@ -96,7 +96,9 @@ def getCurrentlyListeningIds():
 
                 else:
                     for index, album in enumerate(candidates):
-                        if i['album'].lower() in album:
+                        if (i['album'] == album.split(" - ")[1] or
+                            i['album'].lower() == album.split(" - ")[1] or
+                            i['album'].title() == album.split(" - ")[1]):
                             album_id = search_result['albums']['items'][index]['id']
                             break
                         else:
