@@ -75,7 +75,33 @@ def getCurrentlyListeningIds():
         for i in currently_listening_ids:
             try:
                 search_result = sp.search(i['album'], type='album')
-                album_id = search_result['albums']['items'][0]['id']
+
+                albums = search_result['albums']['items']
+                candidates = [album['name'].lower() + " - " + album['artists'][0]['name'].lower() for album in albums][:3]
+
+                if "-" in i['album'] and len(i['album'].split('-')) == 2:
+                    for index, album in enumerate(candidates):
+                        if album == i['album'].lower():
+                            album_id = search_result['albums']['items'][index]['id']
+                            break
+                        else:
+                            continue
+
+                    for index, album in enumerate(candidates):
+                        if " - ".join(album.split(" - ")[::-1]) == i['album'].lower():
+                            album_id = search_result['albums']['items'][index]['id']
+                            break
+                        else:
+                            continue
+
+                else:
+                    for index, album in enumerate(candidates):
+                        if i['album'].lower() in album:
+                            album_id = search_result['albums']['items'][index]['id']
+                            break
+                        else:
+                            continue
+
                 i['album_id'] = album_id
                 
                 album = sp.album_tracks(album_id)
@@ -86,50 +112,6 @@ def getCurrentlyListeningIds():
                 continue
 
     return currently_listening_ids
-
-# def removeFromCurrentlyListeningPlaylist():
-
-    try:
-
-
-        SELECT_QUERY = f'''
-            SELECT track_ids FROM {BQ_PROJECT}.{MUSIC_TABLES_DATASET}.album_spotifyPlaylistIds
-        '''
-
-        query_job = client.query(SELECT_QUERY)
-        [rows] = query_job.result()
-
-        rows = rows[0]
-
-        tracks = [{'uri': rows[i], 'positions': [i]} for i in range(len(rows))]
-
-        tracks_to_delete = []
-
-        while len(tracks) > 0:
-            if len(tracks) < 10:
-                for i in range(0, len(tracks)):
-                    tracks_to_delete.append(tracks[i])
-                sp.user_playlist_remove_specific_occurrences_of_tracks(user=sp.current_user()['id'], playlist_id='2BHeysCh0gYOjVIH7pU6uy', tracks=tracks_to_delete)
-                tracks_to_delete.clear()
-                for i in range(0, len(tracks)):
-                    tracks.pop(0)
-            else:
-                for i in range(0, 10):
-                    tracks_to_delete.append(tracks[i])
-                sp.user_playlist_remove_specific_occurrences_of_tracks(user=sp.current_user()['id'], playlist_id='2BHeysCh0gYOjVIH7pU6uy', tracks=tracks_to_delete)
-                tracks_to_delete.clear()
-                for i in range(0, 10):
-                    tracks.pop(0)
-
-    except Exception as e:
-        print(e)
-
-    DELETE_QUERY = f'''
-        DELETE FROM {BQ_PROJECT}.{MUSIC_TABLES_DATASET}.album_spotifyPlaylistIds WHERE 1 = 1
-    '''
-
-    query_job = client.query(DELETE_QUERY)
-    query_job.result()
 
 def insertIntoCurrentlyListeningPlaylist():
 
