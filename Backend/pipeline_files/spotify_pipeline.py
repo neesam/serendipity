@@ -65,7 +65,7 @@ def getCurrentlyListeningIds():
 
     playlist_albums = set(i['album'] for i in currently_listening_playlist_res)
 
-    table_albums = set(i['title'] for i in currently_listening_table_res if i['original_table'] not in ('youtube', 'vinyl', 'underground', None))
+    table_albums = set(i['title'] for i in currently_listening_table_res if i['original_table'] not in ('album_vinyls', 'artist_underground', None))
 
     new = table_albums - playlist_albums
 
