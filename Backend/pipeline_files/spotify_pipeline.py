@@ -86,7 +86,7 @@ def getCurrentlyListeningIds():
                 albums = search_result['albums']['items']
                 candidates = [album['name'].lower() + " - " + album['artists'][0]['name'].lower() for album in albums][:3]
 
-                if "-" in i['album'] and len(i['album'].split('-')) == 2:
+                if " - " in i['album'] and len(i['album'].split(' - ')) == 2:
                     for index, album in enumerate(candidates):
                         if album == i['album'].lower():
                             album_id = search_result['albums']['items'][index]['id']
@@ -100,6 +100,28 @@ def getCurrentlyListeningIds():
                             break
                         else:
                             continue
+
+                    if "&" in i['album'].split(" - ")[0]:
+                        for index, album in enumerate(candidates):
+                            if (i['album'].split(" - ")[0].split(' & ')[0].lower() == album.split(' - ')[1] or
+                                i['album'].split(" - ")[0].split(' & ')[1].lower() == album.split(' - ')[1]):
+                                if (i['album'].split(" - ")[1].lower() == "".join(album.split(' - ')[0].split(' - ')) or 
+                                    " ".join(i['album'].split(" - ")[1].lower().split("-")) == "".join(album.split(' - ')[0].split(' - '))):
+                                    album_id = search_result['albums']['items'][index]['id']
+                                    break
+                                else:
+                                    album_id = search_result['albums']['items'][index]['id']
+                                    break
+                            else:
+                                continue
+
+                    for index, album in enumerate(candidates):
+                        if (i['album'].split(' - ')[0].lower() == album.split(' - ')[0].lower() or
+                            i['album'].split(' - ')[0].lower() == album.split(' - ')[1].lower() or
+                            i['album'].split(' - ')[1].lower() == album.split(' - ')[0].lower() or
+                            i['album'].split(' - ')[1].lower() == album.split(' - ')[1].lower()):
+                                album_id = search_result['albums']['items'][index]['id']
+                                break
 
                 else:
                     for index, album in enumerate(candidates):
