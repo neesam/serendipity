@@ -87,4 +87,4 @@ except Exception as e:
 try:
     supabase.schema("music_tables").table("album_spotifyPlaylistIds").delete().eq("album", album).execute()
 except Exception as e:
-    logging.exception(f"Failed to remove {album} track IDs from album_spotifyPlaylistIds: {e}")
+    logging.exception(f"Failed to remove {album} track IDs from album_spotifyPlaylistIds : {e}")
