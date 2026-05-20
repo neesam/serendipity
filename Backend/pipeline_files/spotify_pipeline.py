@@ -108,9 +108,9 @@ def getCurrentlyListeningIds():
                             i['album'].title() == album.split(" - ")[1]):
                             album_id = search_result['albums']['items'][index]['id']
                             break
-                        else:
-                            currently_listening_ids.remove({'album': i['album'], 'tracks': [], 'album_id': ""})
-                            continue
+                    else:
+                        to_remove.append({'album': i['album'], 'tracks': [], 'album_id': ""})
+                        continue
 
                 if not album_id:
                     to_remove.append({'album': i['album'], 'tracks': [], 'album_id': ""})
