@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 import os
 import json
+import logging
 
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
@@ -75,9 +76,12 @@ def getCurrentlyListeningIds():
         to_remove = []
 
         for i in currently_listening_ids:
-            try:
+                
                 album_id = ""
-                search_result = sp.search(i['album'], type='album')
+                try:
+                    search_result = sp.search(i['album'], type='album')
+                except Exception as e:
+                    logging.exception(f"Search failed for {i['album']}: {e}")
 
                 albums = search_result['albums']['items']
                 candidates = [album['name'].lower() + " - " + album['artists'][0]['name'].lower() for album in albums][:3]
@@ -113,13 +117,14 @@ def getCurrentlyListeningIds():
                     continue
 
                 i['album_id'] = album_id
-                
-                album = sp.album_tracks(album_id)
+
+                try:
+                    album = sp.album_tracks(album_id)
+                except Exception as e:
+                    logging.exception(f"Failed to retrieve album tracks for {i['album']}: {e}")
 
                 for j in album['items']:
                     i['tracks'].append(j['id'])
-            except:
-                continue
 
         for album in to_remove:
             currently_listening_ids.remove(album)
@@ -132,15 +137,24 @@ def insertIntoCurrentlyListeningPlaylist():
 
     currently_listening_first_ids = [[i['tracks'][0]] for i in currently_listening_ids]
 
-    for entry in currently_listening_ids:
-        for track in entry['tracks']:
-            supabase.schema("music_tables").table("album_spotifyPlaylistIds").insert({"album": entry['album'], "album_id": entry['album_id'], "track": track}).execute()
+    try:
+        for entry in currently_listening_ids:
+            for track in entry['tracks']:
+                supabase.schema("music_tables").table("album_spotifyPlaylistIds").insert({"album": entry['album'], "album_id": entry['album_id'], "track": track}).execute()
+    except Exception as e:
+        logging.exception(f"Failed to upload tracks to album_spotifyPlaylistIds for {entry['album']}: {e}")
 
+    try:
+        for entry in currently_listening_ids:
+            sp.playlist_add_items(playlist_id='2BHeysCh0gYOjVIH7pU6uy', items=entry['tracks'])
+    except Exception as e:
+        logging.exception(f"Failed to add tracks to currently listening playlist for {entry['album']}: {e}")
 
-    for entry in currently_listening_ids:
-        sp.playlist_add_items(playlist_id='2BHeysCh0gYOjVIH7pU6uy', items=entry['tracks'])
+    try:
+        for entry in currently_listening_first_ids:
+            sp.playlist_add_items(playlist_id="6Gm5NaBxTJVUQycxYhsEeP", items=entry)
+    except Exception as e:
+        logging.exception(f"Failed to upload tracks to currently listening albums playlist: {e}")
 
-    for entry in currently_listening_first_ids:
-        sp.playlist_add_items(playlist_id="6Gm5NaBxTJVUQycxYhsEeP", items=entry)
 
 insertIntoCurrentlyListeningPlaylist()
