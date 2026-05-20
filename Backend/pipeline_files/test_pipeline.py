@@ -1,15 +1,13 @@
-# from dotenv import load_dotenv
 import os
 import json
+import logging
 import sys
-import uuid
 
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from spotipy.cache_handler import CacheHandler
 from supabase import create_client
 
-# load_dotenv()
 
 SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
 SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
@@ -57,16 +55,36 @@ sp_oauth = SpotifyOAuth(
     cache_handler=cache_handler
 )
 
-token_info = sp_oauth.get_access_token(as_dict=False)
-sp = spotipy.Spotify(auth=token_info)
+try:
+    token_info = sp_oauth.get_access_token(as_dict=False)
+except Exception as e:
+    logging.exception(f"Failed to get access token from Spotipy: {e}")
+
+try:    
+    sp = spotipy.Spotify(auth=token_info)
+except Exception as e:
+    logging.exception(f"Failed to initialize Spotipy client: {e}")
 
 album = sys.argv[1]
 
-tracks_res = json.loads(supabase.schema("music_tables").table("album_spotifyPlaylistIds").select("track").eq("album", album).execute().model_dump_json())['data']
+try:
+    tracks_res = json.loads(supabase.schema("music_tables").table("album_spotifyPlaylistIds").select("track").eq("album", album).execute().model_dump_json())['data']
+except Exception as e:
+    logging.exception(f"Failed to retrieve tracks for {album}: {e}")
 
 tracks = [i['track'] for i in tracks_res]
 
-sp.playlist_remove_all_occurrences_of_items(playlist_id='2BHeysCh0gYOjVIH7pU6uy', items=tracks)
-sp.playlist_remove_all_occurrences_of_items(playlist_id='6Gm5NaBxTJVUQycxYhsEeP', items=[tracks[0]])
+try:
+    sp.playlist_remove_all_occurrences_of_items(playlist_id='2BHeysCh0gYOjVIH7pU6uy', items=tracks)
+except Exception as e:
+    logging.exception(f"Failed to remove {album} tracks from currently listening playlist: {e}")
 
-supabase.schema("music_tables").table("album_spotifyPlaylistIds").delete().eq("album", album).execute()
+try:
+    sp.playlist_remove_all_occurrences_of_items(playlist_id='6Gm5NaBxTJVUQycxYhsEeP', items=[tracks[0]])
+except Exception as e:
+    logging.exception(f"Failed to remove {album} tracks from currently listening albums playlist: {e}")
+
+try:
+    supabase.schema("music_tables").table("album_spotifyPlaylistIds").delete().eq("album", album).execute()
+except Exception as e:
+    logging.exception(f"Failed to remove {album} track IDs from album_spotifyPlaylistIds: {e}")
