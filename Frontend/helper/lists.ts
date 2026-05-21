@@ -358,7 +358,7 @@ const musicTablesMap = {
     album_late2000sindie: "Late 2000s indie",
     album_hypnagogicpop: "Hypnagogic pop",
     album_indiesleaze: "Indie sleaze",
-    album_faketable: "FAKE TABLE"
+    album_tolisten: "Albums to listen to"
 };
 
 const filmTablesMap = {
