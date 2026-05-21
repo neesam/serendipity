@@ -149,6 +149,12 @@ const whichMusicTable = async (req: Request, res: Response) => {
         });
     }
 
+    let { data: fetch_count, error: fetch_count_error } = await supabase.schema("music_tables").from("table_fetch_count").select("times_retrieved").eq("table", randomTable)
+
+    fetch_count[0].times_retrieved += 1
+
+    const {error: updateError} = await supabase.schema("music_tables").from("table_fetch_count").update({"times_retrieved": fetch_count}).eq("table", randomTable)
+
     return res.status(200).json({
         message: `Fetched successfully for table: ${randomTable}`,
         data: data,
