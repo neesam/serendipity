@@ -49,6 +49,23 @@ const CustomDrawerContent = (props) => {
             <DrawerItem
                 icon={() => (
                     <Ionicons
+                        name={"grid-outline"}
+                        color={pathName === "/fetchCounts" ? "white" : "black"}
+                        size={20}
+                    />
+                )}
+                label={"Fetch counts"}
+                labelStyle={{ color: pathName === "/fetchCounts" ? "white" : "black" }}
+                style={{
+                    backgroundColor: pathName === "/fetchCounts" ? "#333" : "white",
+                }}
+                onPress={() => {
+                    router.push("/(drawer)/fetchCounts");
+                }}
+            />
+            <DrawerItem
+                icon={() => (
+                    <Ionicons
                         name={"checkmark-sharp"}
                         color={pathName === "/finishedContentAlbum" ? "white" : "black"}
                         size={20}
@@ -79,6 +96,10 @@ export default function _layout() {
             <Drawer.Screen
                 name="addToTable"
                 options={{ headerShown: true, headerTitle: "Add to table" }}
+            />
+            <Drawer.Screen
+                name="fetchCounts"
+                options={{ headerShown: true, headerTitle: "Fetch counts" }}
             />
             <Drawer.Screen
                 name="finishedContentAlbum"

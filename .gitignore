@@ -8,3 +8,4 @@ supabase/
 *.ipynb
 songTitlesToFilenames.json
 csvs/
+test.py

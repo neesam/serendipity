@@ -6,6 +6,7 @@ import cors from "cors";
 import { BigQuery } from "@google-cloud/bigquery";
 
 import { pipelineRoutes } from "../routes/pipeline";
+import { fetchCountRoutes } from "../routes/fetchCounts";
 import { queueRoutes } from "../routes/queue";
 import { whichTableRoutes } from "../routes/whichTables";
 import { specificTableRoute } from "../routes/specificTable";
@@ -89,6 +90,10 @@ app.use("/api/add_to_book_table", addToTableRoute);
 // Run Stremio functionality
 
 app.use(stremioRoutes);
+
+// Fetch table counts
+
+app.use(fetchCountRoutes)
 
 // server listening function
 
