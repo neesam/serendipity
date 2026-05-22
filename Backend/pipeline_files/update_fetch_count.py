@@ -32,7 +32,7 @@ def update_fetch_count(table):
         supabase.schema("music_tables").table("table_fetch_count").update(
             {
                 "fetch_count": fetch_count,
-                "last_fetched": datetime.now(timezone.utc),
+                "last_fetched": datetime.now(timezone.utc).isoformat(),
             }
         ).eq("table", table).execute()
     except Exception as e:
