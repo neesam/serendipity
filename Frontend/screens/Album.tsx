@@ -83,6 +83,27 @@ export default function Album() {
 
         const bgColor = randomColor();
         setBackgroundColor(bgColor);
+
+        try {
+            const response = await fetch(
+                `${API_BASE_URL}/api/update_fetch_count/${data['randomTable']}`,
+                {
+                    method: "POST",
+                    headers: { "Content-type": "application/json" },
+                },
+            );
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.log(errorData.message);
+            }
+
+            await response.json();
+            } catch (error) {
+                if (error instanceof Error) {
+                    console.log(error);
+                }
+            }
     };
 
     const getFromSpecificTable = async (specificTable: string) => {
@@ -193,7 +214,7 @@ export default function Album() {
 
             try {
                 const response = await fetch(
-                    `${API_BASE_URL}/api/testPipeline/${album}`,
+                    `${API_BASE_URL}/api/delete_from_spotify/${album}`,
                     {
                         method: "POST",
                         headers: { "Content-type": "application/json" },
@@ -239,6 +260,28 @@ export default function Album() {
             }
 
             getFromSpecificTable(whichTableKey);
+
+            try {
+                const response = await fetch(
+                    `${API_BASE_URL}/api/delete_from_spotify/${album}`,
+                    {
+                        method: "POST",
+                        headers: { "Content-type": "application/json" },
+                    },
+                );
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.log(errorData.message);
+                }
+
+                const data = await response.json();
+            } catch (error) {
+                if (error instanceof Error) {
+                    console.log(error);
+                }
+            }
+
         }
     };
 
@@ -272,7 +315,7 @@ export default function Album() {
 
         try {
             const response = await fetch(
-                `${API_BASE_URL}/api/spotifyPipeline`,
+                `${API_BASE_URL}/api/add_to_spotify`,
                 {
                     method: "POST",
                     headers: { "Content-type": "application/json" },
