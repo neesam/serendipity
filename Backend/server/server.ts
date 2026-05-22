@@ -7,7 +7,7 @@ import { BigQuery } from "@google-cloud/bigquery";
 
 import { pipelineRoutes } from "../routes/pipeline";
 import { fetchCountRoutes } from "../routes/fetchCounts";
-import { queueRoutes } from "../routes/queue";
+// import { queueRoutes } from "../routes/queue";
 import { whichTableRoutes } from "../routes/whichTables";
 import { specificTableRoute } from "../routes/specificTable";
 import { specificEntryRoute } from "../routes/specificEntry";
@@ -42,7 +42,7 @@ app.use(pipelineRoutes);
 
 // Queue routes
 
-app.use(queueRoutes);
+// app.use(queueRoutes);
 
 // whichTable routes
 
