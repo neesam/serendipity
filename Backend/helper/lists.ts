@@ -1,5 +1,4 @@
 const musicTables = [
-    "album_currentlyListening",
     "album_2000smidwest",
     "album_2011vwave",
     "album_4Point5",
