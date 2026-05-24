@@ -74,6 +74,7 @@ const musicTables = [
     "album_telepath",
     "album_tolisten",
     "album_topalbums",
+    "album_topartistdiscogs",
     "album_tweepunk",
     "album_soothingambient",
     "artist_topartists",
@@ -205,6 +206,7 @@ const allTables = [
     "album_telepath",
     "album_tolisten",
     "album_topalbums",
+    "album_topartistdiscogs",
     "album_tweepunk",
     "album_soothingambient",
     "artist_topartists",
@@ -358,7 +360,8 @@ const musicTablesMap = {
     album_late2000sindie: "Late 2000s indie",
     album_hypnagogicpop: "Hypnagogic pop",
     album_indiesleaze: "Indie sleaze",
-    album_tolisten: "Albums to listen to"
+    album_tolisten: "Albums to listen to",
+    album_topartistdiscogs: "Unlistened albums from top artists"
 };
 
 const filmTablesMap = {

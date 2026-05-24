@@ -85,6 +85,7 @@ const musicTables = [
     "album_warmlofi",
     "album_waterloggedEars",
     "artist_underground",
+    "album_topartistdiscogs"
 ];
 
 const filmTables = [
@@ -215,6 +216,7 @@ const allTables = [
     "album_warmlofi",
     "album_waterloggedEars",
     "artist_underground",
+    "album_topartistdiscogs",
     "film_ebert",
     "film_imdb250",
     "filmrecs",

@@ -93,6 +93,29 @@ export default function AddToTable() {
                         console.log("Error during addition:", error.message);
                     }
                 }
+
+                if (destinationTable === 'album_currentlyListening') {
+                    try {
+                            const response = await fetch(
+                                `${API_BASE_URL}/api/add_to_spotify`,
+                                {
+                                    method: "POST",
+                                    headers: { "Content-type": "application/json" },
+                                },
+                            );
+
+                            if (!response.ok) {
+                                const errorData = await response.json();
+                                console.log(errorData.message);
+                            }
+
+                            const data = await response.json();
+                        } catch (error) {
+                            if (error instanceof Error) {
+                                console.log(error);
+                            }
+                        }
+                    };
             } else if (destinationTable.includes("film")) {
                 try {
                     const response = await fetch(
