@@ -17,7 +17,7 @@ const EXPO_PUBLIC_MUSIC_TABLES_DATASET =
 const EXPO_PUBLIC_RAILWAY_URL = process.env.EXPO_PUBLIC_RAILWAY_URL;
 
 const API_BASE_URL = __DEV__
-    ? "http://192.168.0.29:5002"
+    ? "http://192.168.0.86:5002"
     : EXPO_PUBLIC_RAILWAY_URL;
 
 // interface SpecificAlbumOrEntryDataType {
@@ -42,8 +42,7 @@ export default function Album() {
     const [albumAndTableAvailable, setAlbumAndTableAvailable] = useState(true);
 
     useEffect(() => {
-        console.log(currentlyListening);
-        console.log(originalTable, "heres og")
+        console.log(originalTable)
     }, [album, whichTable]);
 
     const getAlbum = async () => {
@@ -364,6 +363,29 @@ export default function Album() {
         }
     };
 
+    const addToSpotifyPlaylist = async (playlist, album) => {
+        
+         try {
+            const response = await fetch(
+                `${API_BASE_URL}/api/add_to_rym_spotify_playlist/${album}/${playlist}/${originalTable}`
+            );
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.log(errorData.message);
+            }
+
+            const data = await response.json();
+
+        } catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+            }
+        }
+
+        deleteAlbum()
+    }
+
     const getDataForSpecificEntry = async (title: string) => {
         console.log(whichTable);
         console.log(title);
@@ -428,6 +450,7 @@ export default function Album() {
                 addToCurrentlyListening={addToCurrentlyListening}
                 availability={albumAndTableAvailable}
                 contentName={album}
+                addToSpotifyPlaylist={addToSpotifyPlaylist}
             />
         </View>
     );

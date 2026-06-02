@@ -3,7 +3,7 @@ dotenv.config();
 
 import express from "express";
 
-import { pipelineLogic, addToSpotifyPipeline, deleteFromSpotifyPipeline, updateFetchCountPipeline  } from "../controllers/pipeline";
+import { pipelineLogic, addToSpotifyPipeline, deleteFromSpotifyPipeline, updateFetchCountPipeline, addToRYMSpotifyPlaylist  } from "../controllers/pipeline";
 
 const pipelineRoutes = express.Router();
 
@@ -11,5 +11,6 @@ pipelineRoutes.post("/api/pipeline", pipelineLogic);
 pipelineRoutes.post("/api/add_to_spotify", addToSpotifyPipeline)
 pipelineRoutes.post("/api/delete_from_spotify/:album", deleteFromSpotifyPipeline)
 pipelineRoutes.post("/api/update_fetch_count/:table", updateFetchCountPipeline)
+pipelineRoutes.post("/api/add_to_rym_spotify_playlist/:album/:playlist/:original_table", addToRYMSpotifyPlaylist)
 
 export { pipelineRoutes };
