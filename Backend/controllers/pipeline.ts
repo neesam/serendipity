@@ -10,6 +10,7 @@ export const PIPELINE_FILE_PATH = process.env.PIPELINE_FILE_PATH;
 export const SPOTIFY_PIPELINE_FILE_PATH = process.env.SPOTIFY_PIPELINE_FILE_PATH;
 export const SPOTIFY_DELETE_FROM_PLAYLIST_PATH = process.env.SPOTIFY_DELETE_FROM_PLAYLIST_PATH;
 export const SPOTIFY_UPDATE_FETCH_COUNT_PATH = process.env.SPOTIFY_UPDATE_FETCH_COUNT_PATH;
+export const SPOTIFY_ADD_TO_RYM_PLAYLIST_PATH = process.env.SPOTIFY_ADD_TO_RYM_PLAYLIST_PATH;
 
 const pipelineLogic = async (req: Request, res: Response) => {
     const python = spawn(`${PYTHON_PACKAGE}`, [`${PIPELINE_FILE_PATH}`]);
@@ -109,6 +110,43 @@ const deleteFromSpotifyPipeline = async (req: Request, res: Response) => {
     });
 };
 
+const addToRYMSpotifyPlaylist = async (req: Request, res: Response) => {
+
+    const album = req.params.album;
+    const playlist = req.params.playlist;
+    const originalTable = req.params.original_table;
+
+    const python = spawn(`${PYTHON_PACKAGE}`, [`${SPOTIFY_ADD_TO_RYM_PLAYLIST_PATH}`, `${album}`, `${playlist}`, `${originalTable}`]);
+
+    let responseSent = false;
+
+    python.stdout.on("data", (data) => {
+        console.log("Python output:", data.toString());
+        if (!responseSent) {
+            responseSent = true;
+            res.send(data.toString());
+            console.log("Added", album)
+        }
+    });
+
+    python.on("close", (code) => {
+        if (!responseSent) {
+            responseSent = true;
+            res.status(500).send(`Python process finished with code: ${code}`);
+        }
+    });
+
+    python.stderr.on("data", (data) => {
+        console.error("Error from Python:", data.toString());
+        if (!responseSent) {
+            responseSent = true;
+            res.status(500).send(
+                `Error running Python script: ${data.toString()}`
+            );
+        }
+    });
+};
+
 const updateFetchCountPipeline = async (req: Request, res: Response) => {
 
     const table = req.params.table;
@@ -144,4 +182,4 @@ const updateFetchCountPipeline = async (req: Request, res: Response) => {
     });
 };
 
-export { pipelineLogic, addToSpotifyPipeline, deleteFromSpotifyPipeline, updateFetchCountPipeline };
+export { pipelineLogic, addToSpotifyPipeline, deleteFromSpotifyPipeline, updateFetchCountPipeline, addToRYMSpotifyPlaylist };
