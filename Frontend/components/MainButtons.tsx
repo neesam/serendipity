@@ -71,7 +71,7 @@ const MainButtons = ({
                                     </Text>
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={currentlyListening ? () => setDeleteModalVisible(true) : deleteContent}>
+                            <TouchableOpacity onPress={deleteContent}>
                                 <View
                                     style={
                                         containerStyles.deleteContentButtonContainer

@@ -17,6 +17,7 @@ const musicTables = [
     "album_contemporaryr_b",
     "album_createdbyrejection",
     "album_crabcore",
+    "album_deathcore",
     "album_dreampop",
     "album_dreamygarage",
     "album_dreamyhiphop",
@@ -53,6 +54,7 @@ const musicTables = [
     "album_metalcore",
     "album_midwest",
     "album_moenieandkitchie",
+    "album_newjackswing",
     "album_neonpoppunk",
     "album_neosoul",
     "album_orangemilkrecords",
@@ -78,6 +80,7 @@ const musicTables = [
     "album_tolisten",
     "album_topalbums",
     "album_topartistdiscogs",
+    "album_topposthardcore",
     "album_tweepunk",
     "album_soothingambient",
     "artist_topartists",
@@ -152,6 +155,7 @@ const allTables = [
     "album_contemporaryr_b",
     "album_createdbyrejection",
     "album_crabcore",
+    "album_deathcore",
     "album_dreampop",
     "album_dreamygarage",
     "album_dreamyhiphop",
@@ -165,7 +169,6 @@ const allTables = [
     "album_emogaze",
     "album_emopop",
     "album_etherealslowcore",
-    "album_faketable",
     "album_fantano",
     "album_folk",
     "album_funk",
@@ -191,6 +194,7 @@ const allTables = [
     "album_moenieandkitchie",
     "album_neonpoppunk",
     "album_neosoul",
+    "album_newjackswing",
     "album_orangemilkrecords",
     "album_pluggnb",
     "album_popalbums",
@@ -214,6 +218,7 @@ const allTables = [
     "album_tolisten",
     "album_topalbums",
     "album_topartistdiscogs",
+    "album_topposthardcore",
     "album_tweepunk",
     "album_soothingambient",
     "artist_topartists",
@@ -372,7 +377,10 @@ const musicTablesMap = {
     album_smoothsoul: "Top smooth soul albums",
     album_soul: "Top soul albums",
     album_funk: "Top funk albums",
-    album_progsoul: "Top prog soul albums"
+    album_progsoul: "Top prog soul albums",
+    album_newjackswing: "Top new jack swing albums",
+    album_topposthardcore: "Top post-hardcore albums",
+    album_deathcore: "Top deathcore albums"
 };
 
 const filmTablesMap = {
