@@ -104,6 +104,7 @@ const filmTables = [
     "film_criterion",
     "film_cry",
     "film_cult",
+    "film_documentary",
     "film_ebert",
     "film_imdb250",
     "film_international",
@@ -244,6 +245,7 @@ const allTables = [
     "film_noir1000",
     "film_stremiolibrary",
     "film_tspdt2500",
+    "film_documentary",
     "film_70s",
     "film_80s",
     "film_90s",
@@ -404,6 +406,7 @@ const filmTablesMap = {
     film_cahiers: "Cahiers du Cinema Annual Top 10",
     film_cry: "Crying movies JamesLovesWeirdness",
     film_top150fromhappiness: "JamesLovesWeirdness favs",
+    film_documentary: "Top documentaries"
 };
 
 const showTablesMap = {

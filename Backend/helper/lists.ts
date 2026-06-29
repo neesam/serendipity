@@ -114,6 +114,7 @@ const filmTables = [
     "film_cahiers",
     "film_cry",
     "film_top150fromhappiness",
+    "film_documentary"
 ];
 
 const showTables = [
@@ -248,6 +249,7 @@ const allTables = [
     "film_cahiers",
     "film_cry",
     "film_top150fromhappiness",
+    "film_documentary",
     "shows",
     "anime_classic",
     "anime_other",
