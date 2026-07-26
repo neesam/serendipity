@@ -53,6 +53,7 @@ const musicTables = [
     "album_meditativepostrock",
     "album_metalcore",
     "album_midwest",
+    "album_midwestemo",
     "album_moenieandkitchie",
     "album_newjackswing",
     "album_neonpoppunk",
@@ -192,6 +193,7 @@ const allTables = [
     "album_meditativepostrock",
     "album_metalcore",
     "album_midwest",
+    "album_midwestemo",
     "album_moenieandkitchie",
     "album_neonpoppunk",
     "album_neosoul",
@@ -382,7 +384,8 @@ const musicTablesMap = {
     album_progsoul: "Top prog soul albums",
     album_newjackswing: "Top new jack swing albums",
     album_topposthardcore: "Top post-hardcore albums",
-    album_deathcore: "Top deathcore albums"
+    album_deathcore: "Top deathcore albums",
+    album_midwestemo: "Midwest emo albums"
 };
 
 const filmTablesMap = {
