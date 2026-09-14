@@ -1,6 +1,6 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { DrawerToggleButton } from "@react-navigation/drawer";
+import { DrawerToggleButton } from "expo-router/drawer";
 
 export default function TabLayout() {
     return (

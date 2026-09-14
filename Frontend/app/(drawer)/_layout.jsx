@@ -1,5 +1,5 @@
 import { Drawer } from "expo-router/drawer";
-import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
+import { DrawerContentScrollView, DrawerItem } from "expo-router/drawer";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { usePathname } from "expo-router";
