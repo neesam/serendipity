@@ -53,6 +53,7 @@ const musicTables = [
     "album_mallsoft",
     "album_mathpop",
     "album_mathpostemo",
+    "album_matthealy",
     "album_meditativepostrock",
     "album_metalcore",
     "album_midwest",
@@ -198,6 +199,7 @@ const allTables = [
     "album_mallsoft",
     "album_mathpop",
     "album_mathpostemo",
+    "album_matthealy",
     "album_meditativepostrock",
     "album_metalcore",
     "album_midwest",
@@ -400,7 +402,8 @@ const musicTablesMap = {
     album_corpsources: "corp sources",
     album_luxelitesources: "luxelite sources",
     album_telepathsources: "telepath sources",
-    album_waterfrontdiningsources: "waterfront sources"
+    album_waterfrontdiningsources: "waterfront sources",
+    album_matthealy: "Matt Healy favs"
 };
 
 const filmTablesMap = {
