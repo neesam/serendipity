@@ -1,98 +1,85 @@
-import { Drawer } from "expo-router/drawer";
-import { DrawerContentScrollView, DrawerItem } from "expo-router/drawer";
+import { Drawer, DrawerContentScrollView, DrawerItem } from "expo-router/drawer";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
-import { usePathname } from "expo-router";
-import { useEffect } from "react";
+import { useRouter, usePathname } from "expo-router";
+
+// Each entry drives one drawer item. `match` lists the pathnames that should
+// highlight the item (usePathname strips group names like "(drawer)").
+const ITEMS = [
+    {
+        label: "Content fetcher",
+        icon: "star-sharp",
+        href: "/(drawer)/(content_fetcher_tabs)/album",
+        match: ["/album", "/book", "/film", "/game", "/show"],
+    },
+    {
+        label: "Add to table",
+        icon: "add-sharp",
+        href: "/(drawer)/addToTable",
+        match: ["/addToTable"],
+    },
+    {
+        label: "Fetch counts",
+        icon: "grid-outline",
+        href: "/(drawer)/fetchCounts",
+        match: ["/fetchCounts"],
+    },
+    {
+        label: "Finished content",
+        icon: "checkmark-sharp",
+        href: "/(drawer)/(finished_content_tabs)/finishedContentAlbum",
+        match: [
+            "/finishedContentAlbum",
+            "/finishedContentBook",
+            "/finishedContentFilm",
+            "/finishedContentShow",
+        ],
+    },
+];
 
 const CustomDrawerContent = (props) => {
+    const router = useRouter();
     const pathName = usePathname();
-
-    useEffect(() => {
-        console.log(pathName);
-    }, [pathName]);
 
     return (
         <DrawerContentScrollView {...props}>
-            <DrawerItem
-                icon={() => (
-                    <Ionicons
-                        name={"star-sharp"}
-                        color={pathName === "/album" ? "white" : "black"}
-                        size={20}
+            {ITEMS.map((item) => {
+                const active = item.match.includes(pathName);
+                return (
+                    <DrawerItem
+                        key={item.label}
+                        icon={() => (
+                            <Ionicons
+                                name={item.icon}
+                                color={active ? "white" : "black"}
+                                size={20}
+                            />
+                        )}
+                        label={item.label}
+                        labelStyle={{ color: active ? "white" : "black" }}
+                        style={{ backgroundColor: active ? "#333" : "white" }}
+                        onPress={() => {
+                            router.navigate(item.href);
+                            props.navigation.closeDrawer();
+                        }}
                     />
-                )}
-                label={"Content fetcher"}
-                labelStyle={{ color: pathName === "/album" ? "white" : "black" }}
-                style={{ backgroundColor: pathName === "/album" ? "#333" : "white" }}
-                onPress={() => {
-                    router.push("/(drawer)/(content_fetcher_tabs)/album");
-                }}
-            />
-            <DrawerItem
-                icon={() => (
-                    <Ionicons
-                        name={"add-sharp"}
-                        color={pathName === "/addToTable" ? "white" : "black"}
-                        size={20}
-                    />
-                )}
-                label={"Add to table"}
-                labelStyle={{ color: pathName === "/addToTable" ? "white" : "black" }}
-                style={{
-                    backgroundColor: pathName === "/addToTable" ? "#333" : "white",
-                }}
-                onPress={() => {
-                    router.push("/(drawer)/addToTable");
-                }}
-            />
-            <DrawerItem
-                icon={() => (
-                    <Ionicons
-                        name={"grid-outline"}
-                        color={pathName === "/fetchCounts" ? "white" : "black"}
-                        size={20}
-                    />
-                )}
-                label={"Fetch counts"}
-                labelStyle={{ color: pathName === "/fetchCounts" ? "white" : "black" }}
-                style={{
-                    backgroundColor: pathName === "/fetchCounts" ? "#333" : "white",
-                }}
-                onPress={() => {
-                    router.push("/(drawer)/fetchCounts");
-                }}
-            />
-            <DrawerItem
-                icon={() => (
-                    <Ionicons
-                        name={"checkmark-sharp"}
-                        color={pathName === "/finishedContentAlbum" ? "white" : "black"}
-                        size={20}
-                    />
-                )}
-                label={"Finished content"}
-                labelStyle={{
-                    color: pathName === "/finishedContentAlbum" ? "white" : "black",
-                }}
-                style={{
-                    backgroundColor:
-                        pathName === "/finishedContentAlbum" ? "#333" : "white",
-                }}
-                onPress={() => {
-                    router.push("/(drawer)/(finished_content_tabs)/finishedContentAlbum");
-                }}
-            />
+                );
+            })}
         </DrawerContentScrollView>
     );
 };
 
-export default function _layout() {
+export default function DrawerLayout() {
     return (
         <Drawer
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             screenOptions={{ headerShown: false }}
         >
+            {/* SDK 58: every drawer child must be declared, using the
+                group folder names for the two tab groups. */}
+            <Drawer.Screen
+                name="(content_fetcher_tabs)"
+                options={{ title: "Content fetcher" }}
+            />
             <Drawer.Screen
                 name="addToTable"
                 options={{ headerShown: true, headerTitle: "Add to table" }}
@@ -102,8 +89,8 @@ export default function _layout() {
                 options={{ headerShown: true, headerTitle: "Fetch counts" }}
             />
             <Drawer.Screen
-                name="finishedContentAlbum"
-                options={{ headerShown: true, headerTitle: "Finished content" }}
+                name="(finished_content_tabs)"
+                options={{ title: "Finished content" }}
             />
         </Drawer>
     );
