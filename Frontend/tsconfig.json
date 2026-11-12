@@ -17,7 +17,7 @@
         "screens/Album.tsx",
         "screens/Film.tsx",
         "components/Show.ksx",
-        "app/(drawer)/(finished_content_tabs)/finishedContentAlbum.jsx",
+        "app/(app)/(drawer)/(finished_content_tabs)/finishedContentAlbum.jsxum.jsx",
         "components/TopScreenFunctionality.tsx",
         "components/ContentCard.tsx"
     ]

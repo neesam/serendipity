@@ -6,10 +6,12 @@ import * as Haptics from "expo-haptics";
 import randomColor from "../utils/randomColor";
 import { musicTables, musicTablesMap } from "../helper/lists";
 import { containerStyles } from "../styles/styles";
+import { authFetch } from "@/lib/api";
 
 import TopScreenFunctionality from "../components/TopScreenFunctionality";
 import MainButtons from "../components/MainButtons";
 import ContentCard from "../components/ContentCard";
+import { useSession } from "@/context/session";
 
 const EXPO_PUBLIC_MUSIC_TABLES_DATASET =
     process.env.EXPO_PUBLIC_MUSIC_TABLES_DATASET;
@@ -40,10 +42,28 @@ export default function Album() {
     const [originalTable, setOriginalTable] = useState<string | null>(null);
     const [backgroundColor, setBackgroundColor] = useState("");
     const [albumAndTableAvailable, setAlbumAndTableAvailable] = useState(true);
+    const [tables, setTables] = useState([]);
+
+    const { session } = useSession();
+    const userId = session?.user.id;
 
     useEffect(() => {
-        console.log(originalTable)
-    }, [album, whichTable]);
+        if (!userId) return;
+
+        console.log(userId)
+
+        const getMusicTables = async () => {
+            const response = await authFetch(`${API_BASE_URL}/api/userMusicTables`);
+            if (!response.ok) throw new Error("Failed to fetch user genres");
+            const data: GetAlbumDataType = await response.json();
+            setTables(data['data'].map((g: { name: string }) => g.name));
+            console.log(tables)
+        };
+        console.log(originalTable);
+
+        getMusicTables().catch(console.error);
+
+    }, [album, whichTable, userId]);
 
     const getAlbum = async () => {
         const start = Date.now();
@@ -428,7 +448,7 @@ export default function Album() {
         <View style={[containerStyles.screenContainer, screenStyle]}>
             <TopScreenFunctionality
                 containerStyles={containerStyles}
-                tables={musicTables}
+                tables={tables}
                 getFromSpecificTable={getFromSpecificTable}
                 addToQueue={addToQueue}
                 contentName={album}

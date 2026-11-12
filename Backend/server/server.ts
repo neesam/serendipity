@@ -15,6 +15,7 @@ import { deletionRoutes } from "../routes/deletion";
 import { allEntriesFromTableRoute } from "../routes/metadata";
 import { addToTableRoute } from "../routes/addToTable";
 import { stremioRoutes } from "../routes/stremio";
+import { userSpecificRoutes } from "../routes/userSpecific";
 
 // Initialize express
 
@@ -94,6 +95,8 @@ app.use(stremioRoutes);
 // Fetch table counts
 
 app.use(fetchCountRoutes)
+
+app.use(userSpecificRoutes)
 
 // server listening function
 

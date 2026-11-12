@@ -1,6 +1,8 @@
 import { Drawer, DrawerContentScrollView, DrawerItem } from "expo-router/drawer";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter, usePathname } from "expo-router";
+import { Button } from "react-native";
+import { useSession } from "@/context/session";
 
 // Each entry drives one drawer item. `match` lists the pathnames that should
 // highlight the item (usePathname strips group names like "(drawer)").
@@ -39,6 +41,7 @@ const ITEMS = [
 const CustomDrawerContent = (props) => {
     const router = useRouter();
     const pathName = usePathname();
+    const { signOut } = useSession();
 
     return (
         <DrawerContentScrollView {...props}>
@@ -64,11 +67,13 @@ const CustomDrawerContent = (props) => {
                     />
                 );
             })}
+            <Button onPress={signOut} title="Sign out" />
         </DrawerContentScrollView>
     );
 };
 
 export default function DrawerLayout() {
+
     return (
         <Drawer
             drawerContent={(props) => <CustomDrawerContent {...props} />}
@@ -76,6 +81,10 @@ export default function DrawerLayout() {
         >
             {/* SDK 58: every drawer child must be declared, using the
                 group folder names for the two tab groups. */}
+            <Drawer.Screen
+                name="index"
+                options={{ drawerItemStyle: { display: "none" } }}
+            />
             <Drawer.Screen
                 name="(content_fetcher_tabs)"
                 options={{ title: "Content fetcher" }}

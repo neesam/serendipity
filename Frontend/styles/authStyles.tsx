@@ -1,0 +1,42 @@
+import { StyleSheet } from "react-native";
+
+export const authStyles = StyleSheet.create({
+  flex: { flex: 1, backgroundColor: "#121212" },
+  container: {
+    flexGrow: 1,
+    justifyContent: "center",
+    padding: 24,
+    gap: 12,
+  },
+  title: { color: "#fff", fontSize: 28, fontWeight: "700" },
+  subtitle: { color: "#aaa", fontSize: 16, marginBottom: 12 },
+  input: {
+    backgroundColor: "#1e1e1e",
+    color: "#fff",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#333",
+    paddingHorizontal: 14,
+    paddingVertical: 14,
+    fontSize: 16,
+  },
+  error: { color: "#ff6b6b", fontSize: 14 },
+  link: { color: "#aaa", fontSize: 14, alignSelf: "flex-end" },
+  linkBold: { color: "#fff", fontSize: 14, fontWeight: "600" },
+  button: {
+    backgroundColor: "#3b82f6",
+    borderRadius: 10,
+    paddingVertical: 15,
+    alignItems: "center",
+    marginTop: 4,
+  },
+  buttonDisabled: { opacity: 0.6 },
+  spotifyButton: { backgroundColor: "#1db954" },
+  buttonText: { color: "#fff", fontSize: 16, fontWeight: "600" },
+  dividerRow: { flexDirection: "row", alignItems: "center", gap: 10, marginVertical: 8 },
+  dividerLine: { flex: 1, height: 1, backgroundColor: "#333" },
+  dividerText: { color: "#888" },
+  footer: { flexDirection: "row", justifyContent: "center", marginTop: 12 },
+  footerText: { color: "#aaa", fontSize: 14 },
+  success: { color: "#4ade80", fontSize: 14 },
+});
