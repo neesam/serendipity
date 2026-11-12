@@ -85,6 +85,7 @@ const musicTables = [
     "album_telepathsources",
     "album_tolisten",
     "album_topalbums",
+    "album_top2026",
     "album_top2000s",
     "album_top2010s",
     "album_top2020s",
@@ -237,6 +238,7 @@ const allTables = [
     "album_telepath",
     "album_telepathsources",
     "album_tolisten",
+    "album_top2026",
     "album_top2000s",
     "album_top2010s",
     "album_top2020s",
@@ -425,6 +427,7 @@ const musicTablesMap = {
     album_top70s: "Top 70s albums",
     album_top80s: "Top 80s albums",
     album_top90s: "Top 90s albums",
+    album_top2026: "Top 2026 albums"
 };
 
 const filmTablesMap = {
