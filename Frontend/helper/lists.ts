@@ -95,6 +95,7 @@ const musicTables = [
     "album_top90s",
     "album_topartistdiscogs",
     "album_topposthardcore",
+    "album_troystop",
     "album_tweepunk",
     "album_soothingambient",
     "artist_topartists",
@@ -249,6 +250,7 @@ const allTables = [
     "album_topalbums",
     "album_topartistdiscogs",
     "album_topposthardcore",
+    "album_troystop",
     "album_tweepunk",
     "album_soothingambient",
     "artist_topartists",
@@ -427,7 +429,8 @@ const musicTablesMap = {
     album_top70s: "Top 70s albums",
     album_top80s: "Top 80s albums",
     album_top90s: "Top 90s albums",
-    album_top2026: "Top 2026 albums"
+    album_top2026: "Top 2026 albums",
+    album_troystop: "Troys top albums"
 };
 
 const filmTablesMap = {
